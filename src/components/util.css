@@ -1,0 +1,15 @@
+.logo {
+  font-family: "Poppins", sans-serif;
+  font-size: 2rem; /* Ajusta según tu navbar */
+  font-weight: bold;
+  color: transparent; /* Sin relleno */
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.9); /* Contorno blanco */
+  text-transform: uppercase; /* Opcional para dar un estilo uniforme */
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.logo:hover {
+  transform: scale(1.1); /* Efecto al pasar el mouse */
+}

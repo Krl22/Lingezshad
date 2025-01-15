@@ -1,0 +1,449 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ... */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+
+    --input: 214.3 31.8% 91.4%;
+
+    --ring: 222.2 84% 4.9%;
+
+    --chart-1: 12 76% 61%;
+
+    --chart-2: 173 58% 39%;
+
+    --chart-3: 197 37% 24%;
+
+    --chart-4: 43 74% 66%;
+
+    --chart-5: 27 87% 67%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --background: 222.2 84% 4.9%;
+
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+
+    --input: 217.2 32.6% 17.5%;
+
+    --ring: 212.7 26.8% 83.9%;
+
+    --chart-1: 220 70% 50%;
+
+    --chart-2: 160 60% 45%;
+
+    --chart-3: 30 80% 55%;
+
+    --chart-4: 280 65% 60%;
+
+    --chart-5: 340 75% 55%;
+
+    --sidebar-background: 240 5.9% 10%;
+
+    --sidebar-foreground: 240 4.8% 95.9%;
+
+    --sidebar-primary: 224.3 76.3% 48%;
+
+    --sidebar-primary-foreground: 0 0% 100%;
+
+    --sidebar-accent: 240 3.7% 15.9%;
+
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+
+    --sidebar-border: 240 3.7% 15.9%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .bg-pattern-1 {
+    @apply w-full h-full; /* Utiliza las utilidades de Tailwind para el tamaño */
+    --s: 200px; /* Controla el tamaño */
+    --c1: #1d1d1d;
+    --c2: #4e4f51;
+    --c3: #3c3c3c;
+
+    background: repeating-conic-gradient(
+          from 30deg,
+          #0000 0 120deg,
+          var(--c3) 0 180deg
+        )
+        calc(0.5 * var(--s)) calc(0.5 * var(--s) * 0.577),
+      repeating-conic-gradient(
+        from 30deg,
+        var(--c1) 0 60deg,
+        var(--c2) 0 120deg,
+        var(--c3) 0 180deg
+      );
+    background-size: var(--s) calc(var(--s) * 0.577);
+  }
+  .bg-pattern-2 {
+    @apply w-full h-full; /* Utiliza las utilidades de Tailwind para el tamaño */
+    --s: 37px; /* control the size */
+
+    --c: #0000, #282828 0.5deg 119.5deg, #0000 120deg;
+    --g1: conic-gradient(from 60deg at 56.25% calc(425% / 6), var(--c));
+    --g2: conic-gradient(from 180deg at 43.75% calc(425% / 6), var(--c));
+    --g3: conic-gradient(from -60deg at 50% calc(175% / 12), var(--c));
+    background: var(--g1), var(--g1) var(--s) calc(1.73 * var(--s)), var(--g2),
+      var(--g2) var(--s) calc(1.73 * var(--s)), var(--g3) var(--s) 0,
+      var(--g3) 0 calc(1.73 * var(--s)) #1e1e1e;
+    background-size: calc(2 * var(--s)) calc(3.46 * var(--s));
+  }
+  .bg-pattern-3 {
+    @apply w-full h-full; /* Utiliza las utilidades de Tailwind para el tamaño */
+    --s: 60px;
+    --c1: #180a22;
+    --c2: #5b42f3;
+
+    --_g: radial-gradient(
+      closest-side at 25% 25%,
+      var(--c1) 99%,
+      rgba(0, 0, 0, 0) 101%
+    );
+
+    background: var(--_g) var(--s) var(--s) / calc(2 * var(--s))
+        calc(2 * var(--s)),
+      var(--_g) 0 0 / calc(2 * var(--s)) calc(2 * var(--s)),
+      radial-gradient(closest-side at 50% 50%, var(--c2) 98%, rgba(0, 0, 0, 0))
+        0 0 / var(--s) var(--s),
+      repeating-conic-gradient(var(--c2) 0 50%, var(--c1) 0 100%)
+        calc(0.5 * var(--s)) 0 / calc(2 * var(--s)) var(--s);
+  }
+
+  .bg-pattern-4 {
+    @apply w-full h-full; /* Utiliza las utilidades de Tailwind para el tamaño */
+    --s: 65px; /* control the size */
+    --c1: #dadee1;
+    --c2: #4a99b4;
+    --c3: #9cceb5;
+
+    --_c: 75%, var(--c3) 52.72deg, #0000 0;
+    --_g1: conic-gradient(from -116.36deg at 25% var(--_c));
+    --_g2: conic-gradient(from 63.43deg at 75% var(--_c));
+    background: var(--_g1), var(--_g1) calc(3 * var(--s)) calc(var(--s) / 2),
+      var(--_g2), var(--_g2) calc(3 * var(--s)) calc(var(--s) / 2),
+      conic-gradient(
+        var(--c2) 63.43deg,
+        var(--c1) 0 116.36deg,
+        var(--c2) 0 180deg,
+        var(--c1) 0 243.43deg,
+        var(--c2) 0 296.15deg,
+        var(--c1) 0
+      );
+    background-size: calc(2 * var(--s)) var(--s);
+  }
+  .bg-pattern-5 {
+    @apply w-full h-full; /* Utiliza las utilidades de Tailwind para el tamaño */
+    --s: 60px;
+    --c1: #180a22;
+    --c2: #5b42f3;
+    --_g: radial-gradient(
+      25% 25% at 25% 25%,
+      var(--c1) 99%,
+      rgba(0, 0, 0, 0) 101%
+    );
+    background: linear-gradient(135deg, #0000 18.75%, #3b82f6 0 31.25%, #0000 0),
+      linear-gradient(45deg, #0000 18.75%, #3b82f6 0 31.25%, #0000 0),
+      linear-gradient(135deg, #0000 18.75%, #3b82f6 0 31.25%, #0000 0),
+      linear-gradient(45deg, #0000 18.75%, #3b82f6 0 31.25%, #0000 0);
+    background-size: 60px 60px;
+    background-position: 0 0, 0 0, 30px 30px, 30px 30px;
+    animation: slide 4s linear infinite;
+  }
+
+  @keyframes slide {
+    to {
+      background-position: 60px 0, 60px 0, 90px 30px, 90px 30px;
+    }
+  }
+  .bg-pattern-6 {
+    @apply w-full h-full; /* Utiliza las utilidades de Tailwind para el tamaño */
+    background: 
+    /* Diagonal slices */ radial-gradient(
+        circle at 100% 50%,
+        #ff00cc 0% 2%,
+        #00ffcc 3% 5%,
+        transparent 6%
+      ),
+      /* Offset dots */
+        radial-gradient(
+          circle at 0% 50%,
+          #ff00cc 0% 2%,
+          #00ffcc 3% 5%,
+          transparent 6%
+        ),
+      /* Wave-like pattern */
+        radial-gradient(ellipse at 50% 0%, #3300ff 0% 3%, transparent 4%) 10px
+        10px,
+      /* Scattered elements */
+        radial-gradient(
+          circle at 50% 50%,
+          #00ffcc 0% 1%,
+          #ff00cc 2% 3%,
+          #3300ff 4% 5%,
+          transparent 6%
+        )
+        20px 20px,
+      /* Background texture */
+        repeating-linear-gradient(
+          45deg,
+          #1a1a1a,
+          #1a1a1a 10px,
+          #242424 10px,
+          #242424 20px
+        );
+    background-size: 50px 50px, 50px 50px, 40px 40px, 60px 60px, 100% 100%;
+    animation: shift 15s linear infinite;
+  }
+
+  @keyframes shift {
+    0% {
+      background-position: 0 0, 0 0, 10px 10px, 20px 20px, 0 0;
+    }
+    100% {
+      background-position: 50px 50px, -50px -50px, 60px 60px, 80px 80px, 0 0;
+    }
+  }
+
+  .bg-pattern-7 {
+    @apply w-full h-full; /* Utiliza las utilidades de Tailwind para el tamaño */
+    position: relative;
+
+    --c: #09f;
+    background-color: #000;
+    background-image: radial-gradient(4px 100px at 0px 235px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 235px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 117.5px, var(--c) 100%, #0000 150%),
+      radial-gradient(4px 100px at 0px 252px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 252px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 126px, var(--c) 100%, #0000 150%),
+      radial-gradient(4px 100px at 0px 150px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 150px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 75px, var(--c) 100%, #0000 150%),
+      radial-gradient(4px 100px at 0px 253px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 253px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 126.5px, var(--c) 100%, #0000 150%),
+      radial-gradient(4px 100px at 0px 204px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 204px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 102px, var(--c) 100%, #0000 150%),
+      radial-gradient(4px 100px at 0px 134px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 134px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 67px, var(--c) 100%, #0000 150%),
+      radial-gradient(4px 100px at 0px 179px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 179px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 89.5px, var(--c) 100%, #0000 150%),
+      radial-gradient(4px 100px at 0px 299px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 299px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 149.5px, var(--c) 100%, #0000 150%),
+      radial-gradient(4px 100px at 0px 215px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 215px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 107.5px, var(--c) 100%, #0000 150%),
+      radial-gradient(4px 100px at 0px 281px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 281px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 140.5px, var(--c) 100%, #0000 150%),
+      radial-gradient(4px 100px at 0px 158px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 158px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 79px, var(--c) 100%, #0000 150%),
+      radial-gradient(4px 100px at 0px 210px, var(--c), #0000),
+      radial-gradient(4px 100px at 300px 210px, var(--c), #0000),
+      radial-gradient(1.5px 1.5px at 150px 105px, var(--c) 100%, #0000 150%);
+    background-size: 300px 235px, 300px 235px, 300px 235px, 300px 252px,
+      300px 252px, 300px 252px, 300px 150px, 300px 150px, 300px 150px,
+      300px 253px, 300px 253px, 300px 253px, 300px 204px, 300px 204px,
+      300px 204px, 300px 134px, 300px 134px, 300px 134px, 300px 179px,
+      300px 179px, 300px 179px, 300px 299px, 300px 299px, 300px 299px,
+      300px 215px, 300px 215px, 300px 215px, 300px 281px, 300px 281px,
+      300px 281px, 300px 158px, 300px 158px, 300px 158px, 300px 210px,
+      300px 210px, 300px 210px;
+    animation: hi 150s linear infinite;
+  }
+  .bg-pattern-7::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-image: radial-gradient(
+      circle at 50% 50%,
+      #0000 0,
+      #0000 2px,
+      hsl(0 0 4%) 2px
+    );
+    background-size: 8px 8px;
+    --f: blur(1em) brightness(6);
+    animation: hii 10s linear infinite;
+  }
+
+  @keyframes hii {
+    0% {
+      backdrop-filter: var(--f) hue-rotate(0deg);
+    }
+    to {
+      backdrop-filter: var(--f) hue-rotate(360deg);
+    }
+  }
+  @keyframes hi {
+    0% {
+      background-position: 0px 220px, 3px 220px, 151.5px 337.5px, 25px 24px,
+        28px 24px, 176.5px 150px, 50px 16px, 53px 16px, 201.5px 91px, 75px 224px,
+        78px 224px, 226.5px 350.5px, 100px 19px, 103px 19px, 251.5px 121px,
+        125px 120px, 128px 120px, 276.5px 187px, 150px 31px, 153px 31px,
+        301.5px 120.5px, 175px 235px, 178px 235px, 326.5px 384.5px, 200px 121px,
+        203px 121px, 351.5px 228.5px, 225px 224px, 228px 224px, 376.5px 364.5px,
+        250px 26px, 253px 26px, 401.5px 105px, 275px 75px, 278px 75px,
+        426.5px 180px;
+    }
+
+    to {
+      background-position: 0px 6800px, 3px 6800px, 151.5px 6917.5px,
+        25px 13632px, 28px 13632px, 176.5px 13758px, 50px 5416px, 53px 5416px,
+        201.5px 5491px, 75px 17175px, 78px 17175px, 226.5px 17301.5px,
+        100px 5119px, 103px 5119px, 251.5px 5221px, 125px 8428px, 128px 8428px,
+        276.5px 8495px, 150px 9876px, 153px 9876px, 301.5px 9965.5px,
+        175px 13391px, 178px 13391px, 326.5px 13540.5px, 200px 14741px,
+        203px 14741px, 351.5px 14848.5px, 225px 18770px, 228px 18770px,
+        376.5px 18910.5px, 250px 5082px, 253px 5082px, 401.5px 5161px,
+        275px 6375px, 278px 6375px, 426.5px 6480px;
+    }
+  }
+
+  /* From Uiverse.io by cssbuttons-io */
+  .btn-1 {
+    align-items: center;
+    background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+    border: 0;
+    border-radius: 8px;
+    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    box-sizing: border-box;
+    color: #ffffff;
+    display: flex;
+    font-size: 18px;
+    justify-content: center;
+    line-height: 1em;
+    max-width: 100%;
+    min-width: 140px;
+    padding: 3px;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-1:active,
+  .btn-1:hover {
+    outline: 0;
+  }
+
+  .btn-1 span {
+    background-color: rgb(5, 6, 45);
+    padding: 16px 24px;
+    border-radius: 6px;
+    width: 100%;
+    height: 100%;
+    transition: 300ms;
+  }
+
+  .btn-1:hover span {
+    background: none;
+  }
+
+  .btn-1:active {
+    transform: scale(0.9);
+  }
+}
