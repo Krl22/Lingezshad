@@ -61,8 +61,8 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 space-y-6 bg-white rounded-lg shadow-lg">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
+      <div className="p-6 space-y-6 w-full max-w-md text-gray-800 bg-white rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center text-gray-800">
           Register
         </h2>
@@ -76,7 +76,7 @@ const Register = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
+              className="px-3 py-2 w-full rounded-lg border border-gray-300 shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
               required
             />
           </div>
@@ -88,23 +88,23 @@ const Register = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
+              className="px-3 py-2 w-full rounded-lg border border-gray-300 shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
               required
             />
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+            className="px-4 py-2 w-full text-white bg-blue-500 rounded-lg hover:bg-blue-600"
           >
             Register
           </button>
         </form>
-        <div className="flex items-center justify-center my-4">
+        <div className="flex justify-center items-center my-4">
           <span className="text-sm text-gray-500">Or</span>
         </div>
         <button
           onClick={handleGoogleRegister}
-          className="flex items-center justify-center w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100"
+          className="flex justify-center items-center px-4 py-2 w-full text-gray-700 bg-white rounded-lg border border-gray-300 hover:bg-gray-100"
         >
           <img
             src="https://img.icons8.com/color/16/000000/google-logo.png"

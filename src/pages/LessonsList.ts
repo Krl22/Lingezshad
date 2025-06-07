@@ -1,9 +1,10 @@
 const LessonList = [
   {
-    title: "Introduction to English",
+    title: "Verb To Be",
     description:
-      "Learn the basics of English language, including alphabet, pronunciation, and simple phrases.",
-    image: "https://dcedu.ie/wp-content/uploads/2016/03/Evening_English_1.jpg",
+      "Explore the correct usage of the verb 'to be' with practical examples and explanations.",
+    image:
+      "https://contenthub-static.grammarly.com/blog/wp-content/uploads/2022/12/To-be.png",
   },
   {
     title: "Beginner Vocabulary",

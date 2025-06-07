@@ -447,3 +447,7 @@
     transform: scale(0.9);
   }
 }
+
+[data-state="active"] {
+  display: block;
+}

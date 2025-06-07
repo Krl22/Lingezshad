@@ -1,3 +1,4 @@
+// import 'react-beautiful-dnd/dist/react-beautiful-dnd.css';
 import {
   BrowserRouter as Router,
   Route,
@@ -23,14 +24,15 @@ import { Messages } from "./pages/Messages";
 import { FriendChat } from "./pages/Friendchat";
 import Restaurant from "./pages/locations/Restaurant";
 import Scene from "./pages/locations/Restaurant/scene";
+import Animals from "./pages/Topics/Animals/Animals";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Router>
-        <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 ">
+        <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
           <ConditionalTopNavBar />
-          <div className="flex-grow ">
+          <div className="flex-grow">
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
@@ -48,6 +50,7 @@ function App() {
               <Route path="/friendChat" element={<FriendChat />} />
               <Route path="/Restaurant" element={<Restaurant />} />
               <Route path="/Restaurant/Scene" element={<Scene />} />
+              <Route path="/topic/animals/exercises" element={<Animals />} />
             </Routes>
           </div>
           <ConditionalBottomNavBar />

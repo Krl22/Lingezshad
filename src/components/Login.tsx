@@ -35,8 +35,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
+      <div className="p-8 space-y-6 w-full max-w-md bg-white rounded shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800">
           Welcome
         </h2>
@@ -52,7 +52,7 @@ const Login = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              className="px-4 py-2 w-full text-sm text-gray-700 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-300"
               required
             />
           </div>
@@ -64,15 +64,15 @@ const Login = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              className="px-4 py-2 w-full text-sm text-gray-700 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-300"
               required
             />
           </div>
-          <div className="flex items-center justify-between">
+          <div className="flex justify-between items-center">
             <label className="flex items-center text-sm text-gray-700">
               <input
                 type="checkbox"
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
               />
               <span className="ml-2">Remember me</span>
             </label>
@@ -82,19 +82,19 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+            className="px-4 py-2 w-full text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
           >
             Sign In
           </button>
         </form>
-        <div className="flex items-center justify-center my-4">
+        <div className="flex justify-center items-center my-4">
           <span className="w-1/3 border-t border-gray-300"></span>
           <span className="mx-2 text-sm text-gray-500">Or</span>
           <span className="w-1/3 border-t border-gray-300"></span>
         </div>
         <button
           onClick={handleGoogleLogin}
-          className="flex items-center justify-center w-full px-4 py-2 text-gray-700 border border-gray-300 rounded hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300"
+          className="flex justify-center items-center px-4 py-2 w-full text-gray-700 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300"
         >
           <img
             src="https://img.icons8.com/color/16/000000/google-logo.png"
