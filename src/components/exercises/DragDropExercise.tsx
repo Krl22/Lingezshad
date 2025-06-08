@@ -74,8 +74,8 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
               disabled={isAssigned}
               onClick={() => setSelectedLabel(item.id)}
               className={`px-3 py-2 font-semibold rounded-xl shadow cursor-pointer transition
-                ${isAssigned ? "bg-gray-200 text-gray-400 cursor-not-allowed" : ""}
-                ${isSelected ? "bg-blue-600 text-white ring-2 ring-blue-400" : "bg-blue-100 text-blue-800 hover:bg-blue-200"}
+                ${isAssigned ? "bg-muted text-muted-foreground cursor-not-allowed" : ""}
+                ${isSelected ? "bg-primary text-primary-foreground ring-2 ring-primary/50" : "bg-secondary text-secondary-foreground hover:bg-secondary/80"}
               `}
             >
               {item.label}
@@ -94,10 +94,10 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
               "flex-shrink-0 w-52 border-2 rounded-2xl p-2 transition-colors relative cursor-pointer",
               droppedItems[item.id]
                 ? isCorrect(item.id)
-                  ? "border-green-400 bg-green-50"
-                  : "border-red-400 bg-red-50"
-                : "border-gray-300 bg-white",
-              selectedLabel && "ring-2 ring-blue-400"
+                  ? "border-green-500 bg-green-50 dark:bg-green-950/20"
+                  : "border-red-500 bg-red-50 dark:bg-red-950/20"
+                : "border-border bg-card",
+              selectedLabel && "ring-2 ring-primary/50"
             )}
           >
             <img
@@ -105,10 +105,10 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
               alt={item.label}
               className="object-contain w-full h-40 rounded-xl"
             />
-            <div className="mt-2 text-base font-semibold text-center">
+            <div className="mt-2 text-base font-semibold text-center text-foreground">
               {droppedItems[item.id] ? (
                 <div className="relative">
-                  <span className="inline-block px-3 py-1 bg-blue-100 rounded-lg">
+                  <span className="inline-block px-3 py-1 bg-secondary text-secondary-foreground rounded-lg">
                     {items.find((i) => i.id === droppedItems[item.id])?.label}
                   </span>
                   <button
@@ -116,9 +116,9 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
                       e.stopPropagation();
                       removeAssignment(item.id);
                     }}
-                    className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow"
+                    className="absolute -top-2 -right-2 p-1 bg-background border rounded-full shadow-sm hover:bg-muted"
                   >
-                    <X className="w-3 h-3 text-red-500" />
+                    <X className="w-3 h-3 text-destructive" />
                   </button>
                 </div>
               ) : (
@@ -139,10 +139,10 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
               "p-4 border-2 rounded-2xl transition-colors relative cursor-pointer",
               droppedItems[item.id]
                 ? isCorrect(item.id)
-                  ? "border-green-400 bg-green-50"
-                  : "border-red-400 bg-red-50"
-                : "border-gray-300 bg-white",
-              selectedLabel && "ring-2 ring-blue-400"
+                  ? "border-green-500 bg-green-50 dark:bg-green-950/20"
+                  : "border-red-500 bg-red-50 dark:bg-red-950/20"
+                : "border-border bg-card",
+              selectedLabel && "ring-2 ring-primary/50"
             )}
           >
             <img
@@ -150,10 +150,10 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
               alt={item.label}
               className="object-contain w-full h-48 rounded-xl"
             />
-            <div className="mt-2 text-lg font-semibold text-center">
+            <div className="mt-2 text-lg font-semibold text-center text-foreground">
               {droppedItems[item.id] ? (
                 <div className="inline-block relative">
-                  <span className="inline-block px-4 py-2 bg-blue-100 rounded-lg">
+                  <span className="inline-block px-4 py-2 bg-secondary text-secondary-foreground rounded-lg">
                     {items.find((i) => i.id === droppedItems[item.id])?.label}
                   </span>
                   <button
@@ -161,9 +161,9 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
                       e.stopPropagation();
                       removeAssignment(item.id);
                     }}
-                    className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow"
+                    className="absolute -top-2 -right-2 p-1 bg-background border rounded-full shadow-sm hover:bg-muted"
                   >
-                    <X className="w-3 h-3 text-red-500" />
+                    <X className="w-3 h-3 text-destructive" />
                   </button>
                 </div>
               ) : (

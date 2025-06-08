@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Volume2, RotateCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -143,8 +143,8 @@ export default function MemoryGame({ title, cardPairs }: MemoryGameProps) {
                 onClick={() => handleCardClick(index)}
                 className={`aspect-square rounded-lg flex items-center justify-center cursor-pointer transition-all duration-300 ${
                   card.flipped || card.matched
-                    ? "bg-white border-2 border-blue-300"
-                    : "bg-blue-100 hover:bg-blue-200"
+                    ? "bg-card border-2 border-primary/30"
+                    : "bg-secondary hover:bg-secondary/80"
                 } ${card.matched ? "opacity-70" : ""}`}
               >
                 {card.flipped || card.matched ? (
@@ -166,17 +166,17 @@ export default function MemoryGame({ title, cardPairs }: MemoryGameProps) {
                       <Volume2
                         className={`h-4 w-4 ${
                           audioPlaying === card.audioUrl
-                            ? "text-blue-500 animate-pulse"
+                            ? "text-primary animate-pulse"
                             : ""
                         }`}
                       />
                     </Button>
-                    <span className="mt-1 text-sm capitalize font-medium">
+                    <span className="mt-1 text-sm capitalize font-medium text-foreground">
                       {card.value}
                     </span>
                   </div>
                 ) : (
-                  <div className="text-4xl">?</div>
+                  <div className="text-4xl text-muted-foreground">?</div>
                 )}
               </div>
             ))}
@@ -184,16 +184,16 @@ export default function MemoryGame({ title, cardPairs }: MemoryGameProps) {
 
           {/* Mensaje de juego completado */}
           {gameComplete && (
-            <div className="mt-6 p-4 bg-green-100 rounded-lg text-center">
-              <h3 className="text-xl font-bold text-green-800 mb-2">
+            <div className="mt-6 p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg text-center">
+              <h3 className="text-xl font-bold text-green-800 dark:text-green-400 mb-2">
                 🎉 Congratulations!
               </h3>
-              <p className="text-green-700">
+              <p className="text-green-700 dark:text-green-300">
                 You completed the game in {moves} moves!
               </p>
               <Button
                 onClick={resetGame}
-                className="mt-4 bg-green-600 hover:bg-green-700"
+                className="mt-4 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600"
               >
                 Play Again
               </Button>

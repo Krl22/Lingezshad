@@ -1,7 +1,16 @@
-import { LogOut, User, Users, Settings } from "lucide-react";
+import {
+  LogOut,
+  User,
+  Users,
+  Settings,
+  MessageCircle,
+  MapPin,
+  LucideGamepad2,
+} from "lucide-react";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/firebase/firebaseconfig";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Sidebar,
   SidebarContent,
@@ -17,6 +26,7 @@ import { ModeToggle } from "./mode-toggle";
 
 export function AppSidebar() {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const handleLogout = async () => {
     try {
@@ -27,26 +37,45 @@ export function AppSidebar() {
     }
   };
 
-  // Menu items.
-  const items = [
+  // Navigation items - Solo en desktop
+  const navigationItems = [
     {
       title: "Account",
-      action: () => navigate("/Account"), // Usar una función de flecha para navegar.
+      action: () => navigate("/account"),
       icon: User,
     },
     {
+      title: "Play",
+      action: () => navigate("/lobby"),
+      icon: LucideGamepad2,
+    },
+    {
+      title: "Environment",
+      action: () => navigate("/environment"),
+      icon: MapPin,
+    },
+    {
+      title: "Messages",
+      action: () => navigate("/messages"),
+      icon: MessageCircle,
+    },
+  ];
+
+  // Menu items.
+  const menuItems = [
+    {
       title: "Friends",
-      action: () => navigate("/Friends"), // Usar una función de flecha para navegar.
+      action: () => navigate("/friends"),
       icon: Users,
     },
     {
       title: "Settings",
-      action: () => navigate("/Settings"), // Usar una función de flecha para navegar.
+      action: () => navigate("/settings"),
       icon: Settings,
     },
     {
       title: "Logout",
-      action: handleLogout, // Pasar la referencia a la función.
+      action: handleLogout,
       icon: LogOut,
     },
   ];
@@ -59,15 +88,35 @@ export function AppSidebar() {
           <div className="flex justify-center py-4">
             <ModeToggle />
           </div>
+
+          {/* Navigation Section - Solo en desktop */}
+          {!isMobile && (
+            <>
+              <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {navigationItems.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild onClick={item.action}>
+                        <button className="flex items-center space-x-2">
+                          <item.icon className="w-4 h-4" />
+                          <span>{item.title}</span>
+                        </button>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </>
+          )}
+
+          {/* Application Section */}
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    onClick={item.action} // Ejecutar la acción al hacer clic.
-                  >
+                  <SidebarMenuButton asChild onClick={item.action}>
                     <button className="flex items-center space-x-2">
                       <item.icon className="w-4 h-4" />
                       <span>{item.title}</span>

@@ -5,18 +5,33 @@ const AnimalExercise4 = () => {
   const cardPairs = [
     {
       value: "lion",
-      audioUrl: "/audio/lion.mp3",
-      imageUrl: "/images/animals/lion.jpg",
+      audioUrl: "/animals/lion.mp3",
+      imageUrl: "/animals/lion.jpg",
     },
     {
       value: "elephant",
-      audioUrl: "/audio/elephant.mp3",
-      imageUrl: "/images/animals/elephant.jpg",
+      audioUrl: "/animals/elephant.mp3",
+      imageUrl: "/animals/elephant.jpg",
     },
     {
       value: "monkey",
-      audioUrl: "/audio/monkey.mp3",
-      imageUrl: "/images/animals/monkey.jpg",
+      audioUrl: "/animals/monkey.mp3",
+      imageUrl: "/animals/monkey.jpg",
+    },
+    {
+      value: "tiger",
+      audioUrl: "/animals/tiger.mp3",
+      imageUrl: "/animals/tiger.jpg",
+    },
+    {
+      value: "cat",
+      audioUrl: "/animals/cat.mp3",
+      imageUrl: "/animals/cat.jpg",
+    },
+    {
+      value: "duck",
+      audioUrl: "/animals/duck.mp3",
+      imageUrl: "/animals/duck.jpg",
     },
   ];
 

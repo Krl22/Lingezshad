@@ -10,10 +10,9 @@ import TopNavBar from "./components/TopNavBar";
 import BottomNavBar from "./components/BottomNavBar";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Home from "./pages/home";
+import Learning from "./pages/Learning"; // Ahora será el componente para /home
 import { Environment } from "./pages/Environment";
 import { ThemeProvider } from "@/components/theme-provider";
-import Learning from "./pages/Learning";
 import Account from "./pages/Account";
 import Game from "./pages/Game";
 import Lobby from "./pages/Lobby";
@@ -37,9 +36,8 @@ function App() {
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/home" element={<Home />} />
+              <Route path="/home" element={<Learning />} />
               <Route path="/environment" element={<Environment />} />
-              <Route path="/learning" element={<Learning />} />
               <Route path="/account" element={<Account />} />
               <Route path="/game/:roomId" element={<Game />} />
               <Route path="/lobby" element={<Lobby />} />
