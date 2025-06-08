@@ -8,8 +8,7 @@ import {
 import Landing from "./pages/Landing";
 import TopNavBar from "./components/TopNavBar";
 import BottomNavBar from "./components/BottomNavBar";
-import Login from "./components/Login";
-import Register from "./components/Register";
+
 import Learning from "./pages/Learning"; // Ahora será el componente para /home
 import { Environment } from "./pages/Environment";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -34,8 +33,6 @@ function App() {
           <div className="flex-grow">
             <Routes>
               <Route path="/" element={<Landing />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
               <Route path="/home" element={<Learning />} />
               <Route path="/environment" element={<Environment />} />
               <Route path="/account" element={<Account />} />
