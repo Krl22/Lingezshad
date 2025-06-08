@@ -31,7 +31,7 @@ export function FriendsList() {
 
   const handleOpenChat = async (friendEmail: string) => {
     try {
-      const chat = await getOrCreateChat(
+      await getOrCreateChat(
         auth.currentUser?.email || "",
         friendEmail
       );

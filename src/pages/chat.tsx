@@ -44,8 +44,7 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
   ]);
   const [input, setInput] = useState<string>("");
   const [isRecording, setIsRecording] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [audioURL, setAudioURL] = useState<string | null>(null);
+  const [_audioURL, setAudioURL] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // Inicializar OpenAI

@@ -16,11 +16,11 @@ import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { fetchFriends, Friend } from "@/firebase/friendsService";
 import { getAuth } from "firebase/auth";
-import { getOrCreateChat } from "@/firebase/messages";
-import { useNavigate } from "react-router-dom";
+// import { getOrCreateChat } from "@/firebase/messages";
+// import { useNavigate } from "react-router-dom";
 
 export function Messages() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [patternNumber, setPatternNumber] = useState(1);
   const [friends, setFriends] = useState<Friend[]>([]);
   const [selectedConversation, setSelectedConversation] =
