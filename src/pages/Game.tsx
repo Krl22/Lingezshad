@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db, auth } from "@/firebase/firebaseconfig";
 import { doc, updateDoc, onSnapshot, runTransaction } from "firebase/firestore";
@@ -175,7 +175,7 @@ const Game = () => {
 
   if (dashboardVisible) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex flex-col justify-center items-center min-h-screen">
         <h1 className="text-2xl font-bold">Game Over!</h1>
         <h2 className="mt-4">Winner: {winner}</h2>
 
@@ -198,7 +198,7 @@ const Game = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-4 py-16 text-gray-800 bg-gradient-to-r from-blue-200 via-indigo-300 to-purple-400 dark:bg-gradient-to-r dark:from-gray-800 dark:via-gray-900 dark:to-gray-950">
+    <div className="flex flex-col justify-center items-center px-4 py-16 min-h-screen text-gray-800 bg-gradient-to-r from-blue-200 via-indigo-300 to-purple-400 dark:bg-gradient-to-r dark:from-gray-800 dark:via-gray-900 dark:to-gray-950">
       <h1 className="mt-8 text-4xl font-extrabold text-center dark:text-gray-100">
         Race to the Finish Line!
       </h1>
@@ -206,12 +206,12 @@ const Game = () => {
         Room: {roomId}
       </h2>
 
-      <div className="w-full max-w-md p-6 mt-8 bg-white rounded-lg shadow-2xl dark:bg-gray-800 dark:shadow-2xl">
+      <div className="p-6 mt-8 w-full max-w-md bg-white rounded-lg shadow-2xl dark:bg-gray-800 dark:shadow-2xl">
         <h3 className="mb-4 text-2xl font-semibold text-center text-gray-800 dark:text-gray-100">
           Players' Progress
         </h3>
 
-        <div className="relative w-full overflow-hidden bg-gray-300 rounded-lg shadow-lg h-28 dark:bg-gray-600 dark:border-gray-700">
+        <div className="overflow-hidden relative w-full h-28 bg-gray-300 rounded-lg shadow-lg dark:bg-gray-600 dark:border-gray-700">
           {roomData?.players?.map((player, index) => (
             <div
               key={player.id}
@@ -232,7 +232,7 @@ const Game = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-md p-6 mt-8 bg-white rounded-lg shadow-2xl dark:bg-gray-800 dark:shadow-2xl">
+      <div className="p-6 mt-8 w-full max-w-md bg-white rounded-lg shadow-2xl dark:bg-gray-800 dark:shadow-2xl">
         <h3 className="mb-4 text-2xl font-semibold text-center text-gray-800 dark:text-gray-200">
           Question: {questions[currentQuestionIndex].question}
         </h3>
@@ -257,7 +257,7 @@ const Game = () => {
         <button
           onClick={handleAnswerSubmit}
           disabled={!selectedOption}
-          className="w-full py-3 mt-6 font-semibold text-white transition-all rounded-lg shadow-md bg-gradient-to-r from-blue-600 to-indigo-600 hover:bg-gradient-to-l disabled:opacity-50 dark:from-blue-500 dark:to-indigo-500 dark:hover:bg-gradient-to-r dark:disabled:opacity-40"
+          className="py-3 mt-6 w-full font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg shadow-md transition-all hover:bg-gradient-to-l disabled:opacity-50 dark:from-blue-500 dark:to-indigo-500 dark:hover:bg-gradient-to-r dark:disabled:opacity-40"
         >
           Submit Answer
         </button>

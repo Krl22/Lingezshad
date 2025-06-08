@@ -235,6 +235,20 @@ const Room = () => {
     }
   };
 
+  // Mostrar estado de carga mientras se obtienen los datos
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gradient-to-r from-gray-100 to-gray-200 dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900">
+        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:shadow-2xl">
+          <div className="text-center">
+            <div className="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">Loading room...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gradient-to-r from-gray-100 to-gray-200 dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:shadow-2xl">

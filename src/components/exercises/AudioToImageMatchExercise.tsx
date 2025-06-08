@@ -15,7 +15,7 @@ type AudioToImageMatchExerciseProps = {
 
 export const AudioToImageMatchExercise: React.FC<
   AudioToImageMatchExerciseProps
-> = ({ items, onComplete }) => {
+> = ({ items }) => {
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [droppedItems, setDroppedItems] = useState<{ [key: string]: string }>(
     {}

@@ -36,17 +36,17 @@ export function Messages() {
     setPatternNumber((prev) => (prev % 7) + 1); // Cambia entre 1 y 7
   };
 
-  const handleOpenChat = async (friendEmail: string) => {
-    try {
-      const chat = await getOrCreateChat(
-        auth.currentUser?.email || "",
-        friendEmail
-      );
-      navigate("/friendchat", { state: { friendEmail } });
-    } catch (error) {
-      console.error("Error opening chat:", error);
-    }
-  };
+  // const handleOpenChat = async (friendEmail: string) => {
+  //   try {
+  //     const chat = await getOrCreateChat(
+  //       auth.currentUser?.email || "",
+  //       friendEmail
+  //     );
+  //     navigate("/friendchat", { state: { friendEmail } });
+  //   } catch (error) {
+  //     console.error("Error opening chat:", error);
+  //   }
+  // };
 
   useEffect(() => {
     if (userUID) {
@@ -76,7 +76,7 @@ export function Messages() {
           isMobile ? "block" : "hidden md:block"
         } ${selectedConversation ? "hidden" : ""}`}
       >
-        <div className="w-full p-2 py-4 bg-gradient-to-r from-purple-400 to-indigo-600 dark:from-sky-950 dark:to-sky-900">
+        <div className="p-2 py-4 w-full bg-gradient-to-r from-purple-400 to-indigo-600 dark:from-sky-950 dark:to-sky-900">
           <div className="flex justify-between w-24">
             <ArrowLeft
               className="cursor-pointer dark:text-gray-300 hover:text-gray-500"
@@ -87,14 +87,14 @@ export function Messages() {
         </div>
 
         {/* Search Input */}
-        <div className="relative w-full px-2 my-4 ">
+        <div className="relative px-2 my-4 w-full">
           <span className="absolute left-4 top-2.5 text-gray-400">
             <Search size={18} />
           </span>
           <Input
             type="text"
             placeholder="Search friends..."
-            className="h-10 pl-10 bg-gray-200"
+            className="pl-10 h-10 bg-gray-200"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -103,7 +103,7 @@ export function Messages() {
         <div className="w-full">
           {loading ? (
             // Mostrar loader mientras se obtienen los datos
-            <div className="flex items-center justify-center h-32">
+            <div className="flex justify-center items-center h-32">
               <Loader />
             </div>
           ) : (
@@ -142,7 +142,7 @@ export function Messages() {
       >
         {selectedConversation && (
           <>
-            <div className="flex items-center justify-start px-2 py-4 bg-gradient-to-r from-purple-400 to-indigo-600 dark:from-sky-950 dark:to-sky-900">
+            <div className="flex justify-start items-center px-2 py-4 bg-gradient-to-r from-purple-400 to-indigo-600 dark:from-sky-950 dark:to-sky-900">
               <button
                 onClick={() => setSelectedConversation(null)}
                 className={`dark:text-gray-300 dark:hover:text-gray-500 ${
@@ -174,7 +174,7 @@ export function Messages() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className="flex-1 overflow-y-auto">
+            <div className="overflow-y-auto flex-1">
               <AIChat patternNumber={patternNumber} />
             </div>
           </>

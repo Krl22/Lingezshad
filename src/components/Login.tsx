@@ -3,17 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "@/firebase/firebaseconfig";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { createUserDoc } from "@/firebase/createUserDoc";
+import { FormEvent } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-
       navigate("/home");
     } catch (error) {
       console.error("Error logging in:", error);
@@ -24,11 +24,20 @@ const Login = () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      const defaultNickname = user.email.split("@")[0];
-
-      await createUserDoc(user, defaultNickname);
-      // Redirigir a /home después de iniciar sesión
-      navigate("/home");
+      
+      // Verificar que user.email existe antes de crear el documento
+      if (user.email) {
+        // Crear un objeto que coincida con la interfaz FirebaseUser
+        const firebaseUser = {
+          uid: user.uid,
+          email: user.email // Ahora sabemos que no es null
+        };
+        
+        await createUserDoc(firebaseUser);
+        navigate("/home");
+      } else {
+        console.error("User email is null");
+      }
     } catch (error) {
       console.error("Error logging in with Google:", error);
     }

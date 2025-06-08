@@ -8,7 +8,8 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 //Initialize css style classes so they load with the page
-const unusedClasses = [
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _ = [
   "bg-pattern-1",
   "bg-pattern-2",
   "bg-pattern-3",
@@ -16,7 +17,10 @@ const unusedClasses = [
   "bg-pattern-5",
   "bg-pattern-6",
   "bg-pattern-7",
-];
+] as const;
+
+// Usar void para indicar que intencionalmente no usamos la variable
+void _;
 
 // Definición de tipos para los mensajes
 interface Message {
@@ -40,6 +44,7 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
   ]);
   const [input, setInput] = useState<string>("");
   const [isRecording, setIsRecording] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [audioURL, setAudioURL] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -115,12 +120,12 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <Card className="flex flex-col w-full h-full mx-auto border-0 rounded-none shadow-md">
+      <Card className="flex flex-col mx-auto w-full h-full rounded-none border-0 shadow-md">
         {/* Chat Messages */}
         <ScrollArea
-          className={`flex-1 p-4 overflow-auto bg-pattern-${patternNumber}`}
+          className={`overflow-auto flex-1 p-4 bg-pattern-${patternNumber}`}
         >
-          <div className="space-y-4 ">
+          <div className="space-y-4">
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -129,7 +134,7 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
                 }`}
               >
                 {message.role === "assistant" && (
-                  <Avatar className="z-10 ">
+                  <Avatar className="z-10">
                     <AvatarImage src="https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg" />
                     <AvatarFallback>AI</AvatarFallback>
                   </Avatar>
@@ -150,7 +155,7 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
         </ScrollArea>
 
         {/* Chat Input */}
-        <div className="flex items-center justify-between gap-2 p-4 bg-white border-t border-gray-300 dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex gap-2 justify-between items-center p-4 bg-white border-t border-gray-300 dark:border-gray-700 dark:bg-gray-800">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}

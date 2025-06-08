@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Volume2, RotateCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -119,8 +119,8 @@ export default function MemoryGame({ title, cardPairs }: MemoryGameProps) {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Card className="max-w-3xl mx-auto">
+    <div className="container px-4 py-8 mx-auto">
+      <Card className="mx-auto max-w-3xl">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
             {title}
@@ -128,7 +128,7 @@ export default function MemoryGame({ title, cardPairs }: MemoryGameProps) {
           <div className="flex justify-between items-center mt-4">
             <span className="text-sm font-medium">Moves: {moves}</span>
             <Button onClick={resetGame} size="sm" variant="outline">
-              <RotateCw className="mr-2 h-4 w-4" />
+              <RotateCw className="mr-2 w-4 h-4" />
               Restart Game
             </Button>
           </div>
@@ -136,7 +136,7 @@ export default function MemoryGame({ title, cardPairs }: MemoryGameProps) {
 
         <CardContent>
           {/* Tablero de juego */}
-          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4">
             {cards.map((card, index) => (
               <div
                 key={card.id}
@@ -152,7 +152,7 @@ export default function MemoryGame({ title, cardPairs }: MemoryGameProps) {
                     <img
                       src={card.imageUrl}
                       alt={card.value}
-                      className="h-16 w-16 object-contain mb-2"
+                      className="object-contain mb-2 w-16 h-16"
                     />
                     <Button
                       variant="ghost"
@@ -171,7 +171,7 @@ export default function MemoryGame({ title, cardPairs }: MemoryGameProps) {
                         }`}
                       />
                     </Button>
-                    <span className="mt-1 text-sm capitalize font-medium text-foreground">
+                    <span className="mt-1 text-sm font-medium capitalize text-foreground">
                       {card.value}
                     </span>
                   </div>
@@ -184,8 +184,8 @@ export default function MemoryGame({ title, cardPairs }: MemoryGameProps) {
 
           {/* Mensaje de juego completado */}
           {gameComplete && (
-            <div className="mt-6 p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg text-center">
-              <h3 className="text-xl font-bold text-green-800 dark:text-green-400 mb-2">
+            <div className="p-4 mt-6 text-center bg-green-50 rounded-lg border border-green-200 dark:bg-green-950/20 dark:border-green-800">
+              <h3 className="mb-2 text-xl font-bold text-green-800 dark:text-green-400">
                 🎉 Congratulations!
               </h3>
               <p className="text-green-700 dark:text-green-300">

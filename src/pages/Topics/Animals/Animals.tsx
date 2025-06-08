@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import AnimalsTopic from "./AnimalsExercise";
 import AnimalExercise2 from "./AnimalsExercise2";
 import AnimalExercise3 from "./AnimalsExercise3";
