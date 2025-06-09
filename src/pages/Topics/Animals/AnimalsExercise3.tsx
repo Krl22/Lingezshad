@@ -1,4 +1,6 @@
 import { AudioToImageMatchExercise } from "@/components/exercises/AudioToImageMatchExercise";
+import { InstructionsBox } from "@/components/exercises/InstructionsBox";
+import { Volume2 } from "lucide-react";
 
 const AnimalExercise3 = () => {
   const items = [
@@ -36,9 +38,16 @@ const AnimalExercise3 = () => {
 
   return (
     <div className="p-4">
-      <h1 className="mb-6 text-2xl font-bold text-center">
+      <h1 className="mb-4 text-2xl font-bold text-center">
         Match the Sound to the Animal
       </h1>
+      
+      <InstructionsBox
+        title="Show Instructions"
+        instructions="Listen to each animal sound by clicking the play button, then click on the matching picture. Use your ears to identify which animal makes each sound."
+        icon={<Volume2 className="w-4 h-4" />}
+      />
+      
       <AudioToImageMatchExercise items={items} />
     </div>
   );

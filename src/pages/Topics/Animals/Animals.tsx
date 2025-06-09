@@ -7,22 +7,22 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const exercises = [
   {
-    name: "Ex 1",
+    name: "Drag & Drop",
     component: <AnimalsTopic />,
     value: "ex1",
   },
   {
-    name: "Ex 2",
+    name: "Fill Blanks",
     component: <AnimalExercise2 />,
     value: "ex2",
   },
   {
-    name: "Ex 3",
+    name: "Audio Match",
     component: <AnimalExercise3 />,
     value: "ex3",
   },
   {
-    name: "Ex 4",
+    name: "Memory",
     component: <AnimalExercise4 />,
     value: "ex4",
   },

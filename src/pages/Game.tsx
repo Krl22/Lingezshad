@@ -176,7 +176,7 @@ const Game = () => {
         </div>
       </div>
     );
-  }
+  };
 
   if (dashboardVisible) {
     return (
@@ -241,115 +241,115 @@ const Game = () => {
   }
 
   return (
-    <div className="px-4 py-8 mt-16 min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="px-2 py-4 mt-16 min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <div className="mx-auto max-w-4xl">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="mb-4 text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 md:text-5xl dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">
+        {/* Header Compacto */}
+        <div className="mb-4 text-center">
+          <h1 className="mb-2 text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 md:text-3xl dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">
             🏁 ¡Carrera al Final!
           </h1>
-          <div className="inline-flex items-center px-4 py-2 bg-white rounded-full border shadow-lg dark:bg-slate-800 border-slate-200 dark:border-slate-700">
-            <span className="mr-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <div className="inline-flex items-center px-3 py-1 bg-white rounded-full border shadow-lg dark:bg-slate-800 border-slate-200 dark:border-slate-700">
+            <span className="mr-2 text-xs font-medium text-slate-600 dark:text-slate-300">
               Sala:
             </span>
-            <span className="font-bold text-indigo-600 dark:text-indigo-400">
+            <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
               {roomId}
             </span>
           </div>
         </div>
 
-        {/* Progress Track */}
-        <div className="p-6 mb-8 bg-white rounded-3xl border shadow-2xl dark:bg-slate-800 border-slate-200 dark:border-slate-700">
-          <h3 className="mb-6 text-2xl font-bold text-center text-slate-800 dark:text-slate-100">
-            Progreso de Jugadores
-          </h3>
+        {/* Progress Track Compacto */}
+        <div className="p-3 mb-4 bg-white rounded-2xl border shadow-xl dark:bg-slate-800 border-slate-200 dark:border-slate-700">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+              Progreso
+            </h3>
+            <span className="text-xs text-slate-600 dark:text-slate-400">
+              Pregunta {currentQuestionIndex + 1}/{questions.length}
+            </span>
+          </div>
 
-          <div className="overflow-hidden relative w-full h-32 bg-gradient-to-r rounded-2xl border-2 shadow-inner from-slate-200 via-slate-100 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700 border-slate-300 dark:border-slate-600">
+          <div className="overflow-hidden relative w-full h-20 bg-gradient-to-r rounded-xl border shadow-inner from-slate-200 via-slate-100 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700 border-slate-300 dark:border-slate-600">
             {/* Finish Line */}
-            <div className="absolute top-0 bottom-0 right-2 w-1 bg-gradient-to-b from-yellow-400 to-red-500 rounded-full"></div>
-            <div className="absolute right-0 top-1/2 text-2xl transform -translate-y-1/2">
+            <div className="absolute top-0 bottom-0 right-1 w-0.5 bg-gradient-to-b from-yellow-400 to-red-500 rounded-full"></div>
+            <div className="absolute right-0 top-1/2 text-lg transform -translate-y-1/2">
               🏁
             </div>
 
             {roomData?.players?.map((player, index) => (
               <div
                 key={player.id}
-                className={`absolute rounded-full h-12 w-12 flex items-center justify-center ${
+                className={`absolute rounded-full h-8 w-8 flex items-center justify-center ${
                   ballColors[index % ballColors.length]
-                } border-2 border-white dark:border-slate-800 transform transition-all duration-700 ease-out hover:scale-110`}
+                } border border-white dark:border-slate-800 transform transition-all duration-700 ease-out`}
                 style={{
                   left: `${Math.min(
                     (player.progress / MAX_QUESTIONS) * TRACK_LENGTH,
                     TRACK_LENGTH
                   )}%`,
-                  top: `${index * 32 + 8}px`,
+                  top: `${index * 20 + 4}px`,
                 }}
               >
-                <span className="px-1 text-xs font-bold text-white truncate">
-                  {player.nickname.length > 6
-                    ? player.nickname.substring(0, 6)
-                    : player.nickname}
+                <span className="text-xs font-bold text-white">
+                  {player.nickname.charAt(0)}
                 </span>
               </div>
             ))}
           </div>
 
-          {/* Progress Stats */}
-          <div className="grid grid-cols-2 gap-4 mt-6 md:grid-cols-4">
+          {/* Progress Stats Horizontal */}
+          <div className="flex justify-between mt-3 space-x-2">
             {roomData?.players?.map((player, index) => (
               <div
                 key={player.id}
-                className="p-3 text-center rounded-xl bg-slate-50 dark:bg-slate-700"
+                className="flex items-center space-x-1 p-2 text-center rounded-lg bg-slate-50 dark:bg-slate-700 flex-1"
               >
                 <div
-                  className={`w-6 h-6 rounded-full ${
+                  className={`w-4 h-4 rounded-full ${
                     ballColors[index % ballColors.length]
-                  } mx-auto mb-2`}
+                  }`}
                 ></div>
-                <p className="text-sm font-medium truncate text-slate-700 dark:text-slate-200">
-                  {player.nickname}
-                </p>
-                <p className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                  {player.progress}/{MAX_QUESTIONS}
-                </p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-medium truncate text-slate-700 dark:text-slate-200">
+                    {player.nickname.length > 8 ? player.nickname.substring(0, 8) + '...' : player.nickname}
+                  </p>
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                    {player.progress}/{MAX_QUESTIONS}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Question Card */}
-        <div className="p-8 bg-white rounded-3xl border shadow-2xl dark:bg-slate-800 border-slate-200 dark:border-slate-700">
-          <div className="mb-6 text-center">
-            <div className="inline-flex items-center px-4 py-2 mb-4 bg-indigo-100 rounded-full dark:bg-indigo-900">
-              <span className="text-sm font-medium text-indigo-700 dark:text-indigo-300">
-                Pregunta {currentQuestionIndex + 1} de {questions.length}
-              </span>
-            </div>
-            <h3 className="text-2xl font-bold leading-relaxed md:text-3xl text-slate-800 dark:text-slate-100">
+        {/* Question Card Compacto */}
+        <div className="p-4 bg-white rounded-2xl border shadow-xl dark:bg-slate-800 border-slate-200 dark:border-slate-700">
+          <div className="mb-4 text-center">
+            <h3 className="text-lg font-bold leading-relaxed md:text-xl text-slate-800 dark:text-slate-100">
               {questions[currentQuestionIndex].question}
             </h3>
           </div>
 
-          <div className="mb-8 space-y-4">
+          <div className="mb-4 space-y-2">
             {questions[currentQuestionIndex].options.map((option, idx) => (
               <label
                 key={idx}
-                className={`block p-4 rounded-2xl border-2 cursor-pointer transition-all duration-300 hover:scale-[1.02] ${
+                className={`block p-3 rounded-xl border cursor-pointer transition-all duration-200 ${
                   selectedOption === option
-                    ? "border-indigo-500 bg-indigo-50 dark:border-indigo-400 dark:bg-indigo-900/30 shadow-lg"
+                    ? "border-indigo-500 bg-indigo-50 dark:border-indigo-400 dark:bg-indigo-900/30 shadow-md"
                     : "border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500"
                 }`}
               >
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-3">
                   <input
                     type="radio"
                     name="option"
                     value={option}
                     checked={selectedOption === option}
                     onChange={() => setSelectedOption(option)}
-                    className="w-5 h-5 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400"
+                    className="w-4 h-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400"
                   />
-                  <span className="text-lg font-medium text-slate-700 dark:text-slate-200">
+                  <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
                     {option}
                   </span>
                 </div>
@@ -360,7 +360,7 @@ const Game = () => {
           <button
             onClick={handleAnswerSubmit}
             disabled={!selectedOption}
-            className="py-4 w-full text-lg font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-lg transition-all duration-300 transform hover:from-indigo-700 hover:to-purple-700 disabled:from-slate-400 disabled:to-slate-500 hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed dark:from-indigo-500 dark:to-purple-500 dark:hover:from-indigo-600 dark:hover:to-purple-600 dark:disabled:from-slate-600 dark:disabled:to-slate-700"
+            className="py-3 w-full text-base font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg transition-all duration-300 transform hover:from-indigo-700 hover:to-purple-700 disabled:from-slate-400 disabled:to-slate-500 hover:scale-[1.02] disabled:scale-100 disabled:cursor-not-allowed dark:from-indigo-500 dark:to-purple-500 dark:hover:from-indigo-600 dark:hover:to-purple-600 dark:disabled:from-slate-600 dark:disabled:to-slate-700"
           >
             {selectedOption ? "Enviar Respuesta" : "Selecciona una opción"}
           </button>

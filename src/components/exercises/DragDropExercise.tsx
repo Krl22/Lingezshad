@@ -57,11 +57,6 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
 
   const isCorrect = (imageId: string) => droppedItems[imageId] === imageId;
 
-  // Obtener etiquetas no asignadas
-  // const unassignedLabels = items.filter(
-  //   (item) => !Object.values(droppedItems).includes(item.id)
-  // );
-
   return (
     <div className="flex flex-col gap-6 w-full">
       {/* Etiquetas seleccionables */}
@@ -74,16 +69,16 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
               key={item.id}
               disabled={isAssigned}
               onClick={() => setSelectedLabel(item.id)}
-              className={`px-3 py-2 font-semibold rounded-xl shadow cursor-pointer transition
+              className={`px-4 py-3 font-semibold rounded-xl shadow-md cursor-pointer transition-all duration-200 border-2
                 ${
                   isAssigned
-                    ? "cursor-not-allowed bg-muted text-muted-foreground"
+                    ? "cursor-not-allowed bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 border-gray-200 dark:border-gray-700"
                     : ""
                 }
                 ${
                   isSelected
-                    ? "ring-2 bg-primary text-primary-foreground ring-primary/50"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    ? "ring-4 bg-blue-500 text-white border-blue-600 ring-blue-200 dark:ring-blue-400 transform scale-105 shadow-lg"
+                    : "bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-lg"
                 }
               `}
             >
@@ -100,24 +95,24 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
             key={item.id}
             onClick={() => handleImageClick(item.id)}
             className={clsx(
-              "flex-shrink-0 w-52 border-2 rounded-2xl p-2 transition-colors relative cursor-pointer",
+              "flex-shrink-0 w-52 border-3 rounded-2xl p-3 transition-all duration-200 relative cursor-pointer shadow-md",
               droppedItems[item.id]
                 ? isCorrect(item.id)
-                  ? "border-green-500 bg-green-50 dark:bg-green-950/20"
-                  : "border-red-500 bg-red-50 dark:bg-red-950/20"
-                : "border-border bg-card",
-              selectedLabel && "ring-2 ring-primary/50"
+                  ? "border-green-500 bg-green-50 dark:bg-green-950/30 shadow-green-200 dark:shadow-green-900"
+                  : "border-red-500 bg-red-50 dark:bg-red-950/30 shadow-red-200 dark:shadow-red-900"
+                : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-lg",
+              selectedLabel && "ring-4 ring-blue-300 dark:ring-blue-500"
             )}
           >
             <img
               src={item.image}
               alt={item.label}
-              className="object-contain w-full h-40 rounded-xl"
+              className="object-contain w-full h-40 rounded-xl bg-gray-50 dark:bg-gray-700"
             />
-            <div className="mt-2 text-base font-semibold text-center text-foreground">
+            <div className="mt-3 text-base font-semibold text-center">
               {droppedItems[item.id] ? (
                 <div className="relative">
-                  <span className="inline-block px-3 py-1 rounded-lg bg-secondary text-secondary-foreground">
+                  <span className="inline-block px-3 py-2 rounded-lg bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-700">
                     {items.find((i) => i.id === droppedItems[item.id])?.label}
                   </span>
                   <button
@@ -125,13 +120,15 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
                       e.stopPropagation();
                       removeAssignment(item.id);
                     }}
-                    className="absolute -top-2 -right-2 p-1 rounded-full border shadow-sm bg-background hover:bg-muted"
+                    className="absolute -top-2 -right-2 p-1 rounded-full border-2 shadow-md bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-950 border-red-300 dark:border-red-700 transition-colors"
                   >
-                    <X className="w-3 h-3 text-destructive" />
+                    <X className="w-3 h-3 text-red-500" />
                   </button>
                 </div>
               ) : (
-                "Haz clic aquí"
+                <span className="text-gray-500 dark:text-gray-400 italic">
+                  Click to match
+                </span>
               )}
             </div>
           </div>
@@ -145,24 +142,24 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
             key={item.id}
             onClick={() => handleImageClick(item.id)}
             className={clsx(
-              "p-4 border-2 rounded-2xl transition-colors relative cursor-pointer",
+              "p-4 border-3 rounded-2xl transition-all duration-200 relative cursor-pointer shadow-md hover:shadow-lg",
               droppedItems[item.id]
                 ? isCorrect(item.id)
-                  ? "border-green-500 bg-green-50 dark:bg-green-950/20"
-                  : "border-red-500 bg-red-50 dark:bg-red-950/20"
-                : "border-border bg-card",
-              selectedLabel && "ring-2 ring-primary/50"
+                  ? "border-green-500 bg-green-50 dark:bg-green-950/30 shadow-green-200 dark:shadow-green-900"
+                  : "border-red-500 bg-red-50 dark:bg-red-950/30 shadow-red-200 dark:shadow-red-900"
+                : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500",
+              selectedLabel && "ring-4 ring-blue-300 dark:ring-blue-500"
             )}
           >
             <img
               src={item.image}
               alt={item.label}
-              className="object-contain w-full h-48 rounded-xl"
+              className="object-contain w-full h-48 rounded-xl bg-gray-50 dark:bg-gray-700"
             />
-            <div className="mt-2 text-lg font-semibold text-center text-foreground">
+            <div className="mt-3 text-lg font-semibold text-center">
               {droppedItems[item.id] ? (
                 <div className="inline-block relative">
-                  <span className="inline-block px-4 py-2 rounded-lg bg-secondary text-secondary-foreground">
+                  <span className="inline-block px-4 py-2 rounded-lg bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-700">
                     {items.find((i) => i.id === droppedItems[item.id])?.label}
                   </span>
                   <button
@@ -170,13 +167,15 @@ export const DragAndDropExercise: React.FC<DragAndDropExerciseProps> = ({
                       e.stopPropagation();
                       removeAssignment(item.id);
                     }}
-                    className="absolute -top-2 -right-2 p-1 rounded-full border shadow-sm bg-background hover:bg-muted"
+                    className="absolute -top-2 -right-2 p-1 rounded-full border-2 shadow-md bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-950 border-red-300 dark:border-red-700 transition-colors"
                   >
-                    <X className="w-3 h-3 text-destructive" />
+                    <X className="w-3 h-3 text-red-500" />
                   </button>
                 </div>
               ) : (
-                "Haz clic aquí"
+                <span className="text-gray-500 dark:text-gray-400 italic">
+                  Click to match
+                </span>
               )}
             </div>
           </div>

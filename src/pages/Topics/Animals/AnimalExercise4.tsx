@@ -1,7 +1,8 @@
 import MemoryGame from "@/components/exercises/MemoryGame";
+import { InstructionsBox } from "@/components/exercises/InstructionsBox";
+import { Brain } from "lucide-react";
 
 const AnimalExercise4 = () => {
-  // Adaptar los items para que sean compatibles con la prop cardPairs
   const cardPairs = [
     {
       value: "lion",
@@ -37,9 +38,16 @@ const AnimalExercise4 = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-6 text-center">
+      <h1 className="text-2xl font-bold mb-4 text-center">
         Memory Game - Animals
       </h1>
+      
+      <InstructionsBox
+        title="Show Instructions"
+        instructions="Find matching pairs by flipping cards. Click on two cards to see if they match. Remember where each animal is located! Try to complete the game with the fewest moves possible."
+        icon={<Brain className="w-4 h-4" />}
+      />
+      
       <MemoryGame
         title="Memory Game - Animals"
         cardPairs={cardPairs}

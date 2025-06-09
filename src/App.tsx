@@ -42,7 +42,7 @@ function App() {
               <Route path="/search-rooms" element={<Search />} />
               <Route path="/friends" element={<Friends />} />
               <Route path="/Messages" element={<Messages />} />
-              <Route path="/friendChat" element={<FriendChat />} />
+              <Route path="/friendchat" element={<FriendChat />} />
               <Route path="/Restaurant" element={<Restaurant />} />
               <Route path="/Restaurant/Scene" element={<Scene />} />
               <Route path="/topic/animals/exercises" element={<Animals />} />
