@@ -11,6 +11,13 @@ import { Button } from "@/components/ui/button";
 export function LanguageToggle() {
   const { language, setLanguage, t } = useLanguage();
 
+  const languages = [
+    { code: "en", name: t("language.english"), flag: "🇺🇸" },
+    { code: "es", name: t("language.spanish"), flag: "🇪🇸" },
+    { code: "pt", name: t("language.portuguese"), flag: "🇧🇷" },
+    { code: "fr", name: t("language.french"), flag: "🇫🇷" },
+  ];
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -25,26 +32,20 @@ export function LanguageToggle() {
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 
-        className="min-w-[120px] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border border-white/20 dark:border-gray-700/50"
+        className="min-w-[140px] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border border-white/20 dark:border-gray-700/50"
       >
-        <DropdownMenuItem
-          onClick={() => setLanguage("en")}
-          className={`cursor-pointer ${
-            language === "en" ? "bg-blue-100 dark:bg-blue-900/50" : ""
-          }`}
-        >
-          <span className="mr-2">🇺🇸</span>
-          {t("language.english")}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setLanguage("es")}
-          className={`cursor-pointer ${
-            language === "es" ? "bg-blue-100 dark:bg-blue-900/50" : ""
-          }`}
-        >
-          <span className="mr-2">🇪🇸</span>
-          {t("language.spanish")}
-        </DropdownMenuItem>
+        {languages.map((lang) => (
+          <DropdownMenuItem
+            key={lang.code}
+            onClick={() => setLanguage(lang.code as any)}
+            className={`cursor-pointer ${
+              language === lang.code ? "bg-blue-100 dark:bg-blue-900/50" : ""
+            }`}
+          >
+            <span className="mr-2">{lang.flag}</span>
+            {lang.name}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

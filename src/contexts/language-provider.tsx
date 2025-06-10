@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Language = "en" | "es";
+type Language = "en" | "es" | "pt" | "fr";
 
 type LanguageProviderProps = {
   children: React.ReactNode;
@@ -73,10 +73,12 @@ type TranslationKeys = {
   // Language Selector
   "language.english": string;
   "language.spanish": string;
+  "language.portuguese": string;
+  "language.french": string;
   "language.select": string;
 };
 
-// Traducciones with proper typing
+// Traducciones con portugués y francés
 const translations: Record<Language, TranslationKeys> = {
   en: {
     // Landing Page
@@ -128,6 +130,8 @@ const translations: Record<Language, TranslationKeys> = {
     // Language Selector
     "language.english": "English",
     "language.spanish": "Español",
+    "language.portuguese": "Português",
+    "language.french": "Français",
     "language.select": "Select Language",
   },
   es: {
@@ -180,7 +184,117 @@ const translations: Record<Language, TranslationKeys> = {
     // Language Selector
     "language.english": "English",
     "language.spanish": "Español",
+    "language.portuguese": "Português",
+    "language.french": "Français",
     "language.select": "Seleccionar Idioma",
+  },
+  pt: {
+    // Landing Page
+    "landing.title": "Bem-vindo ao Lingez",
+    "landing.subtitle": "Aprenda inglês facilmente e divirta-se!",
+    "landing.description": "Junte-se a milhares de estudantes em uma jornada interativa para dominar o inglês através de jogos, conversas e lições personalizadas.",
+    "landing.signin": "Entrar",
+    "landing.getstarted": "Começar",
+    "landing.features.games.title": "Jogos Interativos",
+    "landing.features.games.description": "Aprenda através de jogos divertidos e envolventes que tornam o aprendizado de idiomas agradável.",
+    "landing.features.conversations.title": "Conversas Reais",
+    "landing.features.conversations.description": "Pratique com IA e conecte-se com outros estudantes do mundo todo.",
+    "landing.features.personalized.title": "Aprendizado Personalizado",
+    "landing.features.personalized.description": "Lições adaptativas que se ajustam ao seu ritmo e estilo de aprendizado.",
+    
+    // Messages & Chat
+    "chat.online": "Online",
+    "chat.startconversation": "Iniciar uma conversa",
+    "chat.sendmessage": "Envie uma mensagem para começar a conversar com",
+    "chat.placeholder": "Digite sua mensagem aqui... (Pressione Enter para enviar)",
+    "chat.recording": "Gravando áudio...",
+    "chat.stoprecording": "Parar gravação",
+    "chat.startrecording": "Iniciar gravação",
+    "chat.friendplaceholder": "Escreva uma mensagem...",
+    
+    // Game
+    "game.loading": "Carregando jogo...",
+    "game.finished": "Jogo Terminado!",
+    
+    // Audio Exercise
+    "audio.play": "Reproduzir áudio",
+    "audio.remove": "Remover áudio",
+    
+    // Fill in the Blank
+    "exercise.perfect": "Perfeito!",
+    "exercise.success.compact": "Mensagem de sucesso compacta",
+    
+    // Sidebar
+    "sidebar.account": "Conta",
+    "sidebar.play": "Jogar",
+    "sidebar.environment": "Ambiente",
+    "sidebar.messages": "Mensagens",
+    "sidebar.friends": "Amigos",
+    "sidebar.settings": "Configurações",
+    "sidebar.logout": "Sair",
+    "sidebar.navigation": "Navegação",
+    "sidebar.application": "Aplicação",
+    
+    // Language Selector
+    "language.english": "English",
+    "language.spanish": "Español",
+    "language.portuguese": "Português",
+    "language.french": "Français",
+    "language.select": "Selecionar Idioma",
+  },
+  fr: {
+    // Landing Page
+    "landing.title": "Bienvenue sur Lingez",
+    "landing.subtitle": "Apprenez l'anglais facilement et amusez-vous !",
+    "landing.description": "Rejoignez des milliers d'apprenants dans un voyage interactif pour maîtriser l'anglais à travers des jeux, des conversations et des leçons personnalisées.",
+    "landing.signin": "Se connecter",
+    "landing.getstarted": "Commencer",
+    "landing.features.games.title": "Jeux Interactifs",
+    "landing.features.games.description": "Apprenez à travers des jeux amusants et engageants qui rendent l'apprentissage des langues agréable.",
+    "landing.features.conversations.title": "Vraies Conversations",
+    "landing.features.conversations.description": "Pratiquez avec l'IA et connectez-vous avec d'autres apprenants du monde entier.",
+    "landing.features.personalized.title": "Apprentissage Personnalisé",
+    "landing.features.personalized.description": "Leçons adaptatives qui s'ajustent à votre rythme et style d'apprentissage.",
+    
+    // Messages & Chat
+    "chat.online": "En ligne",
+    "chat.startconversation": "Commencer une conversation",
+    "chat.sendmessage": "Envoyez un message pour commencer à discuter avec",
+    "chat.placeholder": "Tapez votre message ici... (Appuyez sur Entrée pour envoyer)",
+    "chat.recording": "Enregistrement audio...",
+    "chat.stoprecording": "Arrêter l'enregistrement",
+    "chat.startrecording": "Commencer l'enregistrement",
+    "chat.friendplaceholder": "Écrivez un message...",
+    
+    // Game
+    "game.loading": "Chargement du jeu...",
+    "game.finished": "Jeu Terminé !",
+    
+    // Audio Exercise
+    "audio.play": "Lire l'audio",
+    "audio.remove": "Supprimer l'audio",
+    
+    // Fill in the Blank
+    "exercise.perfect": "Parfait !",
+    "exercise.success.compact": "Message de succès compact",
+    
+    // Sidebar
+    "sidebar.account": "Compte",
+    "sidebar.play": "Jouer",
+    "sidebar.environment": "Environnement",
+    "sidebar.messages": "Messages",
+    "sidebar.friends": "Amis",
+    "sidebar.settings": "Paramètres",
+    "sidebar.logout": "Se déconnecter",
+    "sidebar.navigation": "Navigation",
+    "sidebar.application": "Application",
+    
+    // Language Selector
+    "language.english": "English",
+    "language.spanish": "Español",
+    "language.portuguese": "Português",
+    "language.french": "Français",
+    "language.select": "Sélectionner la langue",
   },
 };
 
