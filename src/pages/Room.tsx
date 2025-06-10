@@ -238,11 +238,13 @@ const Room = () => {
   // Mostrar estado de carga mientras se obtienen los datos
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gradient-to-r from-gray-100 to-gray-200 dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900">
-        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:shadow-2xl">
+      <div className="flex flex-col justify-center items-center px-4 min-h-screen bg-gradient-to-r from-gray-100 to-gray-200 dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900">
+        <div className="p-8 space-y-6 w-full max-w-md bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:shadow-2xl">
           <div className="text-center">
-            <div className="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">Loading room...</p>
+            <div className="inline-block w-8 h-8 rounded-full border-4 border-indigo-500 animate-spin border-t-transparent"></div>
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+              Loading room...
+            </p>
           </div>
         </div>
       </div>
@@ -250,8 +252,8 @@ const Room = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gradient-to-r from-gray-100 to-gray-200 dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:shadow-2xl">
+    <div className="flex flex-col justify-center items-center px-4 min-h-screen bg-gradient-to-r from-gray-100 to-gray-200 dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900">
+      <div className="p-8 space-y-6 w-full max-w-md bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:shadow-2xl">
         <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">
           Room:{" "}
           <span className="text-indigo-600 dark:text-indigo-400">{roomId}</span>
@@ -264,7 +266,7 @@ const Room = () => {
           </button>
         </h2>
 
-        <div className="p-4 rounded-md shadow-inner bg-gray-50 dark:bg-gray-700">
+        <div className="p-4 bg-gray-50 rounded-md shadow-inner dark:bg-gray-700">
           <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
             Players
           </h3>
@@ -276,7 +278,7 @@ const Room = () => {
               }) => (
                 <li
                   key={player.nickname}
-                  className="p-2 bg-white border-l-4 border-indigo-500 rounded-md shadow-sm dark:bg-gray-800 dark:border-indigo-400 dark:text-white"
+                  className="p-2 bg-white rounded-md border-l-4 border-indigo-500 shadow-sm dark:bg-gray-800 dark:border-indigo-400 dark:text-white"
                 >
                   <span className="font-semibold text-gray-800 dark:text-white">
                     {player.nickname}
@@ -294,7 +296,7 @@ const Room = () => {
           roomData?.status === "waiting" && (
             <button
               onClick={handleStartGame}
-              className="w-full px-4 py-2 font-semibold text-white transition bg-green-500 rounded-lg hover:bg-green-600 focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-400"
+              className="px-4 py-2 w-full font-semibold text-white bg-green-500 rounded-lg transition hover:bg-green-600 focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-400"
             >
               Start Game
             </button>
@@ -302,7 +304,7 @@ const Room = () => {
 
         <button
           onClick={handleLeaveRoom}
-          className="w-full px-4 py-2 font-semibold text-white transition bg-red-500 rounded-lg hover:bg-red-600 focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-400"
+          className="px-4 py-2 w-full font-semibold text-white bg-red-500 rounded-lg transition hover:bg-red-600 focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-400"
         >
           Leave Room
         </button>

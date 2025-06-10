@@ -29,10 +29,10 @@ export function FriendsList() {
 
   const handleOpenChat = (friendEmail: string) => {
     // Redirigir a Messages con el amigo seleccionado
-    navigate("/messages", { 
-      state: { 
-        selectedFriendEmail: friendEmail 
-      } 
+    navigate("/messages", {
+      state: {
+        selectedFriendEmail: friendEmail,
+      },
     });
   };
 

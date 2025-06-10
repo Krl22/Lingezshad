@@ -1,15 +1,23 @@
 import { useState, useEffect, useRef } from "react";
 import OpenAI from "openai";
-import { Mic, Send, MicOff } from "lucide-react";
+import { Mic, Send, MicOff, MoreVertical, Palette } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 //Initialize css style classes so they load with the page
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _ = [
   "bg-pattern-1",
   "bg-pattern-2",
@@ -32,22 +40,19 @@ interface Message {
 
 interface AIChatProps {
   patternNumber: number;
-  // Eliminar onPatternChange ya que se maneja desde Messages.tsx
+  onPatternChange?: () => void; // Nueva prop opcional
 }
 
-const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
+const AIChat: React.FC<AIChatProps> = ({ patternNumber, onPatternChange }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
-      content:
-        "You are an experienced English tutor. Your role is to help students improve their English skills through conversation, grammar correction, vocabulary building, and pronunciation guidance. Always be encouraging, patient, and provide constructive feedback. Correct mistakes gently and explain grammar rules when needed. Ask follow-up questions to keep the conversation engaging and educational.",
+      content: "You are an experienced English tutor. Your role is to help students improve their English skills through conversation, grammar correction, vocabulary building, and pronunciation guidance. Always be encouraging, patient, and provide constructive feedback. Correct mistakes gently and explain grammar rules when needed. Ask follow-up questions to keep the conversation engaging and educational.",
     },
     {
       role: "assistant",
-      content:
-        "Hello! I'm your English tutor. I'm here to help you improve your English skills through conversation, grammar, vocabulary, and pronunciation. What would you like to work on today? We can have a casual conversation, practice specific grammar topics, or work on any English skills you'd like to improve!",
-      avatar:
-        "https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg",
+      content: "Hello! I'm your English tutor. I'm here to help you improve your English skills through conversation, grammar, vocabulary, and pronunciation. What would you like to work on today? We can have a casual conversation, practice specific grammar topics, or work on any English skills you'd like to improve!",
+      avatar: "https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg",
     },
   ]);
   const [input, setInput] = useState<string>("");
@@ -86,9 +91,7 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
     try {
       // Verificar si la API key está configurada
       if (!import.meta.env.VITE_OPENAI_API_KEY) {
-        throw new Error(
-          "OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to your environment variables."
-        );
+        throw new Error("OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to your environment variables.");
       }
 
       const chatCompletion = await openai.chat.completions.create({
@@ -100,19 +103,16 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
 
       const assistantMessage: Message = {
         role: "assistant",
-        content:
-          chatCompletion.choices[0].message?.content ||
-          "I'm sorry, I couldn't generate a response. Please try again.",
-        avatar:
-          "https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg",
+        content: chatCompletion.choices[0].message?.content || "I'm sorry, I couldn't generate a response. Please try again.",
+        avatar: "https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg",
       };
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Error al obtener respuesta del chat:", error);
-
+      
       let errorMessage = "Sorry, I encountered an error. Please try again.";
-
+      
       if (error instanceof Error) {
         if (error.message.includes("API key")) {
           errorMessage = "OpenAI API key is not configured properly.";
@@ -122,7 +122,7 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
           errorMessage = "Network error. Please check your connection.";
         }
       }
-
+      
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -144,16 +144,14 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
       };
 
       mediaRecorder.onstop = async () => {
-        // const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
-
+        const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
+        
         // Aquí podrías implementar la transcripción de audio usando OpenAI Whisper
         // Por ahora, mostramos un mensaje indicando que la funcionalidad está en desarrollo
-        setError(
-          "Audio transcription feature is coming soon! Please use text input for now."
-        );
-
+        setError("Audio transcription feature is coming soon! Please use text input for now.");
+        
         // Limpiar el stream
-        stream.getTracks().forEach((track) => track.stop());
+        stream.getTracks().forEach(track => track.stop());
       };
 
       mediaRecorder.start();
@@ -185,7 +183,7 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
   }, [messages]);
 
   // Filtrar mensajes del sistema para la visualización
-  const visibleMessages = messages.filter((msg) => msg.role !== "system");
+  const visibleMessages = messages.filter(msg => msg.role !== "system");
 
   return (
     <div className="flex flex-col h-full">

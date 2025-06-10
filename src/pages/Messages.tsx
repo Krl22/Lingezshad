@@ -307,7 +307,9 @@ export function Messages() {
 
       {/* Conversational Area con gradiente de fondo */}
       <div
-        className={`flex-1 h-screen flex flex-col bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-950 dark:to-indigo-950 ${isMobile && !selectedConversation ? "hidden" : ""}`}
+        className={`flex-1 h-screen flex flex-col bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-950 dark:to-indigo-950 ${
+          isMobile && !selectedConversation ? "hidden" : ""
+        }`}
       >
         {selectedConversation ? (
           <>
@@ -316,12 +318,18 @@ export function Messages() {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => setSelectedConversation(null)}
-                  className={`text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 p-2 rounded-full hover:bg-blue-100/50 dark:hover:bg-blue-900/30 transition-all ${isMobile ? "" : "hidden"}`}
+                  className={`text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 p-2 rounded-full hover:bg-blue-100/50 dark:hover:bg-blue-900/30 transition-all ${
+                    isMobile ? "" : "hidden"
+                  }`}
                 >
                   <ArrowLeft size={20} />
                 </button>
                 <Avatar
-                  className={`w-12 h-12 ring-2 ring-blue-400/50 shadow-lg ${isTutor(selectedConversation) ? "ring-blue-500" : "ring-indigo-400"}`}
+                  className={`w-12 h-12 ring-2 ring-blue-400/50 shadow-lg ${
+                    isTutor(selectedConversation)
+                      ? "ring-blue-500"
+                      : "ring-indigo-400"
+                  }`}
                 >
                   {!isTutor(selectedConversation) && (
                     <AvatarImage
@@ -330,9 +338,10 @@ export function Messages() {
                     />
                   )}
                   <AvatarFallback
-                    className={isTutor(selectedConversation)
-                      ? "text-white bg-gradient-to-br from-blue-500 to-blue-600 font-bold"
-                      : "text-white bg-gradient-to-br from-indigo-500 to-purple-600 font-bold"
+                    className={
+                      isTutor(selectedConversation)
+                        ? "text-white bg-gradient-to-br from-blue-500 to-blue-600 font-bold"
+                        : "text-white bg-gradient-to-br from-indigo-500 to-purple-600 font-bold"
                     }
                   >
                     {isTutor(selectedConversation) ? (
@@ -363,12 +372,24 @@ export function Messages() {
               {/* Menú con estilo mejorado */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="p-2 hover:bg-blue-100/50 dark:hover:bg-blue-900/30 rounded-full">
-                    <MoreVertical size={24} className="text-blue-600 dark:text-blue-400" />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="p-2 hover:bg-blue-100/50 dark:hover:bg-blue-900/30 rounded-full"
+                  >
+                    <MoreVertical
+                      size={24}
+                      className="text-blue-600 dark:text-blue-400"
+                    />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border border-blue-200/50 dark:border-blue-800/50 shadow-xl">
-                  <DropdownMenuLabel className="text-blue-700 dark:text-blue-300 font-semibold">Opciones del Chat</DropdownMenuLabel>
+                <DropdownMenuContent
+                  align="end"
+                  className="w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border border-blue-200/50 dark:border-blue-800/50 shadow-xl"
+                >
+                  <DropdownMenuLabel className="text-blue-700 dark:text-blue-300 font-semibold">
+                    Opciones del Chat
+                  </DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-blue-200/30 dark:bg-blue-800/30" />
                   <DropdownMenuItem
                     onClick={changePattern}
@@ -401,10 +422,11 @@ export function Messages() {
                 {/* Friend Chat Messages con overlay colorido */}
                 <div className="overflow-hidden flex-1">
                   <div
-                    className={`overflow-y-auto p-4 space-y-4 h-full bg-pattern-${patternNumber} relative`}>
+                    className={`overflow-y-auto p-4 space-y-4 h-full bg-pattern-${patternNumber} relative`}
+                  >
                     {/* Overlay colorido para dar más esencia */}
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-purple-500/5 dark:from-blue-900/10 dark:via-indigo-900/10 dark:to-purple-900/10 pointer-events-none"></div>
-                    
+
                     {messages.length === 0 ? (
                       <div className="relative z-10 flex flex-col justify-center items-center h-full text-center">
                         <div className="flex justify-center items-center mb-6 w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-full border-2 border-blue-200/50 dark:border-blue-700/50 shadow-lg">
@@ -435,11 +457,15 @@ export function Messages() {
                         return (
                           <div
                             key={index}
-                            className={`relative z-10 flex items-end space-x-3 ${isCurrentUser ? "justify-end" : "justify-start"}`}
+                            className={`relative z-10 flex items-end space-x-3 ${
+                              isCurrentUser ? "justify-end" : "justify-start"
+                            }`}
                           >
                             {!isCurrentUser && (
                               <Avatar
-                                className={`w-8 h-8 ring-2 ring-white/70 dark:ring-gray-800/70 shadow-lg ${showAvatar ? "" : "invisible"}`}
+                                className={`w-8 h-8 ring-2 ring-white/70 dark:ring-gray-800/70 shadow-lg ${
+                                  showAvatar ? "" : "invisible"
+                                }`}
                               >
                                 <AvatarImage
                                   src="https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg"
@@ -451,12 +477,15 @@ export function Messages() {
                               </Avatar>
                             )}
                             <div
-                              className={`max-w-xs md:max-w-md px-4 py-3 rounded-2xl text-sm shadow-xl backdrop-blur-sm border-2 font-medium ${isCurrentUser
-                                ? "text-white bg-gradient-to-br from-blue-500 to-indigo-600 border-blue-300/30 rounded-br-md shadow-blue-200/50"
-                                : "text-gray-800 bg-gradient-to-br from-white to-blue-50/80 border-blue-200/50 rounded-bl-md shadow-indigo-200/50 dark:from-gray-800 dark:to-blue-950/80 dark:text-gray-100 dark:border-blue-700/50"
+                              className={`max-w-xs md:max-w-md px-4 py-3 rounded-2xl text-sm shadow-xl backdrop-blur-sm border-2 font-medium ${
+                                isCurrentUser
+                                  ? "text-white bg-gradient-to-br from-blue-500 to-indigo-600 border-blue-300/30 rounded-br-md shadow-blue-200/50"
+                                  : "text-gray-800 bg-gradient-to-br from-white to-blue-50/80 border-blue-200/50 rounded-bl-md shadow-indigo-200/50 dark:from-gray-800 dark:to-blue-950/80 dark:text-gray-100 dark:border-blue-700/50"
                               }`}
                             >
-                              <p className="break-words leading-relaxed">{message.content}</p>
+                              <p className="break-words leading-relaxed">
+                                {message.content}
+                              </p>
                             </div>
                           </div>
                         );
@@ -481,9 +510,10 @@ export function Messages() {
                       <Button
                         variant="ghost"
                         onClick={() => setIsRecording((prev) => !prev)}
-                        className={`absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-full transition-all ${isRecording
-                          ? "text-red-500 bg-red-100/80 dark:bg-red-950/30 hover:bg-red-200/80 dark:hover:bg-red-950/50"
-                          : "text-blue-500 hover:text-blue-700 hover:bg-blue-100/50 dark:hover:bg-blue-900/30"
+                        className={`absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-full transition-all ${
+                          isRecording
+                            ? "text-red-500 bg-red-100/80 dark:bg-red-950/30 hover:bg-red-200/80 dark:hover:bg-red-950/50"
+                            : "text-blue-500 hover:text-blue-700 hover:bg-blue-100/50 dark:hover:bg-blue-900/30"
                         }`}
                       >
                         <Mic size={18} />

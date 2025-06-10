@@ -176,7 +176,7 @@ const Game = () => {
         </div>
       </div>
     );
-  };
+  }
 
   if (dashboardVisible) {
     return (
@@ -311,7 +311,9 @@ const Game = () => {
                 ></div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium truncate text-slate-700 dark:text-slate-200">
-                    {player.nickname.length > 8 ? player.nickname.substring(0, 8) + '...' : player.nickname}
+                    {player.nickname.length > 8
+                      ? player.nickname.substring(0, 8) + "..."
+                      : player.nickname}
                   </p>
                   <p className="text-sm font-bold text-slate-800 dark:text-slate-100">
                     {player.progress}/{MAX_QUESTIONS}
