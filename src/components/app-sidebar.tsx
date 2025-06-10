@@ -88,10 +88,6 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup className="pt-10">
           <LevelProgress />
-          <div className="flex justify-center items-center py-4 space-x-2">
-            <LanguageToggle />
-            <ModeToggle />
-          </div>
 
           {/* Navigation Section - Solo en desktop */}
           {!isMobile && (

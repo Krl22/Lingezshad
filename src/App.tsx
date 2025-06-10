@@ -24,6 +24,7 @@ import { Messages } from "./pages/Messages";
 import Restaurant from "./pages/locations/Restaurant";
 import Scene from "./pages/locations/Restaurant/scene";
 import Animals from "./pages/Topics/Animals/Animals";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -133,6 +134,14 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <Animals />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/settings"
+                    element={
+                      <ProtectedRoute>
+                        <Settings />
                       </ProtectedRoute>
                     }
                   />

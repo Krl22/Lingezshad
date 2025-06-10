@@ -18,32 +18,38 @@ export function LanguageToggle() {
     { code: "fr", name: t("language.french"), flag: "🇫🇷" },
   ];
 
+  const currentLanguage = languages.find(lang => lang.code === language);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="ghost"
+          variant="outline"
           size="sm"
-          className="relative h-9 w-9 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200"
+          className="h-9 px-3 rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm hover:shadow-md"
         >
-          <Globe className="h-4 w-4 text-white" />
-          <span className="sr-only">{t("language.select")}</span>
+          <Globe className="h-4 w-4 mr-2 text-gray-600 dark:text-gray-300" />
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+            {currentLanguage?.flag} {currentLanguage?.name}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 
-        className="min-w-[140px] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border border-white/20 dark:border-gray-700/50"
+        className="min-w-[160px] bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 shadow-lg rounded-lg p-1"
       >
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
             onClick={() => setLanguage(lang.code as any)}
-            className={`cursor-pointer ${
-              language === lang.code ? "bg-blue-100 dark:bg-blue-900/50" : ""
+            className={`cursor-pointer rounded-md px-3 py-2 transition-colors ${
+              language === lang.code 
+                ? "bg-blue-100 dark:bg-blue-900/50 text-blue-900 dark:text-blue-100" 
+                : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
             }`}
           >
-            <span className="mr-2">{lang.flag}</span>
-            {lang.name}
+            <span className="mr-3 text-lg">{lang.flag}</span>
+            <span className="font-medium">{lang.name}</span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
