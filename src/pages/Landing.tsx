@@ -15,9 +15,9 @@ const Landing = () => {
       </div>
 
       {/* Contenido centrado - Ajustado padding superior para evitar superposición */}
-      <div className="flex flex-col items-center mx-auto max-w-4xl text-center pt-16 sm:pt-8">
+      <div className="flex flex-col items-center pt-16 mx-auto max-w-4xl text-center sm:pt-8">
         <div className="mb-8">
-          <h1 className="mb-6 text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 dark:from-blue-400 dark:via-purple-400 dark:to-indigo-400 sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="mb-6 h-24 text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 dark:from-blue-400 dark:via-purple-400 dark:to-indigo-400 sm:text-5xl md:text-6xl lg:text-7xl">
             Welcome to Lingez
           </h1>
           <p className="text-lg font-medium text-slate-600 dark:text-slate-300 sm:text-xl md:text-2xl lg:text-3xl">
