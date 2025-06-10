@@ -8,7 +8,8 @@ import Landing from "./pages/Landing";
 import TopNavBar from "./components/TopNavBar";
 import BottomNavBar from "./components/BottomNavBar";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-
+import Actions from "./pages/Topics/Actions/Actions";
+import FiveSenses from "./pages/Topics/FiveSenses/FiveSenses";
 import Learning from "./pages/Learning";
 import { Environment } from "./pages/Environment";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -25,6 +26,7 @@ import Restaurant from "./pages/locations/Restaurant";
 import Scene from "./pages/locations/Restaurant/scene";
 import Animals from "./pages/Topics/Animals/Animals";
 import Settings from "./pages/Settings";
+import Body from "./pages/Topics/Body/Body";
 
 function App() {
   return (
@@ -38,7 +40,6 @@ function App() {
                 <Routes>
                   {/* Ruta pública - Landing page */}
                   <Route path="/" element={<Landing />} />
-
                   {/* Todas las demás rutas están protegidas */}
                   <Route
                     path="/home"
@@ -112,7 +113,6 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
-
                   <Route
                     path="/Restaurant"
                     element={
@@ -142,6 +142,31 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <Settings />
+                      </ProtectedRoute>
+                    }
+                  />
+                  // Agregar esta ruta dentro de las Routes:
+                  <Route
+                    path="/topic/actions/exercises"
+                    element={
+                      <ProtectedRoute>
+                        <Actions />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/topic/fivesenses/exercises"
+                    element={
+                      <ProtectedRoute>
+                        <FiveSenses />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/topic/body/exercises"
+                    element={
+                      <ProtectedRoute>
+                        <Body />
                       </ProtectedRoute>
                     }
                   />

@@ -2,7 +2,7 @@ import { TopicGrid } from "@/components/TopicGrid";
 const Learning = () => {
   const topics = [
     {
-      id: "5senses",
+      id: "fivesenses",
       title: "5 Senses",
       image: "/topics/5senses.jpg",
       exercises: [
