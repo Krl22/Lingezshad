@@ -305,29 +305,23 @@ export function Messages() {
         </div>
       </div>
 
-      {/* Conversational Area */}
+      {/* Conversational Area con gradiente de fondo */}
       <div
-        className={`flex-1 h-screen dark:bg-gray-900 flex flex-col bg-gray-200 ${
-          isMobile && !selectedConversation ? "hidden" : ""
-        }`}
+        className={`flex-1 h-screen flex flex-col bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-950 dark:to-indigo-950 ${isMobile && !selectedConversation ? "hidden" : ""}`}
       >
         {selectedConversation ? (
           <>
-            {/* Header */}
-            <div className="flex justify-between items-center p-4 bg-white border-b border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            {/* Header con gradiente y efectos */}
+            <div className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-purple-500/10 backdrop-blur-md border-b border-blue-200/50 shadow-lg dark:from-blue-900/30 dark:via-indigo-900/30 dark:to-purple-900/30 dark:border-blue-800/30">
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => setSelectedConversation(null)}
-                  className={`dark:text-gray-300 dark:hover:text-gray-500 p-2 ${
-                    isMobile ? "" : "hidden"
-                  }`}
+                  className={`text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 p-2 rounded-full hover:bg-blue-100/50 dark:hover:bg-blue-900/30 transition-all ${isMobile ? "" : "hidden"}`}
                 >
                   <ArrowLeft size={20} />
                 </button>
                 <Avatar
-                  className={`w-10 h-10 ${
-                    isTutor(selectedConversation) ? "ring-2 ring-blue-400" : ""
-                  }`}
+                  className={`w-12 h-12 ring-2 ring-blue-400/50 shadow-lg ${isTutor(selectedConversation) ? "ring-blue-500" : "ring-indigo-400"}`}
                 >
                   {!isTutor(selectedConversation) && (
                     <AvatarImage
@@ -336,55 +330,58 @@ export function Messages() {
                     />
                   )}
                   <AvatarFallback
-                    className={
-                      isTutor(selectedConversation)
-                        ? "text-white bg-blue-500"
-                        : "text-white bg-blue-500"
+                    className={isTutor(selectedConversation)
+                      ? "text-white bg-gradient-to-br from-blue-500 to-blue-600 font-bold"
+                      : "text-white bg-gradient-to-br from-indigo-500 to-purple-600 font-bold"
                     }
                   >
                     {isTutor(selectedConversation) ? (
-                      <Bot size={20} />
+                      <Bot size={24} />
                     ) : (
                       getAvatarInitial(selectedConversation)
                     )}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+                  <h3 className="font-bold text-lg bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent dark:from-blue-300 dark:to-indigo-300">
                     {getConversationName(selectedConversation)}
                   </h3>
                   {isTutor(selectedConversation) ? (
-                    <p className="text-sm text-blue-600 dark:text-blue-400">
+                    <p className="text-sm font-medium text-blue-600 dark:text-blue-400 flex items-center">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                       AI English Tutor
                     </p>
                   ) : (
-                    <p className="text-sm text-green-500">En línea</p>
+                    <p className="text-sm font-medium text-green-600 dark:text-green-400 flex items-center">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                      En línea
+                    </p>
                   )}
                 </div>
               </div>
 
-              {/* Menú de opciones - para TODOS los chats */}
+              {/* Menú con estilo mejorado */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="p-2">
-                    <MoreVertical size={24} />
+                  <Button variant="ghost" size="sm" className="p-2 hover:bg-blue-100/50 dark:hover:bg-blue-900/30 rounded-full">
+                    <MoreVertical size={24} className="text-blue-600 dark:text-blue-400" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>Opciones del Chat</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                <DropdownMenuContent align="end" className="w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border border-blue-200/50 dark:border-blue-800/50 shadow-xl">
+                  <DropdownMenuLabel className="text-blue-700 dark:text-blue-300 font-semibold">Opciones del Chat</DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-blue-200/30 dark:bg-blue-800/30" />
                   <DropdownMenuItem
                     onClick={changePattern}
-                    className="cursor-pointer"
+                    className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-950/50 text-blue-700 dark:text-blue-300"
                   >
-                    <Palette className="mr-2 w-4 h-4" />
+                    <Palette className="mr-2 w-4 h-4 text-purple-500" />
                     Cambiar fondo (Patrón {patternNumber})
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuSeparator className="bg-blue-200/30 dark:bg-blue-800/30" />
+                  <DropdownMenuItem className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-950/50">
                     <div className="flex items-center justify-between w-full">
-                      <span className="flex items-center">
-                        <Moon className="mr-2 w-4 h-4" />
+                      <span className="flex items-center text-blue-700 dark:text-blue-300">
+                        <Moon className="mr-2 w-4 h-4 text-indigo-500" />
                         Modo oscuro
                       </span>
                       <ModeToggle />
@@ -401,26 +398,30 @@ export function Messages() {
               </div>
             ) : (
               <>
-                {/* Friend Chat Messages */}
+                {/* Friend Chat Messages con overlay colorido */}
                 <div className="overflow-hidden flex-1">
                   <div
-                    className={`overflow-y-auto p-4 space-y-4 h-full bg-pattern-${patternNumber}`}
-                  >
+                    className={`overflow-y-auto p-4 space-y-4 h-full bg-pattern-${patternNumber} relative`}>
+                    {/* Overlay colorido para dar más esencia */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-purple-500/5 dark:from-blue-900/10 dark:via-indigo-900/10 dark:to-purple-900/10 pointer-events-none"></div>
+                    
                     {messages.length === 0 ? (
-                      <div className="flex flex-col justify-center items-center h-full text-center">
-                        <div className="flex justify-center items-center mb-4 w-16 h-16 bg-gray-200 rounded-full dark:bg-gray-700">
-                          <Avatar className="w-12 h-12">
-                            <AvatarFallback className="text-white bg-blue-500">
+                      <div className="relative z-10 flex flex-col justify-center items-center h-full text-center">
+                        <div className="flex justify-center items-center mb-6 w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-full border-2 border-blue-200/50 dark:border-blue-700/50 shadow-lg">
+                          <Avatar className="w-14 h-14">
+                            <AvatarFallback className="text-white bg-gradient-to-br from-indigo-500 to-purple-600 text-lg font-bold">
                               {getAvatarInitial(selectedConversation)}
                             </AvatarFallback>
                           </Avatar>
                         </div>
-                        <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
+                        <h3 className="mb-3 text-xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent dark:from-blue-300 dark:to-indigo-300">
                           Inicia una conversación
                         </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className="text-blue-600/80 dark:text-blue-400/80 max-w-sm font-medium">
                           Envía un mensaje para comenzar a chatear con{" "}
-                          {getConversationName(selectedConversation)}
+                          <span className="font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent dark:from-indigo-400 dark:to-purple-400">
+                            {getConversationName(selectedConversation)}
+                          </span>
                         </p>
                       </div>
                     ) : (
@@ -434,33 +435,28 @@ export function Messages() {
                         return (
                           <div
                             key={index}
-                            className={`flex items-end space-x-2 z-10 ${
-                              isCurrentUser ? "justify-end" : "justify-start"
-                            }`}
+                            className={`relative z-10 flex items-end space-x-3 ${isCurrentUser ? "justify-end" : "justify-start"}`}
                           >
                             {!isCurrentUser && (
                               <Avatar
-                                className={`w-8 h-8 z-10 ${
-                                  showAvatar ? "" : "invisible"
-                                }`}
+                                className={`w-8 h-8 ring-2 ring-white/70 dark:ring-gray-800/70 shadow-lg ${showAvatar ? "" : "invisible"}`}
                               >
                                 <AvatarImage
                                   src="https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg"
                                   alt="Friend Avatar"
                                 />
-                                <AvatarFallback className="text-xs text-white bg-gray-500">
+                                <AvatarFallback className="text-xs text-white bg-gradient-to-br from-indigo-500 to-purple-600 font-bold">
                                   {getAvatarInitial(selectedConversation)}
                                 </AvatarFallback>
                               </Avatar>
                             )}
                             <div
-                              className={`max-w-xs md:max-w-md px-4 py-2 rounded-2xl text-sm shadow-sm z-10 ${
-                                isCurrentUser
-                                  ? "text-white bg-blue-500 rounded-br-md"
-                                  : "text-gray-900 bg-white rounded-bl-md border border-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+                              className={`max-w-xs md:max-w-md px-4 py-3 rounded-2xl text-sm shadow-xl backdrop-blur-sm border-2 font-medium ${isCurrentUser
+                                ? "text-white bg-gradient-to-br from-blue-500 to-indigo-600 border-blue-300/30 rounded-br-md shadow-blue-200/50"
+                                : "text-gray-800 bg-gradient-to-br from-white to-blue-50/80 border-blue-200/50 rounded-bl-md shadow-indigo-200/50 dark:from-gray-800 dark:to-blue-950/80 dark:text-gray-100 dark:border-blue-700/50"
                               }`}
                             >
-                              <p className="break-words">{message.content}</p>
+                              <p className="break-words leading-relaxed">{message.content}</p>
                             </div>
                           </div>
                         );
@@ -470,8 +466,8 @@ export function Messages() {
                   </div>
                 </div>
 
-                {/* Friend Chat Input */}
-                <div className="p-4 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                {/* Friend Chat Input con gradiente */}
+                <div className="p-4 bg-gradient-to-r from-blue-50/80 via-indigo-50/80 to-purple-50/80 dark:from-gray-900/80 dark:via-blue-950/80 dark:to-indigo-950/80 backdrop-blur-md border-t border-blue-200/50 dark:border-blue-800/30">
                   <div className="flex items-end space-x-3">
                     <div className="relative flex-1">
                       <Input
@@ -479,16 +475,15 @@ export function Messages() {
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={handleKeyPress}
                         placeholder="Escribe un mensaje..."
-                        className="py-3 pr-12 rounded-full border-gray-300 resize-none dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400"
+                        className="py-3 pr-12 rounded-2xl border-2 border-blue-200/50 bg-white/80 dark:bg-gray-800/80 dark:border-blue-700/50 focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-200/50 dark:focus:ring-blue-800/50 backdrop-blur-sm shadow-lg font-medium"
                         maxLength={1000}
                       />
                       <Button
                         variant="ghost"
                         onClick={() => setIsRecording((prev) => !prev)}
-                        className={`absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-full ${
-                          isRecording
-                            ? "text-red-500 bg-red-50 dark:bg-red-900/20"
-                            : "text-gray-400 hover:text-gray-600"
+                        className={`absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-full transition-all ${isRecording
+                          ? "text-red-500 bg-red-100/80 dark:bg-red-950/30 hover:bg-red-200/80 dark:hover:bg-red-950/50"
+                          : "text-blue-500 hover:text-blue-700 hover:bg-blue-100/50 dark:hover:bg-blue-900/30"
                         }`}
                       >
                         <Mic size={18} />
@@ -497,13 +492,13 @@ export function Messages() {
                     <Button
                       onClick={() => handleSendMessage(input)}
                       disabled={!input.trim()}
-                      className="p-0 w-12 h-12 bg-blue-500 rounded-full hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full hover:from-blue-600 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <Send size={18} />
                     </Button>
                   </div>
                   {isRecording && (
-                    <div className="flex justify-center items-center mt-2 text-sm text-red-500">
+                    <div className="flex justify-center items-center mt-3 text-sm text-red-500 font-medium">
                       <div className="mr-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                       Grabando audio...
                     </div>

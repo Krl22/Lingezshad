@@ -189,70 +189,72 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <Card className="flex flex-col mx-auto w-full h-full rounded-none border-0 shadow-md">
-        {/* Eliminar completamente el header con menú de opciones */}
-
-        {/* Error Alert */}
+      <Card className="flex flex-col mx-auto w-full h-full rounded-none border-0 shadow-none bg-transparent">
+        {/* Error Alert con gradiente */}
         {error && (
-          <Alert className="m-4 bg-red-50 border-red-200 dark:border-red-800 dark:bg-red-950">
-            <AlertDescription className="text-red-800 dark:text-red-200">
+          <Alert className="m-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/30 dark:to-pink-950/30 border-2 border-red-200/50 dark:border-red-800/50 backdrop-blur-sm shadow-lg">
+            <AlertDescription className="text-red-700 dark:text-red-300 font-medium">
               {error}
             </AlertDescription>
           </Alert>
         )}
 
-        {/* Chat Messages */}
-        <ScrollArea
-          className={`overflow-auto flex-1 p-4 bg-pattern-${patternNumber}`}
-        >
-          <div className="space-y-4">
+        {/* Chat Messages con overlay colorido */}
+        <ScrollArea className={`overflow-auto flex-1 p-4 bg-pattern-${patternNumber} relative`}>
+          {/* Overlay colorido para dar más esencia */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-purple-500/5 dark:from-blue-900/10 dark:via-indigo-900/10 dark:to-purple-900/10 pointer-events-none"></div>
+          
+          <div className="relative z-10 space-y-6">
             {visibleMessages.map((message, index) => (
               <div
                 key={index}
-                className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
+                className={`flex items-start space-x-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 {message.role === "assistant" && (
-                  <Avatar className="z-10 mr-2">
+                  <Avatar className="ring-2 ring-white/70 dark:ring-gray-800/70 shadow-xl">
                     <AvatarImage src="https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg" />
-                    <AvatarFallback>AI</AvatarFallback>
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold text-lg">
+                      AI
+                    </AvatarFallback>
                   </Avatar>
                 )}
                 <div
-                  className={`max-w-xs md:max-w-md p-3 rounded-lg text-sm z-10 ${
-                    message.role === "user"
-                      ? "bg-blue-500 text-white dark:bg-blue-600"
-                      : "bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-gray-100"
+                  className={`max-w-xs md:max-w-md p-4 rounded-2xl text-sm shadow-xl backdrop-blur-sm border-2 leading-relaxed font-medium ${message.role === "user"
+                    ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white border-blue-300/30 rounded-br-md shadow-blue-200/50"
+                    : "bg-gradient-to-br from-white to-blue-50/80 text-gray-800 border-blue-200/50 rounded-bl-md shadow-indigo-200/50 dark:from-gray-800 dark:to-blue-950/80 dark:text-gray-100 dark:border-blue-700/50"
                   }`}
                 >
                   {message.content}
                 </div>
                 {message.role === "user" && (
-                  <Avatar className="z-10 ml-2">
+                  <Avatar className="ring-2 ring-white/70 dark:ring-gray-800/70 shadow-xl">
                     <AvatarImage src="https://via.placeholder.com/50" />
-                    <AvatarFallback>You</AvatarFallback>
+                    <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold">
+                      Tú
+                    </AvatarFallback>
                   </Avatar>
                 )}
               </div>
             ))}
 
-            {/* Loading indicator */}
+            {/* Loading indicator con gradiente */}
             {isLoading && (
-              <div className="flex justify-start">
-                <Avatar className="z-10 mr-2">
+              <div className="flex justify-start items-start space-x-3">
+                <Avatar className="ring-2 ring-white/70 dark:ring-gray-800/70 shadow-xl">
                   <AvatarImage src="https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg" />
-                  <AvatarFallback>AI</AvatarFallback>
+                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold">
+                    AI
+                  </AvatarFallback>
                 </Avatar>
-                <div className="z-10 p-3 max-w-xs text-sm text-gray-900 bg-gray-200 rounded-lg md:max-w-md dark:bg-gray-600 dark:text-gray-100">
+                <div className="p-4 max-w-xs bg-gradient-to-br from-white to-blue-50/80 dark:from-gray-800 dark:to-blue-950/80 backdrop-blur-sm border-2 border-blue-200/50 dark:border-blue-700/50 rounded-2xl rounded-bl-md shadow-xl">
                   <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
                     <div
-                      className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce"
                       style={{ animationDelay: "0.1s" }}
                     ></div>
                     <div
-                      className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-purple-500 rounded-full animate-bounce"
                       style={{ animationDelay: "0.2s" }}
                     ></div>
                   </div>
@@ -264,32 +266,36 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
           </div>
         </ScrollArea>
 
-        {/* Chat Input */}
-        <div className="flex gap-2 justify-between items-center p-4 bg-white border-t border-gray-300 dark:border-gray-700 dark:bg-gray-800">
+        {/* Chat Input con gradiente */}
+        <div className="flex gap-3 justify-between items-center p-4 bg-gradient-to-r from-blue-50/80 via-indigo-50/80 to-purple-50/80 dark:from-gray-900/80 dark:via-blue-950/80 dark:to-indigo-950/80 backdrop-blur-md border-t border-blue-200/50 dark:border-blue-800/30">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyPress}
-            placeholder="Type your message here... (Press Enter to send)"
-            className="flex-1"
+            placeholder="Escribe tu mensaje aquí... (Presiona Enter para enviar)"
+            className="flex-1 bg-white/80 dark:bg-gray-800/80 border-2 border-blue-200/50 dark:border-blue-700/50 focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-200/50 dark:focus:ring-blue-800/50 rounded-2xl backdrop-blur-sm shadow-lg font-medium"
             disabled={isLoading}
           />
           <Button
             variant="ghost"
             onClick={isRecording ? stopRecording : startRecording}
-            className="p-2"
+            className={`p-3 rounded-full transition-all ${isRecording 
+              ? "text-red-500 bg-red-100/80 dark:bg-red-950/30 hover:bg-red-200/80 dark:hover:bg-red-950/50" 
+              : "text-blue-500 hover:text-blue-700 hover:bg-blue-100/50 dark:hover:bg-blue-900/30"
+            }`}
             disabled={isLoading}
-            title={isRecording ? "Stop recording" : "Start recording"}
+            title={isRecording ? "Detener grabación" : "Iniciar grabación"}
           >
             {isRecording ? (
-              <MicOff className="w-6 h-6 text-red-500 animate-pulse" />
+              <MicOff className="w-5 h-5 animate-pulse" />
             ) : (
-              <Mic className="w-6 h-6 text-blue-500" />
+              <Mic className="w-5 h-5" />
             )}
           </Button>
           <Button
             onClick={() => handleSendMessage(input)}
             disabled={isLoading || input.trim() === ""}
+            className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full hover:from-blue-600 hover:to-indigo-700 shadow-lg transition-all hover:shadow-xl hover:scale-105"
           >
             <Send className="w-5 h-5" />
           </Button>

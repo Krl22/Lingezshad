@@ -149,12 +149,13 @@
 }
 
 @layer utilities {
+  /* Patrones mejorados con mejor contraste para ambos modos */
   .bg-pattern-1 {
-    @apply w-full h-full; /* Utiliza las utilidades de Tailwind para el tamaño */
-    --s: 200px; /* Controla el tamaño */
-    --c1: #1d1d1d;
-    --c2: #4e4f51;
-    --c3: #3c3c3c;
+    @apply w-full h-full;
+    --s: 200px;
+    --c1: hsl(var(--muted));
+    --c2: hsl(var(--muted) / 0.5);
+    --c3: hsl(var(--accent));
 
     background: repeating-conic-gradient(
           from 30deg,
@@ -170,24 +171,25 @@
       );
     background-size: var(--s) calc(var(--s) * 0.577);
   }
-  .bg-pattern-2 {
-    @apply w-full h-full; /* Utiliza las utilidades de Tailwind para el tamaño */
-    --s: 37px; /* control the size */
 
-    --c: #0000, #282828 0.5deg 119.5deg, #0000 120deg;
+  .bg-pattern-2 {
+    @apply w-full h-full;
+    --s: 37px;
+    --c: #0000, hsl(var(--muted)) 0.5deg 119.5deg, #0000 120deg;
     --g1: conic-gradient(from 60deg at 56.25% calc(425% / 6), var(--c));
     --g2: conic-gradient(from 180deg at 43.75% calc(425% / 6), var(--c));
     --g3: conic-gradient(from -60deg at 50% calc(175% / 12), var(--c));
     background: var(--g1), var(--g1) var(--s) calc(1.73 * var(--s)), var(--g2),
       var(--g2) var(--s) calc(1.73 * var(--s)), var(--g3) var(--s) 0,
-      var(--g3) 0 calc(1.73 * var(--s)) #1e1e1e;
+      var(--g3) 0 calc(1.73 * var(--s)) hsl(var(--background));
     background-size: calc(2 * var(--s)) calc(3.46 * var(--s));
   }
+
   .bg-pattern-3 {
-    @apply w-full h-full; /* Utiliza las utilidades de Tailwind para el tamaño */
+    @apply w-full h-full;
     --s: 60px;
-    --c1: #180a22;
-    --c2: #5b42f3;
+    --c1: hsl(var(--primary) / 0.1);
+    --c2: hsl(var(--primary) / 0.3);
 
     --_g: radial-gradient(
       closest-side at 25% 25%,
@@ -204,6 +206,10 @@
         calc(0.5 * var(--s)) 0 / calc(2 * var(--s)) var(--s);
   }
 
+  /* Continuar con patrones similares adaptados al sistema de temas... */
+}
+
+@layer base {
   .bg-pattern-4 {
     @apply w-full h-full; /* Utiliza las utilidades de Tailwind para el tamaño */
     --s: 65px; /* control the size */
