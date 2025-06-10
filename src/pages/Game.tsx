@@ -171,7 +171,7 @@ const Game = () => {
         <div className="flex flex-col items-center space-y-4">
           <div className="w-12 h-12 rounded-full border-4 border-blue-500 animate-spin border-t-transparent"></div>
           <p className="text-lg font-medium text-slate-600 dark:text-slate-300">
-            Cargando juego...
+            Loading game...
           </p>
         </div>
       </div>
@@ -187,7 +187,7 @@ const Game = () => {
               <span className="text-3xl">🏆</span>
             </div>
             <h1 className="mb-2 text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-400 dark:to-orange-400">
-              ¡Juego Terminado!
+              Game Over!
             </h1>
             <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-200">
               Ganador:{" "}

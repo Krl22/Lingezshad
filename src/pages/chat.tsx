@@ -277,7 +277,7 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyPress}
-            placeholder="Escribe tu mensaje aquí... (Presiona Enter para enviar)"
+            placeholder="Write your message here... (Press Enter to send)"
             className="flex-1 font-medium rounded-2xl border-2 shadow-lg backdrop-blur-sm bg-white/80 dark:bg-gray-800/80 border-blue-200/50 dark:border-blue-700/50 focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-200/50 dark:focus:ring-blue-800/50"
             disabled={isLoading}
           />
@@ -290,7 +290,7 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
                 : "text-blue-500 hover:text-blue-700 hover:bg-blue-100/50 dark:hover:bg-blue-900/30"
             }`}
             disabled={isLoading}
-            title={isRecording ? "Detener grabación" : "Iniciar grabación"}
+            title={isRecording ? "Stop recording" : "Start recording"}
           >
             {isRecording ? (
               <MicOff className="w-5 h-5 animate-pulse" />

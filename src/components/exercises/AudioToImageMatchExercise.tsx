@@ -157,7 +157,7 @@ export const AudioToImageMatchExercise: React.FC<
                 type="button"
                 onClick={() => playAudio(item.id)}
                 className="focus:outline-none"
-                aria-label="Reproducir audio"
+                aria-label="Play audio"
               >
                 <Volume2 className="w-7 h-7" />
               </button>

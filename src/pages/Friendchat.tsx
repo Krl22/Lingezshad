@@ -95,7 +95,7 @@ export function FriendChat() {
             <h3 className="font-semibold text-gray-900 dark:text-gray-100">
               {friendEmail}
             </h3>
-            <p className="text-sm text-green-500">En línea</p>
+            <p className="text-sm text-green-500">Online</p>
           </div>
         </div>
         <Button variant="ghost" size="sm" className="p-2">
@@ -116,10 +116,10 @@ export function FriendChat() {
                 </Avatar>
               </div>
               <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
-                Inicia una conversación
+                Start a conversation
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Envía un mensaje para comenzar a chatear con {friendEmail}
+                Send a message to start chatting with {friendEmail}
               </p>
             </div>
           ) : (
@@ -174,7 +174,7 @@ export function FriendChat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="Escribe un mensaje..."
+              placeholder="Write a message..."
               className="py-3 pr-12 rounded-full border-gray-300 resize-none dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400"
               maxLength={1000}
             />
@@ -201,7 +201,7 @@ export function FriendChat() {
         {isRecording && (
           <div className="flex justify-center items-center mt-2 text-sm text-red-500">
             <div className="mr-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-            Grabando audio...
+            Recording audio...
           </div>
         )}
       </div>

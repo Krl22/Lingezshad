@@ -363,7 +363,7 @@ export function Messages() {
                   ) : (
                     <p className="text-sm font-medium text-green-600 dark:text-green-400 flex items-center">
                       <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                      En línea
+                      Online
                     </p>
                   )}
                 </div>
@@ -437,10 +437,10 @@ export function Messages() {
                           </Avatar>
                         </div>
                         <h3 className="mb-3 text-xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent dark:from-blue-300 dark:to-indigo-300">
-                          Inicia una conversación
+                          Start a conversation
                         </h3>
                         <p className="text-blue-600/80 dark:text-blue-400/80 max-w-sm font-medium">
-                          Envía un mensaje para comenzar a chatear con{" "}
+                          Send a message to start chatting with{" "}
                           <span className="font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent dark:from-indigo-400 dark:to-purple-400">
                             {getConversationName(selectedConversation)}
                           </span>
@@ -503,7 +503,7 @@ export function Messages() {
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={handleKeyPress}
-                        placeholder="Escribe un mensaje..."
+                        placeholder="Write a message..."
                         className="py-3 pr-12 rounded-2xl border-2 border-blue-200/50 bg-white/80 dark:bg-gray-800/80 dark:border-blue-700/50 focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-200/50 dark:focus:ring-blue-800/50 backdrop-blur-sm shadow-lg font-medium"
                         maxLength={1000}
                       />
@@ -530,7 +530,7 @@ export function Messages() {
                   {isRecording && (
                     <div className="flex justify-center items-center mt-3 text-sm text-red-500 font-medium">
                       <div className="mr-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                      Grabando audio...
+                      Recording audio...
                     </div>
                   )}
                 </div>

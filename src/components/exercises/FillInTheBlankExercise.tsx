@@ -195,13 +195,13 @@ export const FillInTheBlankExercise: React.FC<FillInTheBlankExerciseProps> = ({
         )}
       </div>
 
-      {/* Mensaje de éxito compacto */}
+      {/* Success message compact */}
       {showResults && score === items.length && (
         <div className="text-center p-3 bg-gradient-to-r from-green-50/80 to-emerald-50/80 dark:from-green-950/40 dark:to-emerald-950/40 rounded-lg border border-green-300/40 dark:border-green-700/30">
           <div className="flex items-center justify-center gap-2">
             <span className="text-lg">🎉</span>
             <p className="text-sm font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
-              ¡Perfecto!
+              Perfect!
             </p>
           </div>
         </div>
