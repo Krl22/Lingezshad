@@ -1,20 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import OpenAI from "openai";
-import { Mic, Send, MicOff, MoreVertical, Palette } from "lucide-react";
+import { Mic, Send, MicOff } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
 
 //Initialize css style classes so they load with the page
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -43,16 +35,19 @@ interface AIChatProps {
   onPatternChange?: () => void; // Nueva prop opcional
 }
 
-const AIChat: React.FC<AIChatProps> = ({ patternNumber, onPatternChange }) => {
+const AIChat: React.FC<AIChatProps> = ({ patternNumber }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
-      content: "You are an experienced English tutor. Your role is to help students improve their English skills through conversation, grammar correction, vocabulary building, and pronunciation guidance. Always be encouraging, patient, and provide constructive feedback. Correct mistakes gently and explain grammar rules when needed. Ask follow-up questions to keep the conversation engaging and educational.",
+      content:
+        "You are an experienced English tutor. Your role is to help students improve their English skills through conversation, grammar correction, vocabulary building, and pronunciation guidance. Always be encouraging, patient, and provide constructive feedback. Correct mistakes gently and explain grammar rules when needed. Ask follow-up questions to keep the conversation engaging and educational.",
     },
     {
       role: "assistant",
-      content: "Hello! I'm your English tutor. I'm here to help you improve your English skills through conversation, grammar, vocabulary, and pronunciation. What would you like to work on today? We can have a casual conversation, practice specific grammar topics, or work on any English skills you'd like to improve!",
-      avatar: "https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg",
+      content:
+        "Hello! I'm your English tutor. I'm here to help you improve your English skills through conversation, grammar, vocabulary, and pronunciation. What would you like to work on today? We can have a casual conversation, practice specific grammar topics, or work on any English skills you'd like to improve!",
+      avatar:
+        "https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg",
     },
   ]);
   const [input, setInput] = useState<string>("");
@@ -91,7 +86,9 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber, onPatternChange }) => {
     try {
       // Verificar si la API key está configurada
       if (!import.meta.env.VITE_OPENAI_API_KEY) {
-        throw new Error("OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to your environment variables.");
+        throw new Error(
+          "OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to your environment variables."
+        );
       }
 
       const chatCompletion = await openai.chat.completions.create({
@@ -103,16 +100,19 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber, onPatternChange }) => {
 
       const assistantMessage: Message = {
         role: "assistant",
-        content: chatCompletion.choices[0].message?.content || "I'm sorry, I couldn't generate a response. Please try again.",
-        avatar: "https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg",
+        content:
+          chatCompletion.choices[0].message?.content ||
+          "I'm sorry, I couldn't generate a response. Please try again.",
+        avatar:
+          "https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg",
       };
 
-      setMessages(prev => [...prev, assistantMessage]);
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Error al obtener respuesta del chat:", error);
-      
+
       let errorMessage = "Sorry, I encountered an error. Please try again.";
-      
+
       if (error instanceof Error) {
         if (error.message.includes("API key")) {
           errorMessage = "OpenAI API key is not configured properly.";
@@ -122,7 +122,7 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber, onPatternChange }) => {
           errorMessage = "Network error. Please check your connection.";
         }
       }
-      
+
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -144,14 +144,16 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber, onPatternChange }) => {
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
-        
+        // const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
+
         // Aquí podrías implementar la transcripción de audio usando OpenAI Whisper
         // Por ahora, mostramos un mensaje indicando que la funcionalidad está en desarrollo
-        setError("Audio transcription feature is coming soon! Please use text input for now.");
-        
+        setError(
+          "Audio transcription feature is coming soon! Please use text input for now."
+        );
+
         // Limpiar el stream
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
       };
 
       mediaRecorder.start();
@@ -183,51 +185,56 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber, onPatternChange }) => {
   }, [messages]);
 
   // Filtrar mensajes del sistema para la visualización
-  const visibleMessages = messages.filter(msg => msg.role !== "system");
+  const visibleMessages = messages.filter((msg) => msg.role !== "system");
 
   return (
     <div className="flex flex-col h-full">
-      <Card className="flex flex-col mx-auto w-full h-full rounded-none border-0 shadow-none bg-transparent">
+      <Card className="flex flex-col mx-auto w-full h-full bg-transparent rounded-none border-0 shadow-none">
         {/* Error Alert con gradiente */}
         {error && (
-          <Alert className="m-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/30 dark:to-pink-950/30 border-2 border-red-200/50 dark:border-red-800/50 backdrop-blur-sm shadow-lg">
-            <AlertDescription className="text-red-700 dark:text-red-300 font-medium">
+          <Alert className="m-4 bg-gradient-to-r from-red-50 to-pink-50 border-2 shadow-lg backdrop-blur-sm dark:from-red-950/30 dark:to-pink-950/30 border-red-200/50 dark:border-red-800/50">
+            <AlertDescription className="font-medium text-red-700 dark:text-red-300">
               {error}
             </AlertDescription>
           </Alert>
         )}
 
         {/* Chat Messages con overlay colorido */}
-        <ScrollArea className={`overflow-auto flex-1 p-4 bg-pattern-${patternNumber} relative`}>
+        <ScrollArea
+          className={`overflow-auto relative flex-1 p-4 bg-pattern-${patternNumber}`}
+        >
           {/* Overlay colorido para dar más esencia */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-purple-500/5 dark:from-blue-900/10 dark:via-indigo-900/10 dark:to-purple-900/10 pointer-events-none"></div>
-          
+          <div className="absolute inset-0 bg-gradient-to-br pointer-events-none from-blue-500/5 via-indigo-500/5 to-purple-500/5 dark:from-blue-900/10 dark:via-indigo-900/10 dark:to-purple-900/10"></div>
+
           <div className="relative z-10 space-y-6">
             {visibleMessages.map((message, index) => (
               <div
                 key={index}
-                className={`flex items-start space-x-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex items-start space-x-3 ${
+                  message.role === "user" ? "justify-end" : "justify-start"
+                }`}
               >
                 {message.role === "assistant" && (
-                  <Avatar className="ring-2 ring-white/70 dark:ring-gray-800/70 shadow-xl">
+                  <Avatar className="ring-2 shadow-xl ring-white/70 dark:ring-gray-800/70">
                     <AvatarImage src="https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg" />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold text-lg">
+                    <AvatarFallback className="text-lg font-bold text-white bg-gradient-to-br from-blue-500 to-indigo-600">
                       AI
                     </AvatarFallback>
                   </Avatar>
                 )}
                 <div
-                  className={`max-w-xs md:max-w-md p-4 rounded-2xl text-sm shadow-xl backdrop-blur-sm border-2 leading-relaxed font-medium ${message.role === "user"
-                    ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white border-blue-300/30 rounded-br-md shadow-blue-200/50"
-                    : "bg-gradient-to-br from-white to-blue-50/80 text-gray-800 border-blue-200/50 rounded-bl-md shadow-indigo-200/50 dark:from-gray-800 dark:to-blue-950/80 dark:text-gray-100 dark:border-blue-700/50"
+                  className={`max-w-xs md:max-w-md p-4 rounded-2xl text-sm shadow-xl backdrop-blur-sm border-2 leading-relaxed font-medium ${
+                    message.role === "user"
+                      ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white border-blue-300/30 rounded-br-md shadow-blue-200/50"
+                      : "bg-gradient-to-br from-white to-blue-50/80 text-gray-800 border-blue-200/50 rounded-bl-md shadow-indigo-200/50 dark:from-gray-800 dark:to-blue-950/80 dark:text-gray-100 dark:border-blue-700/50"
                   }`}
                 >
                   {message.content}
                 </div>
                 {message.role === "user" && (
-                  <Avatar className="ring-2 ring-white/70 dark:ring-gray-800/70 shadow-xl">
+                  <Avatar className="ring-2 shadow-xl ring-white/70 dark:ring-gray-800/70">
                     <AvatarImage src="https://via.placeholder.com/50" />
-                    <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold">
+                    <AvatarFallback className="font-bold text-white bg-gradient-to-br from-indigo-500 to-purple-600">
                       Tú
                     </AvatarFallback>
                   </Avatar>
@@ -238,13 +245,13 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber, onPatternChange }) => {
             {/* Loading indicator con gradiente */}
             {isLoading && (
               <div className="flex justify-start items-start space-x-3">
-                <Avatar className="ring-2 ring-white/70 dark:ring-gray-800/70 shadow-xl">
+                <Avatar className="ring-2 shadow-xl ring-white/70 dark:ring-gray-800/70">
                   <AvatarImage src="https://t4.ftcdn.net/jpg/05/57/19/43/360_F_557194315_OGvi1AdKHGr9P1PpPx7wThwy0mOW022C.jpg" />
-                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold">
+                  <AvatarFallback className="font-bold text-white bg-gradient-to-br from-blue-500 to-indigo-600">
                     AI
                   </AvatarFallback>
                 </Avatar>
-                <div className="p-4 max-w-xs bg-gradient-to-br from-white to-blue-50/80 dark:from-gray-800 dark:to-blue-950/80 backdrop-blur-sm border-2 border-blue-200/50 dark:border-blue-700/50 rounded-2xl rounded-bl-md shadow-xl">
+                <div className="p-4 max-w-xs bg-gradient-to-br from-white rounded-2xl rounded-bl-md border-2 shadow-xl backdrop-blur-sm to-blue-50/80 dark:from-gray-800 dark:to-blue-950/80 border-blue-200/50 dark:border-blue-700/50">
                   <div className="flex space-x-1">
                     <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
                     <div
@@ -265,21 +272,22 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber, onPatternChange }) => {
         </ScrollArea>
 
         {/* Chat Input con gradiente */}
-        <div className="flex gap-3 justify-between items-center p-4 bg-gradient-to-r from-blue-50/80 via-indigo-50/80 to-purple-50/80 dark:from-gray-900/80 dark:via-blue-950/80 dark:to-indigo-950/80 backdrop-blur-md border-t border-blue-200/50 dark:border-blue-800/30">
+        <div className="flex gap-3 justify-between items-center p-4 bg-gradient-to-r border-t backdrop-blur-md from-blue-50/80 via-indigo-50/80 to-purple-50/80 dark:from-gray-900/80 dark:via-blue-950/80 dark:to-indigo-950/80 border-blue-200/50 dark:border-blue-800/30">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyPress}
             placeholder="Escribe tu mensaje aquí... (Presiona Enter para enviar)"
-            className="flex-1 bg-white/80 dark:bg-gray-800/80 border-2 border-blue-200/50 dark:border-blue-700/50 focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-200/50 dark:focus:ring-blue-800/50 rounded-2xl backdrop-blur-sm shadow-lg font-medium"
+            className="flex-1 font-medium rounded-2xl border-2 shadow-lg backdrop-blur-sm bg-white/80 dark:bg-gray-800/80 border-blue-200/50 dark:border-blue-700/50 focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-200/50 dark:focus:ring-blue-800/50"
             disabled={isLoading}
           />
           <Button
             variant="ghost"
             onClick={isRecording ? stopRecording : startRecording}
-            className={`p-3 rounded-full transition-all ${isRecording 
-              ? "text-red-500 bg-red-100/80 dark:bg-red-950/30 hover:bg-red-200/80 dark:hover:bg-red-950/50" 
-              : "text-blue-500 hover:text-blue-700 hover:bg-blue-100/50 dark:hover:bg-blue-900/30"
+            className={`p-3 rounded-full transition-all ${
+              isRecording
+                ? "text-red-500 bg-red-100/80 dark:bg-red-950/30 hover:bg-red-200/80 dark:hover:bg-red-950/50"
+                : "text-blue-500 hover:text-blue-700 hover:bg-blue-100/50 dark:hover:bg-blue-900/30"
             }`}
             disabled={isLoading}
             title={isRecording ? "Detener grabación" : "Iniciar grabación"}
@@ -293,7 +301,7 @@ const AIChat: React.FC<AIChatProps> = ({ patternNumber, onPatternChange }) => {
           <Button
             onClick={() => handleSendMessage(input)}
             disabled={isLoading || input.trim() === ""}
-            className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full hover:from-blue-600 hover:to-indigo-700 shadow-lg transition-all hover:shadow-xl hover:scale-105"
+            className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full shadow-lg transition-all hover:from-blue-600 hover:to-indigo-700 hover:shadow-xl hover:scale-105"
           >
             <Send className="w-5 h-5" />
           </Button>
