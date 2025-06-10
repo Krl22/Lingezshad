@@ -21,7 +21,6 @@ import Room from "./pages/Room";
 import Search from "./pages/Search";
 import { Friends } from "./pages/Friends";
 import { Messages } from "./pages/Messages";
-import { FriendChat } from "./pages/Friendchat";
 import Restaurant from "./pages/locations/Restaurant";
 import Scene from "./pages/locations/Restaurant/scene";
 import Animals from "./pages/Topics/Animals/Animals";
@@ -38,73 +37,105 @@ function App() {
                 <Routes>
                   {/* Ruta pública - Landing page */}
                   <Route path="/" element={<Landing />} />
-                  
+
                   {/* Todas las demás rutas están protegidas */}
-                  <Route path="/home" element={
-                    <ProtectedRoute>
-                      <Learning />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/environment" element={
-                    <ProtectedRoute>
-                      <Environment />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/account" element={
-                    <ProtectedRoute>
-                      <Account />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/game/:roomId" element={
-                    <ProtectedRoute>
-                      <Game />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/lobby" element={
-                    <ProtectedRoute>
-                      <Lobby />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/room/:roomId" element={
-                    <ProtectedRoute>
-                      <Room />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/search-rooms" element={
-                    <ProtectedRoute>
-                      <Search />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/friends" element={
-                    <ProtectedRoute>
-                      <Friends />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/Messages" element={
-                    <ProtectedRoute>
-                      <Messages />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/friendchat" element={
-                    <ProtectedRoute>
-                      <FriendChat />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/Restaurant" element={
-                    <ProtectedRoute>
-                      <Restaurant />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/Restaurant/Scene" element={
-                    <ProtectedRoute>
-                      <Scene />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/topic/animals/exercises" element={
-                    <ProtectedRoute>
-                      <Animals />
-                    </ProtectedRoute>
-                  } />
+                  <Route
+                    path="/home"
+                    element={
+                      <ProtectedRoute>
+                        <Learning />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/environment"
+                    element={
+                      <ProtectedRoute>
+                        <Environment />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/account"
+                    element={
+                      <ProtectedRoute>
+                        <Account />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/game/:roomId"
+                    element={
+                      <ProtectedRoute>
+                        <Game />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/lobby"
+                    element={
+                      <ProtectedRoute>
+                        <Lobby />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/room/:roomId"
+                    element={
+                      <ProtectedRoute>
+                        <Room />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/search-rooms"
+                    element={
+                      <ProtectedRoute>
+                        <Search />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/friends"
+                    element={
+                      <ProtectedRoute>
+                        <Friends />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/Messages"
+                    element={
+                      <ProtectedRoute>
+                        <Messages />
+                      </ProtectedRoute>
+                    }
+                  />
+
+                  <Route
+                    path="/Restaurant"
+                    element={
+                      <ProtectedRoute>
+                        <Restaurant />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/Restaurant/Scene"
+                    element={
+                      <ProtectedRoute>
+                        <Scene />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/topic/animals/exercises"
+                    element={
+                      <ProtectedRoute>
+                        <Animals />
+                      </ProtectedRoute>
+                    }
+                  />
                 </Routes>
               </div>
               <ConditionalBottomNavBar />
