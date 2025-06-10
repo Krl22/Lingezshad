@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Mic, Send, ArrowLeft, MoreVertical } from "lucide-react";

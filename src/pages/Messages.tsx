@@ -5,7 +5,7 @@ import { useMediaQuery } from "react-responsive";
 import AIChat from "./chat";
 import {
   ArrowLeft,
-  EllipsisVertical,
+  Moon,
   Search,
   Bot,
   Pin,
@@ -379,6 +379,16 @@ export function Messages() {
                   >
                     <Palette className="mr-2 w-4 h-4" />
                     Cambiar fondo (Patrón {patternNumber})
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="cursor-pointer">
+                    <div className="flex items-center justify-between w-full">
+                      <span className="flex items-center">
+                        <Moon className="mr-2 w-4 h-4" />
+                        Modo oscuro
+                      </span>
+                      <ModeToggle />
+                    </div>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
