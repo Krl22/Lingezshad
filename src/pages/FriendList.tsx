@@ -19,34 +19,29 @@ import { getAuth } from "firebase/auth";
 import { fetchFriends, handleRemove, Friend } from "@/firebase/friendsService";
 import { Loader } from "@/components/uiverse/Loader";
 
-import { getOrCreateChat } from "@/firebase/messages";
-
 export function FriendsList() {
   const navigate = useNavigate();
   const [friends, setFriends] = useState<Friend[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // Estado para el loader
+  const [isLoading, setIsLoading] = useState(true);
 
   const auth = getAuth();
   const userUID = auth.currentUser?.uid;
 
-  const handleOpenChat = async (friendEmail: string) => {
-    try {
-      await getOrCreateChat(
-        auth.currentUser?.email || "",
-        friendEmail
-      );
-      navigate("/friendchat", { state: { friendEmail } });
-    } catch (error) {
-      console.error("Error opening chat:", error);
-    }
+  const handleOpenChat = (friendEmail: string) => {
+    // Redirigir a Messages con el amigo seleccionado
+    navigate("/messages", { 
+      state: { 
+        selectedFriendEmail: friendEmail 
+      } 
+    });
   };
 
   useEffect(() => {
     if (userUID) {
-      setIsLoading(true); // Inicia el loader
+      setIsLoading(true);
       fetchFriends(userUID)
         .then((friendsList) => setFriends(friendsList))
-        .finally(() => setIsLoading(false)); // Desactiva el loader al terminar
+        .finally(() => setIsLoading(false));
     }
   }, [userUID]);
 
@@ -68,9 +63,8 @@ export function FriendsList() {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          // Mostrar loader mientras carga
-          <div className="flex items-center justify-center py-8">
-            <Loader /> {/* Aquí se usa el componente Loader */}
+          <div className="flex justify-center items-center py-8">
+            <Loader />
           </div>
         ) : friends.length > 0 ? (
           <ul className="space-y-4">
@@ -78,7 +72,7 @@ export function FriendsList() {
               <li
                 key={friend.id}
                 onClick={() => handleOpenChat(friend.email)}
-                className="flex items-center justify-between px-1 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="flex justify-between items-center px-1 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 {/* Avatar and Info */}
                 <div className="flex items-center space-x-4">
@@ -103,7 +97,7 @@ export function FriendsList() {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <div className="flex items-center justify-center text-gray-800 bg-gray-200 rounded-full w-9 h-9 dark:bg-gray-700 dark:text-gray-100">
+                        <div className="flex justify-center items-center w-9 h-9 text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-100">
                           <MessageCircle />
                         </div>
                       </TooltipTrigger>
@@ -117,7 +111,7 @@ export function FriendsList() {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <div className="flex items-center justify-center text-gray-800 bg-gray-200 rounded-full w-9 h-9 dark:bg-gray-700 dark:text-gray-100">
+                            <div className="flex justify-center items-center w-9 h-9 text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-100">
                               <EllipsisVertical />
                             </div>
                           </TooltipTrigger>
@@ -129,9 +123,10 @@ export function FriendsList() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuItem
-                        onClick={() =>
-                          handleRemoveFriend(friend.id, friend.email)
-                        }
+                        onClick={(e) => {
+                          e.stopPropagation(); // Evitar que se active el click del li
+                          handleRemoveFriend(friend.id, friend.email);
+                        }}
                       >
                         Delete Friend
                       </DropdownMenuItem>

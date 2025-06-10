@@ -81,6 +81,7 @@ const ConditionalBottomNavBar = () => {
     "/aichat",
     "/chatgptclone",
     "/messages",
+    "/friendchat",
   ];
   return !hiddenRoutes.includes(location.pathname) ? <BottomNavBar /> : null;
 };
