@@ -7,11 +7,13 @@ import {
 import Landing from "./pages/Landing";
 import TopNavBar from "./components/TopNavBar";
 import BottomNavBar from "./components/BottomNavBar";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import Learning from "./pages/Learning";
 import { Environment } from "./pages/Environment";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/contexts/language-provider";
+import { AuthProvider } from "@/contexts/auth-provider";
 import Account from "./pages/Account";
 import Game from "./pages/Game";
 import Lobby from "./pages/Lobby";
@@ -26,34 +28,91 @@ import Animals from "./pages/Topics/Animals/Animals";
 
 function App() {
   return (
-    <LanguageProvider defaultLanguage="en" storageKey="lingez-language">
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <Router>
-          <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
-            <ConditionalTopNavBar />
-            <div className="flex-grow">
-              <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/home" element={<Learning />} />
-                <Route path="/environment" element={<Environment />} />
-                <Route path="/account" element={<Account />} />
-                <Route path="/game/:roomId" element={<Game />} />
-                <Route path="/lobby" element={<Lobby />} />
-                <Route path="/room/:roomId" element={<Room />} />
-                <Route path="/search-rooms" element={<Search />} />
-                <Route path="/friends" element={<Friends />} />
-                <Route path="/Messages" element={<Messages />} />
-                <Route path="/friendchat" element={<FriendChat />} />
-                <Route path="/Restaurant" element={<Restaurant />} />
-                <Route path="/Restaurant/Scene" element={<Scene />} />
-                <Route path="/topic/animals/exercises" element={<Animals />} />
-              </Routes>
+    <AuthProvider>
+      <LanguageProvider defaultLanguage="en" storageKey="lingez-language">
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <Router>
+            <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
+              <ConditionalTopNavBar />
+              <div className="flex-grow">
+                <Routes>
+                  {/* Ruta pública - Landing page */}
+                  <Route path="/" element={<Landing />} />
+                  
+                  {/* Todas las demás rutas están protegidas */}
+                  <Route path="/home" element={
+                    <ProtectedRoute>
+                      <Learning />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/environment" element={
+                    <ProtectedRoute>
+                      <Environment />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/account" element={
+                    <ProtectedRoute>
+                      <Account />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/game/:roomId" element={
+                    <ProtectedRoute>
+                      <Game />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/lobby" element={
+                    <ProtectedRoute>
+                      <Lobby />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/room/:roomId" element={
+                    <ProtectedRoute>
+                      <Room />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/search-rooms" element={
+                    <ProtectedRoute>
+                      <Search />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/friends" element={
+                    <ProtectedRoute>
+                      <Friends />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/Messages" element={
+                    <ProtectedRoute>
+                      <Messages />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/friendchat" element={
+                    <ProtectedRoute>
+                      <FriendChat />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/Restaurant" element={
+                    <ProtectedRoute>
+                      <Restaurant />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/Restaurant/Scene" element={
+                    <ProtectedRoute>
+                      <Scene />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/topic/animals/exercises" element={
+                    <ProtectedRoute>
+                      <Animals />
+                    </ProtectedRoute>
+                  } />
+                </Routes>
+              </div>
+              <ConditionalBottomNavBar />
             </div>
-            <ConditionalBottomNavBar />
-          </div>
-        </Router>
-      </ThemeProvider>
-    </LanguageProvider>
+          </Router>
+        </ThemeProvider>
+      </LanguageProvider>
+    </AuthProvider>
   );
 }
 

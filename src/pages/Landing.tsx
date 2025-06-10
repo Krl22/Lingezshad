@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useLanguage } from "@/contexts/language-provider";
+import { useAuth } from "@/contexts/auth-provider";
+import { useNavigate } from "react-router-dom";
 import { LoginDialog } from "@/components/LoginDialog";
 import { RegisterDialog } from "@/components/RegisterDialog";
 
@@ -9,6 +11,29 @@ const Landing = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
   const { t } = useLanguage();
+  const { isAuthenticated, loading } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirigir a home si el usuario ya está autenticado
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      navigate("/home", { replace: true });
+    }
+  }, [isAuthenticated, loading, navigate]);
+
+  // Mostrar loading mientras se verifica la autenticación
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  // Solo mostrar el landing si el usuario NO está autenticado
+  if (isAuthenticated) {
+    return null; // No mostrar nada mientras se redirige
+  }
 
   return (
     <div className="flex flex-col justify-center items-center p-4 w-screen min-h-screen bg-gradient-to-br transition-colors from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950">
