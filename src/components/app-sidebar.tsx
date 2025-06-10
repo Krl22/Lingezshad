@@ -23,8 +23,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { LevelProgress } from "./level-progress";
-import { ModeToggle } from "./mode-toggle";
-import { LanguageToggle } from "./language-toggle";
 
 export function AppSidebar() {
   const navigate = useNavigate();
