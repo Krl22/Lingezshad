@@ -11,6 +11,7 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/firebase/firebaseconfig";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useLanguage } from "@/contexts/language-provider";
 import {
   Sidebar,
   SidebarContent,
@@ -23,15 +24,17 @@ import {
 } from "@/components/ui/sidebar";
 import { LevelProgress } from "./level-progress";
 import { ModeToggle } from "./mode-toggle";
+import { LanguageToggle } from "./language-toggle";
 
 export function AppSidebar() {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { t } = useLanguage();
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/"); // Redirige al usuario a la página principal después de cerrar sesión.
+      navigate("/");
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -40,22 +43,22 @@ export function AppSidebar() {
   // Navigation items - Solo en desktop
   const navigationItems = [
     {
-      title: "Account",
+      title: t("sidebar.account"),
       action: () => navigate("/account"),
       icon: User,
     },
     {
-      title: "Play",
+      title: t("sidebar.play"),
       action: () => navigate("/lobby"),
       icon: LucideGamepad2,
     },
     {
-      title: "Environment",
+      title: t("sidebar.environment"),
       action: () => navigate("/environment"),
       icon: MapPin,
     },
     {
-      title: "Messages",
+      title: t("sidebar.messages"),
       action: () => navigate("/messages"),
       icon: MessageCircle,
     },
@@ -64,17 +67,17 @@ export function AppSidebar() {
   // Menu items.
   const menuItems = [
     {
-      title: "Friends",
+      title: t("sidebar.friends"),
       action: () => navigate("/friends"),
       icon: Users,
     },
     {
-      title: "Settings",
+      title: t("sidebar.settings"),
       action: () => navigate("/settings"),
       icon: Settings,
     },
     {
-      title: "Logout",
+      title: t("sidebar.logout"),
       action: handleLogout,
       icon: LogOut,
     },
@@ -85,14 +88,15 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup className="pt-10">
           <LevelProgress />
-          <div className="flex justify-center py-4">
+          <div className="flex justify-center items-center py-4 space-x-2">
+            <LanguageToggle />
             <ModeToggle />
           </div>
 
           {/* Navigation Section - Solo en desktop */}
           {!isMobile && (
             <>
-              <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+              <SidebarGroupLabel>{t("sidebar.navigation")}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {navigationItems.map((item) => (
@@ -111,7 +115,7 @@ export function AppSidebar() {
           )}
 
           {/* Application Section */}
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("sidebar.application")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
