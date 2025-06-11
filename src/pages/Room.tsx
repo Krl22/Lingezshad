@@ -11,7 +11,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { Timestamp } from "firebase/firestore";
-import { Copy } from "lucide-react";
+import { Copy, Settings, Clock, Zap, Target } from "lucide-react";
 
 // Función para obtener el nickname del usuario desde Firestore
 const getUserNickname = async (userId: string): Promise<string | null> => {
@@ -31,11 +31,21 @@ const getUserNickname = async (userId: string): Promise<string | null> => {
   }
 };
 
+// Configuraciones del juego
+interface GameSettings {
+  timeLimit: boolean;
+  timeLimitSeconds: number;
+  specialQuestions: boolean;
+  rapidBonus: boolean;
+  rapidBonusSeconds: number;
+}
+
 const Room = () => {
   const { roomId } = useParams();
   const [roomData, setRoomData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any | null>(null);
+  const [showGameSettings, setShowGameSettings] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -235,6 +245,20 @@ const Room = () => {
     }
   };
 
+  // Función para actualizar configuraciones del juego
+  const updateGameSettings = async (newSettings: Partial<GameSettings>) => {
+    if (!roomId || !roomData) return;
+
+    const roomRef = doc(db, "rooms", roomId);
+    try {
+      await updateDoc(roomRef, {
+        gameSettings: { ...roomData.gameSettings, ...newSettings },
+      });
+    } catch (error) {
+      console.error("Error updating game settings: ", error);
+    }
+  };
+
   // Mostrar estado de carga mientras se obtienen los datos
   if (loading) {
     return (
@@ -266,6 +290,120 @@ const Room = () => {
           </button>
         </h2>
 
+        {/* Panel de Configuraciones del Juego */}
+        {roomData?.creator?.id === user?.uid && roomData?.status === "waiting" && (
+          <div className="p-4 bg-gray-50 rounded-md shadow-inner dark:bg-gray-700">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                Configuraciones del Juego
+              </h3>
+              <button
+                onClick={() => setShowGameSettings(!showGameSettings)}
+                className="p-2 text-indigo-500 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-600"
+              >
+                <Settings className="w-5 h-5" />
+              </button>
+            </div>
+
+            {showGameSettings && (
+              <div className="space-y-4">
+                {/* Tiempo Límite */}
+                <div className="flex items-center justify-between p-3 bg-white rounded-lg dark:bg-gray-800">
+                  <div className="flex items-center space-x-2">
+                    <Clock className="w-4 h-4 text-blue-500" />
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Tiempo Límite
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={roomData?.gameSettings?.timeLimit || false}
+                      onChange={(e) =>
+                        updateGameSettings({ timeLimit: e.target.checked })
+                      }
+                      className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+                    />
+                    {roomData?.gameSettings?.timeLimit && (
+                      <input
+                        type="number"
+                        min="5"
+                        max="30"
+                        value={roomData?.gameSettings?.timeLimitSeconds || 10}
+                        onChange={(e) =>
+                          updateGameSettings({
+                            timeLimitSeconds: parseInt(e.target.value),
+                          })
+                        }
+                        className="w-16 px-2 py-1 text-xs border rounded dark:bg-gray-700 dark:border-gray-600"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {/* Preguntas Especiales */}
+                <div className="flex items-center justify-between p-3 bg-white rounded-lg dark:bg-gray-800">
+                  <div className="flex items-center space-x-2">
+                    <Target className="w-4 h-4 text-red-500" />
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Preguntas Especiales
+                    </span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={roomData?.gameSettings?.specialQuestions || false}
+                    onChange={(e) =>
+                      updateGameSettings({ specialQuestions: e.target.checked })
+                    }
+                    className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+                  />
+                </div>
+
+                {/* Bonificación Rápida */}
+                <div className="flex items-center justify-between p-3 bg-white rounded-lg dark:bg-gray-800">
+                  <div className="flex items-center space-x-2">
+                    <Zap className="w-4 h-4 text-yellow-500" />
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Bonificación Rápida
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={roomData?.gameSettings?.rapidBonus || false}
+                      onChange={(e) =>
+                        updateGameSettings({ rapidBonus: e.target.checked })
+                      }
+                      className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+                    />
+                    {roomData?.gameSettings?.rapidBonus && (
+                      <input
+                        type="number"
+                        min="2"
+                        max="8"
+                        value={roomData?.gameSettings?.rapidBonusSeconds || 4}
+                        onChange={(e) =>
+                          updateGameSettings({
+                            rapidBonusSeconds: parseInt(e.target.value),
+                          })
+                        }
+                        className="w-16 px-2 py-1 text-xs border rounded dark:bg-gray-700 dark:border-gray-600"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                <div className="p-2 text-xs text-gray-600 dark:text-gray-400 bg-blue-50 rounded dark:bg-blue-900/20">
+                  <p><strong>Tiempo Límite:</strong> Los jugadores tienen tiempo limitado para responder</p>
+                  <p><strong>Preguntas Especiales:</strong> Algunas preguntas harán retroceder a los oponentes</p>
+                  <p><strong>Bonificación Rápida:</strong> Responder rápido otorga pasos extra</p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Lista de Jugadores */}
         <div className="p-4 bg-gray-50 rounded-md shadow-inner dark:bg-gray-700">
           <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
             Players
@@ -292,6 +430,7 @@ const Room = () => {
           </ul>
         </div>
 
+        {/* Botones de acción */}
         {roomData?.creator?.id === user?.uid &&
           roomData?.status === "waiting" && (
             <button

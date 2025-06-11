@@ -10,9 +10,7 @@ import { Loader } from "@/components/uiverse/Loader";
 import {
   generateAvatarUrl,
   generateUserSeed,
-  getDefaultAvatar,
   AVATAR_STYLES,
-  AvatarStyle,
 } from "@/firebase/avatarService";
 
 import image1 from "../assets/pfp.jpg";
@@ -31,7 +29,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -207,8 +204,8 @@ const Account = () => {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           onClick={() => setIsAvatarDialogOpen(true)}
                         >
@@ -222,7 +219,10 @@ const Account = () => {
                   </TooltipProvider>
 
                   {/* Dialog separado */}
-                  <Dialog open={isAvatarDialogOpen} onOpenChange={setIsAvatarDialogOpen}>
+                  <Dialog
+                    open={isAvatarDialogOpen}
+                    onOpenChange={setIsAvatarDialogOpen}
+                  >
                     <DialogContent className="max-w-md">
                       <DialogHeader>
                         <DialogTitle>Personaliza tu Avatar</DialogTitle>
@@ -239,38 +239,47 @@ const Account = () => {
                               {currentUser.displayName?.charAt(0) || "U"}
                             </AvatarFallback>
                           </Avatar>
-                          <p className="text-sm font-medium">Tu Avatar Actual</p>
+                          <p className="text-sm font-medium">
+                            Tu Avatar Actual
+                          </p>
                         </div>
 
                         {/* Selector de estilo */}
                         <div className="space-y-3">
-                          <p className="text-sm font-medium">Estilo de Avatar</p>
+                          <p className="text-sm font-medium">
+                            Estilo de Avatar
+                          </p>
                           <div className="grid grid-cols-2 gap-2">
-                            {Object.entries(AVATAR_STYLES).map(([key, style]) => (
-                              <button
-                                key={key}
-                                onClick={() => handleStyleChange(key)}
-                                className={`p-3 text-sm rounded-lg border-2 transition-all hover:scale-105 ${
-                                  selectedStyle === key
-                                    ? 'border-primary bg-primary/10 text-primary font-medium'
-                                    : 'border-border bg-background hover:bg-muted'
-                                }`}
-                              >
-                                {style.displayName}
-                              </button>
-                            ))}
+                            {Object.entries(AVATAR_STYLES).map(
+                              ([key, style]) => (
+                                <button
+                                  key={key}
+                                  onClick={() => handleStyleChange(key)}
+                                  className={`p-3 text-sm rounded-lg border-2 transition-all hover:scale-105 ${
+                                    selectedStyle === key
+                                      ? "border-primary bg-primary/10 text-primary font-medium"
+                                      : "border-border bg-background hover:bg-muted"
+                                  }`}
+                                >
+                                  {style.displayName}
+                                </button>
+                              )
+                            )}
                           </div>
                         </div>
 
                         {/* Generador de variaciones */}
                         <div className="space-y-3">
                           <div className="flex justify-between items-center">
-                            <p className="text-sm font-medium">Generar Variaciones</p>
+                            <p className="text-sm font-medium">
+                              Generar Variaciones
+                            </p>
                             <Badge variant="outline" className="text-xs">
-                              Estilo: {AVATAR_STYLES[selectedStyle]?.displayName}
+                              Estilo:{" "}
+                              {AVATAR_STYLES[selectedStyle]?.displayName}
                             </Badge>
                           </div>
-                          
+
                           <div className="flex gap-2">
                             <Button
                               onClick={generateNewAvatar}
@@ -284,7 +293,10 @@ const Account = () => {
                               onClick={() => {
                                 // Resetear al avatar original del usuario
                                 if (currentUser && userData?.avatarSeed) {
-                                  const originalUrl = generateAvatarUrl(userData.avatarSeed, selectedStyle);
+                                  const originalUrl = generateAvatarUrl(
+                                    userData.avatarSeed,
+                                    selectedStyle
+                                  );
                                   setProfileImage(originalUrl);
                                 }
                               }}
@@ -294,9 +306,10 @@ const Account = () => {
                               ↺ Resetear
                             </Button>
                           </div>
-                          
+
                           <p className="text-xs text-muted-foreground">
-                            Haz click en "Generar Nuevo" para crear diferentes variaciones del estilo seleccionado
+                            Haz click en "Generar Nuevo" para crear diferentes
+                            variaciones del estilo seleccionado
                           </p>
                         </div>
 

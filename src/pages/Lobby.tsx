@@ -8,8 +8,17 @@ interface User {
   nickname: string;
 }
 
+// Configuraciones del juego
+interface GameSettings {
+  timeLimit: boolean;
+  timeLimitSeconds: number;
+  specialQuestions: boolean;
+  rapidBonus: boolean;
+  rapidBonusSeconds: number;
+}
+
 const Lobby = () => {
-  const [roomId, setRoomId] = useState<string>(""); // Estado para el ID de la sala al unirse
+  const [roomId, setRoomId] = useState<string>("");
   const navigate = useNavigate();
 
   // Función para obtener el nickname del usuario desde Firestore
@@ -32,8 +41,8 @@ const Lobby = () => {
 
   // Función para crear una sala
   const handleCreateRoom = async () => {
-    const newRoomId = generateRoomId(); // Generar un nuevo ID de sala
-    const creatorId = auth.currentUser?.uid; // Obtener el ID del creador (usuario autenticado)
+    const newRoomId = generateRoomId();
+    const creatorId = auth.currentUser?.uid;
 
     if (!creatorId) {
       console.error("No user is authenticated");
@@ -41,29 +50,38 @@ const Lobby = () => {
     }
 
     try {
-      const nickname = await getUserNickname(creatorId); // Obtener el nickname del usuario desde Firestore
+      const nickname = await getUserNickname(creatorId);
 
       if (!nickname) {
         console.error("Nickname not found for user");
         return;
       }
 
-      // Crear un documento en la colección "rooms" de Firestore usando setDoc para establecer el ID del documento
+      // Configuraciones por defecto del juego
+      const defaultGameSettings: GameSettings = {
+        timeLimit: false,
+        timeLimitSeconds: 10,
+        specialQuestions: false,
+        rapidBonus: false,
+        rapidBonusSeconds: 4,
+      };
+
       await setDoc(doc(collection(db, "rooms"), newRoomId), {
         roomId: newRoomId,
         creator: {
           id: creatorId,
-          nickname: nickname, // Usar el nickname del documento de usuario
+          nickname: nickname,
         },
         players: [
           {
             id: creatorId,
-            nickname: nickname, // Usar el nickname del documento de usuario
+            nickname: nickname,
             joinedAt: Timestamp.now(),
           },
         ],
-        status: "waiting", // Estado inicial de la sala
+        status: "waiting",
         createdAt: Timestamp.now(),
+        gameSettings: defaultGameSettings, // Nuevas configuraciones
       });
 
       console.log("Room created with ID: ", newRoomId);
