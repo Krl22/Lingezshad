@@ -6,6 +6,15 @@ import { useNavigate } from "react-router-dom";
 import { updateUserRanking } from "@/firebase/createUserDoc";
 import { Loader } from "@/components/uiverse/Loader";
 
+// Importar el servicio de avatares
+import {
+  generateAvatarUrl,
+  generateUserSeed,
+  getDefaultAvatar,
+  AVATAR_STYLES,
+  AvatarStyle,
+} from "@/firebase/avatarService";
+
 import image1 from "../assets/pfp.jpg";
 import image2 from "../assets/pfp2.jpg";
 import image3 from "../assets/pfp3.jpg";
@@ -43,6 +52,9 @@ interface UserData {
   ranking: number;
   nickname?: string;
   photoURL?: string;
+  // Nuevos campos para DiceBear
+  avatarSeed?: string;
+  avatarStyle?: string;
 }
 
 const Account = () => {
@@ -51,6 +63,12 @@ const Account = () => {
   const [profileImage, setProfileImage] = useState("");
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Nuevos estados para DiceBear
+  const [selectedStyle, setSelectedStyle] = useState("avataaars");
+  const [avatarSeed, setAvatarSeed] = useState("");
+  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
+
   const currentUser = auth.currentUser;
   const navigate = useNavigate();
 
@@ -63,16 +81,27 @@ const Account = () => {
         if (userDoc.exists()) {
           if (user.email) {
             await updateUserRanking(userRef, user.email);
-          } else {
-            console.error("User email is null.");
           }
 
           const data = userDoc.data() as UserData;
           setUserData(data);
           setNickname(data.nickname || "");
-          setProfileImage(data.photoURL || image1);
-        } else {
-          console.error("No such document!");
+
+          // Configurar avatar
+          const userSeed = data.avatarSeed || generateUserSeed(user.uid);
+          const userStyle = data.avatarStyle || "avataaars";
+
+          setAvatarSeed(userSeed);
+          setSelectedStyle(userStyle);
+          setProfileImage(generateAvatarUrl(userSeed, userStyle));
+
+          // Si es la primera vez, guardar la semilla
+          if (!data.avatarSeed) {
+            await updateDoc(userRef, {
+              avatarSeed: userSeed,
+              avatarStyle: userStyle,
+            });
+          }
         }
         setLoading(false);
       } else {
@@ -82,6 +111,41 @@ const Account = () => {
 
     return () => unsubscribe();
   }, [navigate]);
+
+  // Función para cambiar el estilo del avatar
+  const handleStyleChange = async (newStyle: string) => {
+    if (currentUser && avatarSeed) {
+      const newAvatarUrl = generateAvatarUrl(avatarSeed, newStyle);
+      setSelectedStyle(newStyle);
+      setProfileImage(newAvatarUrl);
+
+      const userDocRef = doc(db, "users", currentUser.uid);
+      await updateDoc(userDocRef, {
+        avatarStyle: newStyle,
+        photoURL: newAvatarUrl,
+      });
+    }
+  };
+
+  // Función para generar nuevo avatar (nueva semilla)
+  const generateNewAvatar = async () => {
+    if (currentUser) {
+      const newSeed = generateUserSeed(
+        currentUser.uid,
+        Math.random().toString(36)
+      );
+      const newAvatarUrl = generateAvatarUrl(newSeed, selectedStyle);
+
+      setAvatarSeed(newSeed);
+      setProfileImage(newAvatarUrl);
+
+      const userDocRef = doc(db, "users", currentUser.uid);
+      await updateDoc(userDocRef, {
+        avatarSeed: newSeed,
+        photoURL: newAvatarUrl,
+      });
+    }
+  };
 
   const handleNicknameChange = async () => {
     if (currentUser && newNickname.trim()) {
@@ -143,44 +207,118 @@ const Account = () => {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="outline" size="sm">
-                              Change Avatar
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>Choose an Avatar</DialogTitle>
-                              <DialogDescription>
-                                Select from our collection or upload your own
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="grid grid-cols-3 gap-4 py-4">
-                              {availableImages.map((image, index) => (
-                                <button
-                                  key={index}
-                                  onClick={() =>
-                                    handleProfileImageChange(image)
-                                  }
-                                  className="overflow-hidden rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                >
-                                  <img
-                                    src={image}
-                                    alt={`Avatar ${index + 1}`}
-                                    className="object-cover w-full h-auto aspect-square"
-                                  />
-                                </button>
-                              ))}
-                            </div>
-                          </DialogContent>
-                        </Dialog>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setIsAvatarDialogOpen(true)}
+                        >
+                          Change Avatar
+                        </Button>
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>Change your profile picture</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
+
+                  {/* Dialog separado */}
+                  <Dialog open={isAvatarDialogOpen} onOpenChange={setIsAvatarDialogOpen}>
+                    <DialogContent className="max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Personaliza tu Avatar</DialogTitle>
+                        <DialogDescription>
+                          Elige un estilo y genera diferentes variaciones
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="py-4 space-y-6">
+                        {/* Avatar actual */}
+                        <div className="flex flex-col gap-3 items-center">
+                          <Avatar className="w-32 h-32 border-2 border-primary">
+                            <AvatarImage src={profileImage} />
+                            <AvatarFallback>
+                              {currentUser.displayName?.charAt(0) || "U"}
+                            </AvatarFallback>
+                          </Avatar>
+                          <p className="text-sm font-medium">Tu Avatar Actual</p>
+                        </div>
+
+                        {/* Selector de estilo */}
+                        <div className="space-y-3">
+                          <p className="text-sm font-medium">Estilo de Avatar</p>
+                          <div className="grid grid-cols-2 gap-2">
+                            {Object.entries(AVATAR_STYLES).map(([key, style]) => (
+                              <button
+                                key={key}
+                                onClick={() => handleStyleChange(key)}
+                                className={`p-3 text-sm rounded-lg border-2 transition-all hover:scale-105 ${
+                                  selectedStyle === key
+                                    ? 'border-primary bg-primary/10 text-primary font-medium'
+                                    : 'border-border bg-background hover:bg-muted'
+                                }`}
+                              >
+                                {style.displayName}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Generador de variaciones */}
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center">
+                            <p className="text-sm font-medium">Generar Variaciones</p>
+                            <Badge variant="outline" className="text-xs">
+                              Estilo: {AVATAR_STYLES[selectedStyle]?.displayName}
+                            </Badge>
+                          </div>
+                          
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={generateNewAvatar}
+                              variant="outline"
+                              className="flex-1"
+                              size="sm"
+                            >
+                              🎲 Generar Nuevo
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                // Resetear al avatar original del usuario
+                                if (currentUser && userData?.avatarSeed) {
+                                  const originalUrl = generateAvatarUrl(userData.avatarSeed, selectedStyle);
+                                  setProfileImage(originalUrl);
+                                }
+                              }}
+                              variant="ghost"
+                              size="sm"
+                            >
+                              ↺ Resetear
+                            </Button>
+                          </div>
+                          
+                          <p className="text-xs text-muted-foreground">
+                            Haz click en "Generar Nuevo" para crear diferentes variaciones del estilo seleccionado
+                          </p>
+                        </div>
+
+                        {/* Botones de acción */}
+                        <div className="flex gap-2 pt-2">
+                          <Button
+                            onClick={() => setIsAvatarDialogOpen(false)}
+                            variant="outline"
+                            className="flex-1"
+                          >
+                            Cancelar
+                          </Button>
+                          <Button
+                            onClick={() => setIsAvatarDialogOpen(false)}
+                            className="flex-1"
+                          >
+                            Guardar Avatar
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
 
                 <div className="space-y-4">

@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db, auth } from "@/firebase/firebaseconfig";
-import { doc, updateDoc, onSnapshot, runTransaction } from "firebase/firestore";
+import { doc, updateDoc, onSnapshot, runTransaction, getDoc } from "firebase/firestore";
 import { questions } from "./utils/questions";
+import { generateAvatarUrl, getDefaultAvatar } from "@/firebase/avatarService";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const MAX_QUESTIONS = 10;
 const TRACK_LENGTH = 90;
 
-// Colores mejorados para las pelotas de los jugadores
+// Colores de respaldo para las pelotas (en caso de que no cargue el avatar)
 const ballColors = [
   "bg-gradient-to-br from-red-400 to-red-600 shadow-lg",
   "bg-gradient-to-br from-blue-400 to-blue-600 shadow-lg",
@@ -19,6 +21,7 @@ interface Player {
   id: string;
   nickname: string;
   progress: number;
+  avatarUrl?: string; // Nuevo campo para el avatar
 }
 
 interface RoomData {
@@ -37,6 +40,26 @@ const Game = () => {
   const [dashboardVisible, setDashboardVisible] = useState(false);
   const navigate = useNavigate();
 
+  // Función para obtener el avatar de un jugador
+  const getPlayerAvatar = async (playerId: string): Promise<string> => {
+    try {
+      const userRef = doc(db, "users", playerId);
+      const userDoc = await getDoc(userRef);
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        return userData.photoURL || 
+               (userData.avatarSeed ? 
+                generateAvatarUrl(userData.avatarSeed, userData.avatarStyle || 'avataaars') : 
+                getDefaultAvatar(playerId));
+      }
+      return getDefaultAvatar(playerId);
+    } catch (error) {
+      console.error("Error getting player avatar:", error);
+      return getDefaultAvatar(playerId);
+    }
+  };
+
   useEffect(() => {
     if (!roomId) {
       console.log("Missing data, skipping handleAnswerSubmit");
@@ -44,22 +67,32 @@ const Game = () => {
     }
     const roomRef = doc(db, "rooms", roomId);
 
-    const unsubscribe = onSnapshot(roomRef, (docSnap) => {
+    const unsubscribe = onSnapshot(roomRef, async (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data() as RoomData;
-        setRoomData(data);
+        
+        // Obtener avatares para todos los jugadores
+        const playersWithAvatars = await Promise.all(
+          data.players.map(async (player) => {
+            const avatarUrl = await getPlayerAvatar(player.id);
+            return { ...player, avatarUrl };
+          })
+        );
+        
+        const updatedData = { ...data, players: playersWithAvatars };
+        setRoomData(updatedData);
 
-        const winningPlayer = data.players.find(
+        const winningPlayer = updatedData.players.find(
           (player) => player.progress >= MAX_QUESTIONS
         );
         if (winningPlayer) {
           setWinner(winningPlayer.nickname);
           setDashboardVisible(true);
         } else {
-          setDashboardVisible(data.dashboardVisible || false);
+          setDashboardVisible(updatedData.dashboardVisible || false);
         }
 
-        data.players.forEach((player) => {
+        updatedData.players.forEach((player) => {
           if (isNaN(player.progress)) {
             player.progress = 0;
           }
@@ -208,15 +241,13 @@ const Game = () => {
                   className="flex justify-between items-center p-3 bg-white rounded-xl shadow-sm dark:bg-slate-600"
                 >
                   <div className="flex items-center space-x-3">
-                    <div
-                      className={`w-8 h-8 rounded-full ${
-                        ballColors[index % ballColors.length]
-                      } flex items-center justify-center`}
-                    >
-                      <span className="text-xs font-bold text-white">
+                    {/* Avatar del jugador en lugar de pelota de color */}
+                    <Avatar className="w-8 h-8 border-2 border-white/20">
+                      <AvatarImage src={player.avatarUrl} />
+                      <AvatarFallback className={ballColors[index % ballColors.length]}>
                         {player.nickname.charAt(0)}
-                      </span>
-                    </div>
+                      </AvatarFallback>
+                    </Avatar>
                     <span className="font-medium text-slate-700 dark:text-slate-200">
                       {player.nickname}
                     </span>
@@ -276,12 +307,11 @@ const Game = () => {
               🏁
             </div>
 
+            {/* Avatares de los jugadores en lugar de pelotas */}
             {roomData?.players?.map((player, index) => (
               <div
                 key={player.id}
-                className={`absolute rounded-full h-8 w-8 flex items-center justify-center ${
-                  ballColors[index % ballColors.length]
-                } border border-white dark:border-slate-800 transform transition-all duration-700 ease-out`}
+                className="absolute transform transition-all duration-700 ease-out"
                 style={{
                   left: `${Math.min(
                     (player.progress / MAX_QUESTIONS) * TRACK_LENGTH,
@@ -290,9 +320,12 @@ const Game = () => {
                   top: `${index * 20 + 4}px`,
                 }}
               >
-                <span className="text-xs font-bold text-white">
-                  {player.nickname.charAt(0)}
-                </span>
+                <Avatar className="w-8 h-8 border-2 border-white shadow-lg">
+                  <AvatarImage src={player.avatarUrl} />
+                  <AvatarFallback className={ballColors[index % ballColors.length]}>
+                    {player.nickname.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
               </div>
             ))}
           </div>
@@ -304,11 +337,13 @@ const Game = () => {
                 key={player.id}
                 className="flex items-center space-x-1 p-2 text-center rounded-lg bg-slate-50 dark:bg-slate-700 flex-1"
               >
-                <div
-                  className={`w-4 h-4 rounded-full ${
-                    ballColors[index % ballColors.length]
-                  }`}
-                ></div>
+                {/* Avatar en las estadísticas también */}
+                <Avatar className="w-4 h-4">
+                  <AvatarImage src={player.avatarUrl} />
+                  <AvatarFallback className={ballColors[index % ballColors.length]}>
+                    {player.nickname.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium truncate text-slate-700 dark:text-slate-200">
                     {player.nickname.length > 8
@@ -324,7 +359,7 @@ const Game = () => {
           </div>
         </div>
 
-        {/* Question Card Compacto */}
+        {/* Question Card Compacto - permanece igual */}
         <div className="p-4 bg-white rounded-2xl border shadow-xl dark:bg-slate-800 border-slate-200 dark:border-slate-700">
           <div className="mb-4 text-center">
             <h3 className="text-lg font-bold leading-relaxed md:text-xl text-slate-800 dark:text-slate-100">
