@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import { Copy, Settings, Clock, Zap, Target } from "lucide-react";
+import { useLanguage } from "@/contexts/language-provider";
 
 // Función para obtener el nickname del usuario desde Firestore
 const getUserNickname = async (userId: string): Promise<string | null> => {
@@ -47,6 +48,7 @@ const Room = () => {
   const [user, setUser] = useState<any | null>(null);
   const [showGameSettings, setShowGameSettings] = useState(false);
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -203,7 +205,7 @@ const Room = () => {
     try {
       if (roomId) {
         await navigator.clipboard.writeText(roomId);
-        alert("Room ID copied to clipboard!");
+        alert(t("room.roomIdCopied"));
       } else {
         console.error("Room ID is undefined");
       }
@@ -267,7 +269,7 @@ const Room = () => {
           <div className="text-center">
             <div className="inline-block w-8 h-8 rounded-full border-4 border-indigo-500 animate-spin border-t-transparent"></div>
             <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-              Loading room...
+              {t("room.loadingRoom")}
             </p>
           </div>
         </div>
@@ -279,12 +281,12 @@ const Room = () => {
     <div className="flex flex-col justify-center items-center px-4 min-h-screen bg-gradient-to-r from-gray-100 to-gray-200 dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900">
       <div className="p-8 space-y-6 w-full max-w-md bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:shadow-2xl">
         <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">
-          Room:{" "}
+          {t("room.title")}:{" "}
           <span className="text-indigo-600 dark:text-indigo-400">{roomId}</span>
           <button
             onClick={handleCopyRoomId}
             className="ml-2 text-indigo-500 transition hover:text-indigo-700 focus:ring-2 focus:ring-indigo-300 dark:text-indigo-400 dark:hover:text-indigo-600"
-            aria-label="Copy Room ID"
+            aria-label={t("room.copyId")}
           >
             <Copy />
           </button>
@@ -295,7 +297,7 @@ const Room = () => {
           <div className="p-4 bg-gray-50 rounded-md shadow-inner dark:bg-gray-700">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-                Configuraciones del Juego
+                {t("room.gameSettings")}
               </h3>
               <button
                 onClick={() => setShowGameSettings(!showGameSettings)}
@@ -312,7 +314,7 @@ const Room = () => {
                   <div className="flex items-center space-x-2">
                     <Clock className="w-4 h-4 text-blue-500" />
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Tiempo Límite
+                      {t("room.timeLimit")}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -346,7 +348,7 @@ const Room = () => {
                   <div className="flex items-center space-x-2">
                     <Target className="w-4 h-4 text-red-500" />
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Preguntas Especiales
+                      {t("room.specialQuestions")}
                     </span>
                   </div>
                   <input
@@ -364,7 +366,7 @@ const Room = () => {
                   <div className="flex items-center space-x-2">
                     <Zap className="w-4 h-4 text-yellow-500" />
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Bonificación Rápida
+                      {t("room.rapidBonus")}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -394,9 +396,9 @@ const Room = () => {
                 </div>
 
                 <div className="p-2 text-xs text-gray-600 dark:text-gray-400 bg-blue-50 rounded dark:bg-blue-900/20">
-                  <p><strong>Tiempo Límite:</strong> Los jugadores tienen tiempo limitado para responder</p>
-                  <p><strong>Preguntas Especiales:</strong> Algunas preguntas harán retroceder a los oponentes</p>
-                  <p><strong>Bonificación Rápida:</strong> Responder rápido otorga pasos extra</p>
+                  <p><strong>{t("room.timeLimit")}:</strong> {t("room.timeLimitDescription")}</p>
+                  <p><strong>{t("room.specialQuestions")}:</strong> {t("room.specialQuestionsDescription")}</p>
+                  <p><strong>{t("room.rapidBonus")}:</strong> {t("room.rapidBonusDescription")}</p>
                 </div>
               </div>
             )}
@@ -406,7 +408,7 @@ const Room = () => {
         {/* Lista de Jugadores */}
         <div className="p-4 bg-gray-50 rounded-md shadow-inner dark:bg-gray-700">
           <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-            Players
+            {t("room.players")}
           </h3>
           <ul className="mt-2 space-y-2">
             {roomData?.players?.map(
@@ -422,7 +424,7 @@ const Room = () => {
                     {player.nickname}
                   </span>{" "}
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    (Joined: {player.joinedAt.toDate().toLocaleTimeString()})
+                    ({t("room.joined")}: {player.joinedAt.toDate().toLocaleTimeString()})
                   </span>
                 </li>
               )
@@ -437,7 +439,7 @@ const Room = () => {
               onClick={handleStartGame}
               className="px-4 py-2 w-full font-semibold text-white bg-green-500 rounded-lg transition hover:bg-green-600 focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-400"
             >
-              Start Game
+              {t("room.startGame")}
             </button>
           )}
 
@@ -445,7 +447,7 @@ const Room = () => {
           onClick={handleLeaveRoom}
           className="px-4 py-2 w-full font-semibold text-white bg-red-500 rounded-lg transition hover:bg-red-600 focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-400"
         >
-          Leave Room
+          {t("room.leaveRoom")}
         </button>
       </div>
     </div>

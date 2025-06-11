@@ -93,6 +93,23 @@ type TranslationKeys = {
   "settings.privacy.title": string;
   "settings.privacy.description": string;
   "settings.privacy.comingSoon": string;
+
+  // Room Page - NUEVAS TRADUCCIONES
+  "room.title": string;
+  "room.copyId": string;
+  "room.gameSettings": string;
+  "room.timeLimit": string;
+  "room.specialQuestions": string;
+  "room.rapidBonus": string;
+  "room.timeLimitDescription": string;
+  "room.specialQuestionsDescription": string;
+  "room.rapidBonusDescription": string;
+  "room.players": string;
+  "room.joined": string;
+  "room.startGame": string;
+  "room.leaveRoom": string;
+  "room.loadingRoom": string;
+  "room.roomIdCopied": string;
 };
 
 // Traducciones con portugués y francés
@@ -171,6 +188,24 @@ const translations: Record<Language, TranslationKeys> = {
     "settings.privacy.title": "Privacy",
     "settings.privacy.description": "Manage your privacy and data settings.",
     "settings.privacy.comingSoon": "Privacy settings coming soon...",
+
+    // Room Page - AGREGAR AL FINAL
+    "room.title": "Room",
+    "room.copyId": "Copy Room ID",
+    "room.gameSettings": "Game Settings",
+    "room.timeLimit": "Time Limit",
+    "room.specialQuestions": "Special Questions",
+    "room.rapidBonus": "Rapid Bonus",
+    "room.timeLimitDescription": "Players have limited time to answer",
+    "room.specialQuestionsDescription":
+      "Some questions will make opponents move back",
+    "room.rapidBonusDescription": "Answering quickly grants extra steps",
+    "room.players": "Players",
+    "room.joined": "Joined",
+    "room.startGame": "Start Game",
+    "room.leaveRoom": "Leave Room",
+    "room.loadingRoom": "Loading room...",
+    "room.roomIdCopied": "Room ID copied to clipboard!",
   },
   es: {
     // Landing Page
@@ -251,6 +286,25 @@ const translations: Record<Language, TranslationKeys> = {
       "Gestiona tu privacidad y configuración de datos.",
     "settings.privacy.comingSoon":
       "Configuración de privacidad próximamente...",
+
+    // Room Page - AGREGAR AL FINAL
+    "room.title": "Sala",
+    "room.copyId": "Copiar ID de Sala",
+    "room.gameSettings": "Configuraciones del Juego",
+    "room.timeLimit": "Tiempo Límite",
+    "room.specialQuestions": "Preguntas Especiales",
+    "room.rapidBonus": "Bonificación Rápida",
+    "room.timeLimitDescription":
+      "Los jugadores tienen tiempo limitado para responder",
+    "room.specialQuestionsDescription":
+      "Algunas preguntas harán retroceder a los oponentes",
+    "room.rapidBonusDescription": "Responder rápido otorga pasos extra",
+    "room.players": "Jugadores",
+    "room.joined": "Se unió",
+    "room.startGame": "Iniciar Juego",
+    "room.leaveRoom": "Salir de la Sala",
+    "room.loadingRoom": "Cargando sala...",
+    "room.roomIdCopied": "¡ID de sala copiado al portapapeles!",
   },
   pt: {
     // Landing Page
@@ -329,6 +383,24 @@ const translations: Record<Language, TranslationKeys> = {
     "settings.privacy.description":
       "Gerencie sua privacidade e configurações de dados.",
     "settings.privacy.comingSoon": "Configurações de privacidade em breve...",
+    // Room Page - AGREGAR AL FINAL
+    "room.title": "Sala",
+    "room.copyId": "Copiar ID da Sala",
+    "room.gameSettings": "Configurações do Jogo",
+    "room.timeLimit": "Tempo Limite",
+    "room.specialQuestions": "Perguntas Especiais",
+    "room.rapidBonus": "Bônus Rápido",
+    "room.timeLimitDescription":
+      "Os jogadores têm tempo limitado para responder",
+    "room.specialQuestionsDescription":
+      "Algumas perguntas farão os oponentes recuarem",
+    "room.rapidBonusDescription": "Responder rapidamente concede passos extras",
+    "room.players": "Jogadores",
+    "room.joined": "Entrou",
+    "room.startGame": "Iniciar Jogo",
+    "room.leaveRoom": "Sair da Sala",
+    "room.loadingRoom": "Carregando sala...",
+    "room.roomIdCopied": "ID da sala copiado para a área de transferência!",
   },
   fr: {
     // Landing Page
@@ -411,6 +483,26 @@ const translations: Record<Language, TranslationKeys> = {
       "Gérez vos paramètres de confidentialité et de données.",
     "settings.privacy.comingSoon":
       "Paramètres de confidentialité bientôt disponibles...",
+
+    // Room Page - AGREGAR AL FINAL
+    "room.title": "Salle",
+    "room.copyId": "Copier l'ID de la Salle",
+    "room.gameSettings": "Paramètres du Jeu",
+    "room.timeLimit": "Temps Limité",
+    "room.specialQuestions": "Questions Spéciales",
+    "room.rapidBonus": "Bonus Rapide",
+    "room.timeLimitDescription":
+      "Les joueurs ont un temps limité pour répondre",
+    "room.specialQuestionsDescription":
+      "Certaines questions feront reculer les adversaires",
+    "room.rapidBonusDescription":
+      "Répondre rapidement accorde des pas supplémentaires",
+    "room.players": "Joueurs",
+    "room.joined": "Rejoint",
+    "room.startGame": "Commencer le Jeu",
+    "room.leaveRoom": "Quitter la Salle",
+    "room.loadingRoom": "Chargement de la salle...",
+    "room.roomIdCopied": "ID de la salle copié dans le presse-papiers !",
   },
 };
 
