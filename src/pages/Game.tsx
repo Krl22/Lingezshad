@@ -1,14 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db, auth } from "@/firebase/firebaseconfig";
-import { doc, updateDoc, onSnapshot, runTransaction, getDoc } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  onSnapshot,
+  runTransaction,
+  getDoc,
+} from "firebase/firestore";
 import { questions } from "./utils/questions";
 import { generateAvatarUrl, getDefaultAvatar } from "@/firebase/avatarService";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Clock, Zap, Target } from "lucide-react";
 
 const MAX_QUESTIONS = 10;
-const TRACK_LENGTH = 90;
+// const TRACK_LENGTH = 90;
 
 // Colores de respaldo para las pelotas
 const ballColors = [
@@ -49,11 +55,13 @@ const Game = () => {
   const [winner, setWinner] = useState<string | null>(null);
   const [dashboardVisible, setDashboardVisible] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
-  const [questionStartTime, setQuestionStartTime] = useState<number | null>(null);
+  const [questionStartTime, setQuestionStartTime] = useState<number | null>(
+    null
+  );
   const [isSpecialQuestion, setIsSpecialQuestion] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
-  
+
   // Obtener el usuario actual
   const user = auth.currentUser;
 
@@ -69,13 +77,18 @@ const Game = () => {
     try {
       const userRef = doc(db, "users", playerId);
       const userDoc = await getDoc(userRef);
-      
+
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        return userData.photoURL || 
-               (userData.avatarSeed ? 
-                generateAvatarUrl(userData.avatarSeed, userData.avatarStyle || 'avataaars') : 
-                getDefaultAvatar(playerId));
+        return (
+          userData.photoURL ||
+          (userData.avatarSeed
+            ? generateAvatarUrl(
+                userData.avatarSeed,
+                userData.avatarStyle || "avataaars"
+              )
+            : getDefaultAvatar(playerId))
+        );
       }
       return getDefaultAvatar(playerId);
     } catch (error) {
@@ -87,11 +100,11 @@ const Game = () => {
   // Iniciar temporizador para la pregunta
   const startQuestionTimer = () => {
     if (!roomData?.gameSettings?.timeLimit) return;
-    
+
     const timeLimit = roomData.gameSettings.timeLimitSeconds;
     setTimeLeft(timeLimit);
     setQuestionStartTime(Date.now());
-    
+
     timerRef.current = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev === null || prev <= 1) {
@@ -133,7 +146,7 @@ const Game = () => {
     const unsubscribe = onSnapshot(roomRef, async (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data() as RoomData;
-        
+
         // Obtener avatares para todos los jugadores
         const playersWithAvatars = await Promise.all(
           data.players.map(async (player) => {
@@ -141,7 +154,7 @@ const Game = () => {
             return { ...player, avatarUrl };
           })
         );
-        
+
         const updatedData = { ...data, players: playersWithAvatars };
         setRoomData(updatedData);
 
@@ -178,16 +191,17 @@ const Game = () => {
       setIsSpecialQuestion(checkIfSpecialQuestion());
       startQuestionTimer();
     }
-    
+
     return () => clearTimer();
   }, [currentQuestionIndex, roomData?.gameSettings]);
 
   const handleAnswerSubmit = async () => {
     const isCorrect = checkAnswer(selectedOption);
     const responseTime = questionStartTime ? Date.now() - questionStartTime : 0;
-    const isRapidResponse = roomData?.gameSettings?.rapidBonus && 
-                           responseTime <= (roomData.gameSettings.rapidBonusSeconds * 1000);
-    
+    const isRapidResponse =
+      roomData?.gameSettings?.rapidBonus &&
+      responseTime <= roomData.gameSettings.rapidBonusSeconds * 1000;
+
     clearTimer();
     setSelectedOption("");
 
@@ -211,23 +225,32 @@ const Game = () => {
           const roomData = roomSnap.data() as RoomData;
 
           const updatedPlayers = roomData.players.map((player) => {
-            const currentProgress = isNaN(player.progress) ? 0 : player.progress;
-            
+            const currentProgress = isNaN(player.progress)
+              ? 0
+              : player.progress;
+
             if (player.id === user.uid && isCorrect) {
               // Jugador actual respondió correctamente
               let progressIncrease = 1;
-              
+
               // Bonificación por respuesta rápida
               if (isRapidResponse) {
                 progressIncrease = 2;
               }
-              
-              return { ...player, progress: currentProgress + progressIncrease };
-            } else if (player.id !== user.uid && isCorrect && isSpecialQuestion) {
+
+              return {
+                ...player,
+                progress: currentProgress + progressIncrease,
+              };
+            } else if (
+              player.id !== user.uid &&
+              isCorrect &&
+              isSpecialQuestion
+            ) {
               // Pregunta especial: otros jugadores retroceden
               return { ...player, progress: Math.max(0, currentProgress - 1) };
             }
-            
+
             return player;
           });
 
@@ -338,7 +361,9 @@ const Game = () => {
                     {/* Avatar del jugador en lugar de pelota de color */}
                     <Avatar className="w-8 h-8 border-2 border-white/20">
                       <AvatarImage src={player.avatarUrl} />
-                      <AvatarFallback className={ballColors[index % ballColors.length]}>
+                      <AvatarFallback
+                        className={ballColors[index % ballColors.length]}
+                      >
                         {player.nickname.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
@@ -373,7 +398,7 @@ const Game = () => {
           <h1 className="mb-2 text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 md:text-3xl dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">
             🏁 ¡Carrera al Final!
           </h1>
-          <div className="flex justify-center items-center space-x-2 mb-2">
+          <div className="flex justify-center items-center mb-2 space-x-2">
             <div className="inline-flex items-center px-3 py-1 bg-white rounded-full border shadow-lg dark:bg-slate-800 border-slate-200 dark:border-slate-700">
               <span className="mr-2 text-xs font-medium text-slate-600 dark:text-slate-300">
                 Sala:
@@ -383,25 +408,31 @@ const Game = () => {
               </span>
             </div>
           </div>
-          
+
           {/* Indicadores de modos activos */}
           <div className="flex justify-center space-x-2">
             {roomData?.gameSettings?.timeLimit && (
               <div className="flex items-center px-2 py-1 bg-blue-100 rounded-full dark:bg-blue-900">
-                <Clock className="w-3 h-3 mr-1 text-blue-600 dark:text-blue-400" />
-                <span className="text-xs text-blue-600 dark:text-blue-400">Tiempo Límite</span>
+                <Clock className="mr-1 w-3 h-3 text-blue-600 dark:text-blue-400" />
+                <span className="text-xs text-blue-600 dark:text-blue-400">
+                  Tiempo Límite
+                </span>
               </div>
             )}
             {roomData?.gameSettings?.specialQuestions && (
               <div className="flex items-center px-2 py-1 bg-red-100 rounded-full dark:bg-red-900">
-                <Target className="w-3 h-3 mr-1 text-red-600 dark:text-red-400" />
-                <span className="text-xs text-red-600 dark:text-red-400">Preguntas Especiales</span>
+                <Target className="mr-1 w-3 h-3 text-red-600 dark:text-red-400" />
+                <span className="text-xs text-red-600 dark:text-red-400">
+                  Preguntas Especiales
+                </span>
               </div>
             )}
             {roomData?.gameSettings?.rapidBonus && (
               <div className="flex items-center px-2 py-1 bg-yellow-100 rounded-full dark:bg-yellow-900">
-                <Zap className="w-3 h-3 mr-1 text-yellow-600 dark:text-yellow-400" />
-                <span className="text-xs text-yellow-600 dark:text-yellow-400">Bonificación Rápida</span>
+                <Zap className="mr-1 w-3 h-3 text-yellow-600 dark:text-yellow-400" />
+                <span className="text-xs text-yellow-600 dark:text-yellow-400">
+                  Bonificación Rápida
+                </span>
               </div>
             )}
           </div>
@@ -409,18 +440,22 @@ const Game = () => {
 
         {/* Progress Track */}
         <div className="p-3 mb-4 bg-white rounded-2xl border shadow-xl dark:bg-slate-800 border-slate-200 dark:border-slate-700">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex justify-between items-center mb-3">
             <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
               Progreso
             </h3>
             <div className="flex items-center space-x-2">
               {timeLeft !== null && (
-                <div className={`flex items-center px-2 py-1 rounded-full ${
-                  timeLeft <= 3 ? 'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-400' :
-                  timeLeft <= 5 ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-400' :
-                  'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400'
-                }`}>
-                  <Clock className="w-3 h-3 mr-1" />
+                <div
+                  className={`flex items-center px-2 py-1 rounded-full ${
+                    timeLeft <= 3
+                      ? "bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-400"
+                      : timeLeft <= 5
+                      ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-400"
+                      : "bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400"
+                  }`}
+                >
+                  <Clock className="mr-1 w-3 h-3" />
                   <span className="text-xs font-bold">{timeLeft}s</span>
                 </div>
               )}
@@ -431,80 +466,92 @@ const Game = () => {
           </div>
 
           {/* Pista de carrera */}
-          <div className="relative p-4 bg-gradient-to-r from-green-100 via-yellow-50 to-red-100 dark:from-green-900/20 dark:via-yellow-900/20 dark:to-red-900/20 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600">
+          <div className="relative p-4 bg-gradient-to-r from-green-100 via-yellow-50 to-red-100 rounded-xl border-2 border-dashed dark:from-green-900/20 dark:via-yellow-900/20 dark:to-red-900/20 border-slate-300 dark:border-slate-600">
             {/* Línea de meta */}
-            <div className="absolute right-2 top-0 bottom-0 w-1 bg-gradient-to-b from-red-500 to-red-600 rounded-full opacity-80"></div>
-            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 text-red-600 dark:text-red-400 font-bold text-xs">
+            <div className="absolute top-0 bottom-0 right-2 w-1 bg-gradient-to-b from-red-500 to-red-600 rounded-full opacity-80"></div>
+            <div className="absolute right-0 top-1/2 text-xs font-bold text-red-600 transform -translate-y-1/2 dark:text-red-400">
               🏁
             </div>
-            
+
             {/* Marcadores de progreso */}
             <div className="relative h-16">
               {Array.from({ length: MAX_QUESTIONS + 1 }, (_, i) => (
                 <div
                   key={i}
-                  className="absolute top-0 bottom-0 w-px bg-slate-300 dark:bg-slate-600 opacity-50"
+                  className="absolute top-0 bottom-0 w-px opacity-50 bg-slate-300 dark:bg-slate-600"
                   style={{ left: `${(i / MAX_QUESTIONS) * 100}%` }}
                 >
-                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-slate-500 dark:text-slate-400">
+                  <div className="absolute -bottom-6 left-1/2 text-xs transform -translate-x-1/2 text-slate-500 dark:text-slate-400">
                     {i}
                   </div>
                 </div>
               ))}
-              
+
               {/* Pelotas de jugadores con avatares */}
               {roomData?.players?.map((player, index) => {
-                const progressPercentage = (player.progress / MAX_QUESTIONS) * 100;
+                const progressPercentage =
+                  (player.progress / MAX_QUESTIONS) * 100;
                 const isCurrentUser = player.id === user?.uid;
-                
+
                 return (
                   <div
                     key={player.id}
                     className={`absolute transition-all duration-1000 ease-out transform ${
-                      isCurrentUser ? 'scale-110 z-10' : 'z-0'
+                      isCurrentUser ? "z-10 scale-110" : "z-0"
                     }`}
                     style={{
                       left: `${Math.min(progressPercentage, 95)}%`,
                       top: `${index * 12 + 4}px`,
-                      transform: `translateX(-50%) ${isCurrentUser ? 'scale(1.1)' : ''}`
+                      transform: `translateX(-50%) ${
+                        isCurrentUser ? "scale(1.1)" : ""
+                      }`,
                     }}
                   >
                     {/* Pelota con avatar */}
-                    <div className={`relative group ${
-                      isCurrentUser ? 'animate-bounce' : ''
-                    }`}>
+                    <div
+                      className={`relative group ${
+                        isCurrentUser ? "animate-bounce" : ""}`}
+                    >
                       {/* Sombra de la pelota */}
-                      <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-2 bg-black/20 rounded-full blur-sm"></div>
-                      
+                      <div className="absolute -bottom-1 left-1/2 w-8 h-2 rounded-full blur-sm transform -translate-x-1/2 bg-black/20"></div>
+
                       {/* Pelota principal */}
-                      <div className={`relative w-10 h-10 rounded-full border-3 shadow-lg transition-all duration-300 ${
-                        isCurrentUser 
-                          ? 'border-yellow-400 shadow-yellow-400/50 ring-2 ring-yellow-300' 
-                          : 'border-white/80 shadow-slate-400/30'
-                      }`}>
+                      <div
+                        className={`relative w-10 h-10 rounded-full border-3 shadow-lg transition-all duration-300 ${
+                          isCurrentUser
+                            ? "border-yellow-400 ring-2 ring-yellow-300 shadow-yellow-400/50"
+                            : "border-white/80 shadow-slate-400/30"
+                        }`}
+                      >
                         <Avatar className="w-full h-full">
-                          <AvatarImage 
-                            src={player.avatarUrl} 
+                          <AvatarImage
+                            src={player.avatarUrl}
                             className="object-cover"
                           />
-                          <AvatarFallback className={`${ballColors[index % ballColors.length]} text-white font-bold text-sm`}>
+                          <AvatarFallback
+                            className={`${
+                              ballColors[index % ballColors.length]
+                            } text-white font-bold text-sm`}
+                          >
                             {player.nickname.charAt(0)}
                           </AvatarFallback>
                         </Avatar>
-                        
+
                         {/* Efecto de brillo para el jugador actual */}
                         {isCurrentUser && (
-                          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-yellow-400/30 to-transparent animate-pulse"></div>
+                          <div className="absolute inset-0 bg-gradient-to-tr to-transparent rounded-full animate-pulse from-yellow-400/30"></div>
                         )}
                       </div>
-                      
+
                       {/* Tooltip con información del jugador */}
-                      <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                        <div className="bg-slate-800 text-white text-xs px-2 py-1 rounded-lg whitespace-nowrap shadow-lg">
+                      <div className="absolute -top-12 left-1/2 opacity-0 transition-opacity duration-200 transform -translate-x-1/2 pointer-events-none group-hover:opacity-100">
+                        <div className="px-2 py-1 text-xs text-white whitespace-nowrap rounded-lg shadow-lg bg-slate-800">
                           <div className="font-semibold">{player.nickname}</div>
-                          <div className="text-slate-300">{player.progress}/{MAX_QUESTIONS}</div>
+                          <div className="text-slate-300">
+                            {player.progress}/{MAX_QUESTIONS}
+                          </div>
                         </div>
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-t-4 border-transparent border-t-slate-800"></div>
+                        <div className="absolute top-full left-1/2 w-0 h-0 border-t-4 border-r-2 border-l-2 border-transparent transform -translate-x-1/2 border-t-slate-800"></div>
                       </div>
                     </div>
                   </div>
@@ -512,7 +559,7 @@ const Game = () => {
               })}
             </div>
           </div>
-          
+
           {/* Estadísticas horizontales compactas */}
           <div className="flex justify-between items-center mt-3 space-x-2">
             {roomData?.players?.map((player, index) => {
@@ -521,26 +568,38 @@ const Game = () => {
                 <div
                   key={player.id}
                   className={`flex items-center space-x-2 px-2 py-1 rounded-lg transition-all duration-300 ${
-                    isCurrentUser 
-                      ? 'bg-yellow-100 dark:bg-yellow-900/30 ring-1 ring-yellow-300 dark:ring-yellow-600' 
-                      : 'bg-slate-100 dark:bg-slate-700'
+                    isCurrentUser
+                      ? "bg-yellow-100 ring-1 ring-yellow-300 dark:bg-yellow-900/30 dark:ring-yellow-600"
+                      : "bg-slate-100 dark:bg-slate-700"
                   }`}
                 >
                   <Avatar className="w-6 h-6 border border-white/50">
                     <AvatarImage src={player.avatarUrl} />
-                    <AvatarFallback className={`${ballColors[index % ballColors.length]} text-white text-xs`}>
+                    <AvatarFallback
+                      className={`${
+                        ballColors[index % ballColors.length]
+                      } text-white text-xs`}
+                    >
                       {player.nickname.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="text-xs">
-                    <div className={`font-semibold truncate max-w-16 ${
-                      isCurrentUser ? 'text-yellow-800 dark:text-yellow-200' : 'text-slate-700 dark:text-slate-200'
-                    }`}>
+                    <div
+                      className={`font-semibold truncate max-w-16 ${
+                        isCurrentUser
+                          ? "text-yellow-800 dark:text-yellow-200"
+                          : "text-slate-700 dark:text-slate-200"
+                      }`}
+                    >
                       {player.nickname}
                     </div>
-                    <div className={`text-xs ${
-                      isCurrentUser ? 'text-yellow-600 dark:text-yellow-300' : 'text-slate-500 dark:text-slate-400'
-                    }`}>
+                    <div
+                      className={`text-xs ${
+                        isCurrentUser
+                          ? "text-yellow-600 dark:text-yellow-300"
+                          : "text-slate-500 dark:text-slate-400"
+                      }`}
+                    >
                       {player.progress}/{MAX_QUESTIONS}
                     </div>
                   </div>
@@ -554,30 +613,33 @@ const Game = () => {
         <div className="p-4 bg-white rounded-2xl border shadow-xl dark:bg-slate-800 border-slate-200 dark:border-slate-700">
           {/* Indicador de pregunta especial */}
           {isSpecialQuestion && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-800">
+            <div className="p-3 mb-4 bg-red-50 rounded-lg border border-red-200 dark:bg-red-900/20 dark:border-red-800">
               <div className="flex items-center space-x-2">
                 <Target className="w-5 h-5 text-red-600 dark:text-red-400" />
                 <span className="text-sm font-bold text-red-600 dark:text-red-400">
                   ¡Pregunta Especial!
                 </span>
               </div>
-              <p className="text-xs text-red-600 dark:text-red-400 mt-1">
-                Si respondes correctamente, los demás jugadores retrocederán un paso.
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">
+                Si respondes correctamente, los demás jugadores retrocederán un
+                paso.
               </p>
             </div>
           )}
 
           {/* Indicador de bonificación rápida */}
           {roomData?.gameSettings?.rapidBonus && questionStartTime && (
-            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg dark:bg-yellow-900/20 dark:border-yellow-800">
+            <div className="p-3 mb-4 bg-yellow-50 rounded-lg border border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800">
               <div className="flex items-center space-x-2">
                 <Zap className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
                 <span className="text-sm font-bold text-yellow-600 dark:text-yellow-400">
                   Bonificación Rápida Activa
                 </span>
               </div>
-              <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
-                Responde en los primeros {roomData.gameSettings.rapidBonusSeconds} segundos para obtener 2 pasos.
+              <p className="mt-1 text-xs text-yellow-600 dark:text-yellow-400">
+                Responde en los primeros{" "}
+                {roomData.gameSettings.rapidBonusSeconds} segundos para obtener
+                2 pasos.
               </p>
             </div>
           )}

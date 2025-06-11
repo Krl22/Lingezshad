@@ -13,9 +13,6 @@ import {
   AVATAR_STYLES,
 } from "@/firebase/avatarService";
 
-import image1 from "../assets/pfp.jpg";
-import image2 from "../assets/pfp2.jpg";
-import image3 from "../assets/pfp3.jpg";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -154,18 +151,6 @@ const Account = () => {
       setNewNickname("");
     }
   };
-
-  const handleProfileImageChange = (image: string) => {
-    setProfileImage(image);
-    if (currentUser) {
-      const userDocRef = doc(db, "users", currentUser.uid);
-      updateDoc(userDocRef, {
-        photoURL: image,
-      });
-    }
-  };
-
-  const availableImages = [image1, image2, image3];
 
   if (loading) {
     return (
