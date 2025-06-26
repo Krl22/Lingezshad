@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { db, auth } from "@/firebase/firebaseconfig";
+import { db, auth, rtdb } from "@/firebase/firebaseconfig";
 import {
   doc,
   getDoc,
   updateDoc,
   onSnapshot,
   arrayUnion,
-  arrayRemove,
   setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import { Copy, Settings, Clock, Zap, Target } from "lucide-react";
 import { useLanguage } from "@/contexts/language-provider";
+import { useState, useEffect } from "react"; // Asegúrate de tener estos imports
+import { ref, onDisconnect, set, onValue } from 'firebase/database';
 
 // Función para obtener el nickname del usuario desde Firestore
 const getUserNickname = async (userId: string): Promise<string | null> => {
@@ -86,6 +87,7 @@ const Room = () => {
           }
 
           await setDoc(roomRef, {
+            maxPlayers: 8, // Agregar límite de 8 jugadores
             creator: {
               id: user.uid,
               nickname: nickname,
@@ -131,54 +133,131 @@ const Room = () => {
     return () => unsubscribe();
   }, [roomId, navigate]);
 
+  // Dentro del useEffect donde se une el jugador a la sala
   useEffect(() => {
+    let unsubscribePresence: (() => void) | null = null;
+    let presenceRef: any = null;
+    
     const joinRoom = async () => {
-      // Verificar que 'user', 'roomId' y 'roomData' estén disponibles antes de proceder
       if (!user || !roomId || !roomData || !roomData.players) {
         console.log("Missing data, skipping join");
         return;
       }
-
+  
       const roomRef = doc(db, "rooms", roomId);
-
-      // Verificar si el jugador ya está en la sala
       const isPlayerInRoom = roomData.players.some(
         (player: { id: string }) => player.id === user.uid
       );
-
-      if (isPlayerInRoom) {
-        console.log("Player already in the room, skipping join");
-        return;
-      }
-
-      // Obtener el apodo del usuario
-      const nickname = await getUserNickname(user.uid);
-      if (!nickname) {
-        console.error("Nickname not found for user");
-        return;
-      }
-
-      // Intentar agregar el jugador a la sala
+  
+      // Configurar presencia PRIMERO
+      presenceRef = ref(rtdb, `rooms/${roomId}/presence/${user.uid}`);
+      
       try {
-        await updateDoc(roomRef, {
-          players: arrayUnion({
-            id: user.uid,
-            nickname: nickname,
-            joinedAt: Timestamp.now(),
-          }),
+        // Establecer presencia inmediatamente
+        await set(presenceRef, {
+          online: true,
+          lastSeen: Date.now()
         });
-        console.log("Player successfully joined the room");
+        
+        // Configurar auto-removal cuando se desconecte
+        onDisconnect(presenceRef).remove();
+        
+        console.log("Presence established for user:", user.uid);
+
+        if (!isPlayerInRoom) {
+          const nickname = await getUserNickname(user.uid);
+          if (!nickname) {
+            console.error("Nickname not found for user");
+            return;
+          }
+
+          // Agregar jugador a Firestore DESPUÉS de establecer presencia
+          await updateDoc(roomRef, {
+            players: arrayUnion({
+              id: user.uid,
+              nickname: nickname,
+              joinedAt: Timestamp.now(),
+            }),
+          });
+          
+          console.log("Player successfully joined the room");
+        } else {
+          console.log("Player already in room, presence updated");
+        }
       } catch (error) {
-        console.error("Error joining room: ", error);
+        console.error("Error in joinRoom: ", error);
       }
     };
-
-    // Solo ejecutar si 'roomId', 'user' y 'roomData' están disponibles
+  
+    // Configurar listener de presencia SOLO para el creador de la sala
+    const setupPresenceListener = () => {
+      if (!roomId || !user || !roomData?.creator?.id) return;
+      
+      // Solo el creador de la sala maneja la limpieza automática
+      if (roomData.creator.id !== user.uid) {
+        console.log("Not room creator, skipping presence listener setup");
+        return;
+      }
+      
+      const disconnectRef = ref(rtdb, `rooms/${roomId}/presence`);
+      unsubscribePresence = onValue(disconnectRef, async (snapshot) => {
+        // Agregar delay para evitar eliminaciones prematuras
+        setTimeout(async () => {
+          const roomRef = doc(db, "rooms", roomId);
+          
+          try {
+            const currentRoomSnap = await getDoc(roomRef);
+            if (!currentRoomSnap.exists()) return;
+            
+            const currentRoomData = currentRoomSnap.data();
+            const presenceData = snapshot.val();
+            
+            if (!presenceData) {
+              console.log("No presence data, but room exists - keeping room");
+              return;
+            }
+            
+            const onlineUsers = Object.keys(presenceData);
+            console.log("Online users:", onlineUsers);
+            console.log("Current players:", currentRoomData.players.map((p: any) => p.id));
+            
+            // Filtrar jugadores que están online
+            const updatedPlayers = currentRoomData.players.filter(
+              (player: { id: string }) => onlineUsers.includes(player.id)
+            );
+            
+            if (updatedPlayers.length !== currentRoomData.players.length) {
+              if (updatedPlayers.length === 0) {
+                await deleteDoc(roomRef);
+                console.log("Room deleted - no players online");
+              } else {
+                await updateDoc(roomRef, { players: updatedPlayers });
+                console.log(`Updated players list, ${updatedPlayers.length} players remaining`);
+              }
+            }
+          } catch (error) {
+            console.error("Error in presence listener: ", error);
+          }
+        }, 2000); // Delay de 2 segundos para permitir que la presencia se establezca
+      });
+    };
+  
     if (roomId && user && roomData) {
-      joinRoom();
-    } else {
-      console.log("Waiting for required data...");
+      joinRoom().then(() => {
+        // Delay adicional antes de configurar el listener
+        setTimeout(() => {
+          setupPresenceListener();
+        }, 3000);
+      });
     }
+    
+    // Cleanup
+    return () => {
+      if (unsubscribePresence) {
+        unsubscribePresence();
+      }
+      // NO limpiar presencia aquí automáticamente
+    };
   }, [roomId, user, roomData]);
 
   const handleStartGame = async () => {
@@ -214,38 +293,83 @@ const Room = () => {
     }
   };
 
+  // Función mejorada para salir de la sala
   const handleLeaveRoom = async () => {
     if (!roomData || !user || !roomId) return;
 
     const roomRef = doc(db, "rooms", roomId);
+    const presenceRef = ref(rtdb, `rooms/${roomId}/presence/${user.uid}`);
 
     try {
-      const updatedPlayers = roomData.players.filter(
+      // Limpiar presencia primero
+      await set(presenceRef, null);
+      
+      // Obtener datos actualizados de la sala
+      const currentRoomSnap = await getDoc(roomRef);
+      if (!currentRoomSnap.exists()) {
+        console.log("Room no longer exists");
+        navigate("/lobby");
+        return;
+      }
+
+      const currentRoomData = currentRoomSnap.data();
+
+      // Filtrar jugadores para remover el actual
+      const updatedPlayers = currentRoomData.players.filter(
         (player: { id: string }) => player.id !== user.uid
       );
 
-      await updateDoc(roomRef, {
-        players:
-          updatedPlayers.length > 0
-            ? updatedPlayers
-            : arrayRemove({
-                id: user.uid,
-                nickname: user.displayName || "Unknown",
-              }),
-      });
+      console.log("Players after filtering:", updatedPlayers);
+      console.log("Players count after removal:", updatedPlayers.length);
 
-      console.log("Player removed successfully");
       if (updatedPlayers.length === 0) {
+        // Si no quedan jugadores, eliminar la sala completamente
+        await deleteDoc(roomRef);
+        console.log("Room deleted - no players remaining");
+      } else {
+        // Si quedan jugadores, actualizar la lista
         await updateDoc(roomRef, {
-          status: "empty",
+          players: updatedPlayers,
         });
+        console.log(
+          "Player removed successfully, players remaining:",
+          updatedPlayers.length
+        );
       }
 
       navigate("/lobby");
     } catch (error) {
       console.error("Error removing player from room: ", error);
+      navigate("/lobby");
     }
   };
+  // Limpieza automática cuando el componente se desmonta
+  useEffect(() => {
+    const cleanup = async () => {
+      if (!user || !roomId) return;
+      
+      const presenceRef = ref(rtdb, `rooms/${roomId}/presence/${user.uid}`);
+      try {
+        await set(presenceRef, null);
+        console.log("Presence cleaned up on unmount");
+      } catch (error) {
+        console.error("Error in cleanup: ", error);
+      }
+    };
+  
+  // Solo manejar beforeunload, no cleanup automático en unmount
+  const handleBeforeUnload = () => {
+    cleanup();
+  };
+
+  window.addEventListener("beforeunload", handleBeforeUnload);
+
+  // Cleanup solo en beforeunload, no en unmount normal
+  return () => {
+    window.removeEventListener("beforeunload", handleBeforeUnload);
+    // NO llamar cleanup() aquí para evitar eliminaciones prematuras
+  };
+}, []); // Array vacío para que solo se ejecute al montar/desmontar
 
   // Función para actualizar configuraciones del juego
   const updateGameSettings = async (newSettings: Partial<GameSettings>) => {
@@ -293,117 +417,131 @@ const Room = () => {
         </h2>
 
         {/* Panel de Configuraciones del Juego */}
-        {roomData?.creator?.id === user?.uid && roomData?.status === "waiting" && (
-          <div className="p-4 bg-gray-50 rounded-md shadow-inner dark:bg-gray-700">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-                {t("room.gameSettings")}
-              </h3>
-              <button
-                onClick={() => setShowGameSettings(!showGameSettings)}
-                className="p-2 text-indigo-500 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-600"
-              >
-                <Settings className="w-5 h-5" />
-              </button>
-            </div>
-
-            {showGameSettings && (
-              <div className="space-y-4">
-                {/* Tiempo Límite */}
-                <div className="flex items-center justify-between p-3 bg-white rounded-lg dark:bg-gray-800">
-                  <div className="flex items-center space-x-2">
-                    <Clock className="w-4 h-4 text-blue-500" />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {t("room.timeLimit")}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={roomData?.gameSettings?.timeLimit || false}
-                      onChange={(e) =>
-                        updateGameSettings({ timeLimit: e.target.checked })
-                      }
-                      className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
-                    />
-                    {roomData?.gameSettings?.timeLimit && (
-                      <input
-                        type="number"
-                        min="5"
-                        max="30"
-                        value={roomData?.gameSettings?.timeLimitSeconds || 10}
-                        onChange={(e) =>
-                          updateGameSettings({
-                            timeLimitSeconds: parseInt(e.target.value),
-                          })
-                        }
-                        className="w-16 px-2 py-1 text-xs border rounded dark:bg-gray-700 dark:border-gray-600"
-                      />
-                    )}
-                  </div>
-                </div>
-
-                {/* Preguntas Especiales */}
-                <div className="flex items-center justify-between p-3 bg-white rounded-lg dark:bg-gray-800">
-                  <div className="flex items-center space-x-2">
-                    <Target className="w-4 h-4 text-red-500" />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {t("room.specialQuestions")}
-                    </span>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={roomData?.gameSettings?.specialQuestions || false}
-                    onChange={(e) =>
-                      updateGameSettings({ specialQuestions: e.target.checked })
-                    }
-                    className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
-                  />
-                </div>
-
-                {/* Bonificación Rápida */}
-                <div className="flex items-center justify-between p-3 bg-white rounded-lg dark:bg-gray-800">
-                  <div className="flex items-center space-x-2">
-                    <Zap className="w-4 h-4 text-yellow-500" />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {t("room.rapidBonus")}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={roomData?.gameSettings?.rapidBonus || false}
-                      onChange={(e) =>
-                        updateGameSettings({ rapidBonus: e.target.checked })
-                      }
-                      className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
-                    />
-                    {roomData?.gameSettings?.rapidBonus && (
-                      <input
-                        type="number"
-                        min="2"
-                        max="8"
-                        value={roomData?.gameSettings?.rapidBonusSeconds || 4}
-                        onChange={(e) =>
-                          updateGameSettings({
-                            rapidBonusSeconds: parseInt(e.target.value),
-                          })
-                        }
-                        className="w-16 px-2 py-1 text-xs border rounded dark:bg-gray-700 dark:border-gray-600"
-                      />
-                    )}
-                  </div>
-                </div>
-
-                <div className="p-2 text-xs text-gray-600 dark:text-gray-400 bg-blue-50 rounded dark:bg-blue-900/20">
-                  <p><strong>{t("room.timeLimit")}:</strong> {t("room.timeLimitDescription")}</p>
-                  <p><strong>{t("room.specialQuestions")}:</strong> {t("room.specialQuestionsDescription")}</p>
-                  <p><strong>{t("room.rapidBonus")}:</strong> {t("room.rapidBonusDescription")}</p>
-                </div>
+        {roomData?.creator?.id === user?.uid &&
+          roomData?.status === "waiting" && (
+            <div className="p-4 bg-gray-50 rounded-md shadow-inner dark:bg-gray-700">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                  {t("room.gameSettings")}
+                </h3>
+                <button
+                  onClick={() => setShowGameSettings(!showGameSettings)}
+                  className="p-2 text-indigo-500 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-600"
+                >
+                  <Settings className="w-5 h-5" />
+                </button>
               </div>
-            )}
-          </div>
-        )}
+
+              {showGameSettings && (
+                <div className="space-y-4">
+                  {/* Tiempo Límite */}
+                  <div className="flex justify-between items-center p-3 bg-white rounded-lg dark:bg-gray-800">
+                    <div className="flex items-center space-x-2">
+                      <Clock className="w-4 h-4 text-blue-500" />
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {t("room.timeLimit")}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={roomData?.gameSettings?.timeLimit || false}
+                        onChange={(e) =>
+                          updateGameSettings({ timeLimit: e.target.checked })
+                        }
+                        className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+                      />
+                      {roomData?.gameSettings?.timeLimit && (
+                        <input
+                          type="number"
+                          min="5"
+                          max="30"
+                          value={roomData?.gameSettings?.timeLimitSeconds || 10}
+                          onChange={(e) =>
+                            updateGameSettings({
+                              timeLimitSeconds: parseInt(e.target.value),
+                            })
+                          }
+                          className="px-2 py-1 w-16 text-xs rounded border dark:bg-gray-700 dark:border-gray-600"
+                        />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Preguntas Especiales */}
+                  <div className="flex justify-between items-center p-3 bg-white rounded-lg dark:bg-gray-800">
+                    <div className="flex items-center space-x-2">
+                      <Target className="w-4 h-4 text-red-500" />
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {t("room.specialQuestions")}
+                      </span>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={
+                        roomData?.gameSettings?.specialQuestions || false
+                      }
+                      onChange={(e) =>
+                        updateGameSettings({
+                          specialQuestions: e.target.checked,
+                        })
+                      }
+                      className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  {/* Bonificación Rápida */}
+                  <div className="flex justify-between items-center p-3 bg-white rounded-lg dark:bg-gray-800">
+                    <div className="flex items-center space-x-2">
+                      <Zap className="w-4 h-4 text-yellow-500" />
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {t("room.rapidBonus")}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={roomData?.gameSettings?.rapidBonus || false}
+                        onChange={(e) =>
+                          updateGameSettings({ rapidBonus: e.target.checked })
+                        }
+                        className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+                      />
+                      {roomData?.gameSettings?.rapidBonus && (
+                        <input
+                          type="number"
+                          min="2"
+                          max="8"
+                          value={roomData?.gameSettings?.rapidBonusSeconds || 4}
+                          onChange={(e) =>
+                            updateGameSettings({
+                              rapidBonusSeconds: parseInt(e.target.value),
+                            })
+                          }
+                          className="px-2 py-1 w-16 text-xs rounded border dark:bg-gray-700 dark:border-gray-600"
+                        />
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="p-2 text-xs text-gray-600 bg-blue-50 rounded dark:text-gray-400 dark:bg-blue-900/20">
+                    <p>
+                      <strong>{t("room.timeLimit")}:</strong>{" "}
+                      {t("room.timeLimitDescription")}
+                    </p>
+                    <p>
+                      <strong>{t("room.specialQuestions")}:</strong>{" "}
+                      {t("room.specialQuestionsDescription")}
+                    </p>
+                    <p>
+                      <strong>{t("room.rapidBonus")}:</strong>{" "}
+                      {t("room.rapidBonusDescription")}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
         {/* Lista de Jugadores */}
         <div className="p-4 bg-gray-50 rounded-md shadow-inner dark:bg-gray-700">
@@ -424,7 +562,8 @@ const Room = () => {
                     {player.nickname}
                   </span>{" "}
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    ({t("room.joined")}: {player.joinedAt.toDate().toLocaleTimeString()})
+                    ({t("room.joined")}:{" "}
+                    {player.joinedAt.toDate().toLocaleTimeString()})
                   </span>
                 </li>
               )
@@ -455,3 +594,5 @@ const Room = () => {
 };
 
 export default Room;
+
+

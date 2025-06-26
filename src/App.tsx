@@ -27,8 +27,14 @@ import Scene from "./pages/locations/Restaurant/scene";
 import Animals from "./pages/Topics/Animals/Animals";
 import Settings from "./pages/Settings";
 import Body from "./pages/Topics/Body/Body";
+import { useEffect } from "react";
+import { startRoomCleanupScheduler } from "@/firebase/roomCleanupService";
 
 function App() {
+  // Inicializar el servicio de limpieza al cargar la app
+  useEffect(() => {
+    startRoomCleanupScheduler();
+  }, []);
   return (
     <AuthProvider>
       <LanguageProvider defaultLanguage="en" storageKey="lingez-language">
@@ -193,6 +199,8 @@ const ConditionalTopNavBar = () => {
     "/chatgptclone",
     "/messages",
     "/friendchat",
+    "/search-rooms",
+    "/lobby",
   ];
   return !hiddenRoutes.includes(location.pathname) ? <TopNavBar /> : null;
 };
@@ -208,6 +216,8 @@ const ConditionalBottomNavBar = () => {
     "/chatgptclone",
     "/messages",
     "/friendchat",
+    "/search-rooms",
+    "/lobby",
   ];
   return !hiddenRoutes.includes(location.pathname) ? <BottomNavBar /> : null;
 };

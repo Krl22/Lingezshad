@@ -110,6 +110,45 @@ type TranslationKeys = {
   "room.leaveRoom": string;
   "room.loadingRoom": string;
   "room.roomIdCopied": string;
+
+  // Lobby Page - NUEVAS TRADUCCIONES
+  "lobby.title": string;
+  "lobby.subtitle": string;
+  "lobby.raceMode.title": string;
+  "lobby.raceMode.description": string;
+  "lobby.partyMode.title": string;
+  "lobby.partyMode.description": string;
+  "lobby.partyMode.tag1": string;
+  "lobby.partyMode.tag2": string;
+  "lobby.partyMode.tag3": string;
+  "lobby.createRaceRoom": string;
+  "lobby.createPartyRoom": string;
+  "lobby.hasRoomCode": string;
+  "lobby.enterRoomCode": string;
+  "lobby.joinRoom": string;
+  "lobby.explorePublicRooms": string;
+  "lobby.enterValidRoomId": string;
+  "lobby.raceTab": string;
+  "lobby.raceTabShort": string;
+  "lobby.partyTab": string;
+  "lobby.partyTabShort": string;
+  "lobby.backToHome": string;
+
+  // Search Page - NUEVAS TRADUCCIONES
+  "search.title": string;
+  "search.subtitle": string;
+  "search.loadingRooms": string;
+  "search.error": string;
+  "search.backToLobby": string;
+  "search.room": string;
+  "search.players": string;
+  "search.currentPlayers": string;
+  "search.roomFull": string;
+  "search.joinRoom": string;
+  "search.noRooms": string;
+  "search.noRoomsDescription": string;
+  "search.refresh": string;
+  "search.refreshing": string;
 };
 
 // Traducciones con portugués y francés
@@ -206,6 +245,48 @@ const translations: Record<Language, TranslationKeys> = {
     "room.leaveRoom": "Leave Room",
     "room.loadingRoom": "Loading room...",
     "room.roomIdCopied": "Room ID copied to clipboard!",
+
+    // Lobby Page
+    "lobby.title": "Lingez Games",
+    "lobby.subtitle": "Choose your favorite game mode",
+    "lobby.raceMode.title": "Speed Race",
+    "lobby.raceMode.description":
+      "Race to the finish line! Answer questions quickly to advance towards the goal",
+    "lobby.partyMode.title": "Lingez Party",
+    "lobby.partyMode.description":
+      "Party mode! Mini-games, special challenges and multiplayer fun",
+    "lobby.partyMode.tag1": "Mini-games",
+    "lobby.partyMode.tag2": "Challenges",
+    "lobby.partyMode.tag3": "Competitive",
+    "lobby.createRaceRoom": "Create Race Room",
+    "lobby.createPartyRoom": "Create Party Room",
+    "lobby.hasRoomCode": "Already have a room code?",
+    "lobby.enterRoomCode": "Enter room code",
+    "lobby.joinRoom": "Join Room",
+    "lobby.explorePublicRooms": "Explore Public Rooms",
+    "lobby.enterValidRoomId": "Please enter a valid Room ID",
+    "lobby.raceTab": "Speed Race",
+    "lobby.raceTabShort": "Race",
+    "lobby.partyTab": "Lingez Party",
+    "lobby.partyTabShort": "Party",
+    "lobby.backToHome": "Back",
+
+    // Search Page
+    "search.title": "Available Rooms",
+    "search.subtitle": "Join an ongoing match",
+    "search.loadingRooms": "Loading rooms...",
+    "search.error": "Error",
+    "search.backToLobby": "Back to Lobby",
+    "search.room": "Room",
+    "search.players": "Players",
+    "search.currentPlayers": "Current players:",
+    "search.roomFull": "Room Full",
+    "search.joinRoom": "Join Room",
+    "search.noRooms": "No rooms available",
+    "search.noRoomsDescription":
+      "No rooms are waiting for players at the moment.",
+    "search.refresh": "Refresh",
+    "search.refreshing": "Refreshing...",
   },
   es: {
     // Landing Page
@@ -305,6 +386,48 @@ const translations: Record<Language, TranslationKeys> = {
     "room.leaveRoom": "Salir de la Sala",
     "room.loadingRoom": "Cargando sala...",
     "room.roomIdCopied": "¡ID de sala copiado al portapapeles!",
+
+    // Lobby Page
+    "lobby.title": "Lingez Games",
+    "lobby.subtitle": "Elige tu modo de juego favorito",
+    "lobby.raceMode.title": "Carrera Rápida",
+    "lobby.raceMode.description":
+      "¡Corre hacia la meta! Responde preguntas rápidamente para avanzar hacia el objetivo",
+    "lobby.partyMode.title": "Lingez Party",
+    "lobby.partyMode.description":
+      "¡Modo fiesta! Minijuegos, desafíos especiales y diversión multijugador",
+    "lobby.partyMode.tag1": "Minijuegos",
+    "lobby.partyMode.tag2": "Desafíos",
+    "lobby.partyMode.tag3": "Competitivo",
+    "lobby.createRaceRoom": "Crear Sala de Carrera",
+    "lobby.createPartyRoom": "Crear Sala Party",
+    "lobby.hasRoomCode": "¿Ya tienes un código de sala?",
+    "lobby.enterRoomCode": "Ingresa el código de sala",
+    "lobby.joinRoom": "Unirse a Sala",
+    "lobby.explorePublicRooms": "Explorar Salas Públicas",
+    "lobby.enterValidRoomId": "Por favor ingresa un ID de sala válido",
+    "lobby.raceTab": "Carrera Rápida",
+    "lobby.raceTabShort": "Carrera",
+    "lobby.partyTab": "Lingez Party",
+    "lobby.partyTabShort": "Party",
+    "lobby.backToHome": "Regresar",
+
+    // Search Page
+    "search.title": "Salas Disponibles",
+    "search.subtitle": "Únete a una partida en curso",
+    "search.loadingRooms": "Cargando salas...",
+    "search.error": "Error",
+    "search.backToLobby": "Volver al Lobby",
+    "search.room": "Sala",
+    "search.players": "Jugadores",
+    "search.currentPlayers": "Jugadores actuales:",
+    "search.roomFull": "Sala Llena",
+    "search.joinRoom": "Unirse a la Sala",
+    "search.noRooms": "No hay salas disponibles",
+    "search.noRoomsDescription":
+      "No hay salas esperando jugadores en este momento.",
+    "search.refresh": "Actualizar",
+    "search.refreshing": "Actualizando...",
   },
   pt: {
     // Landing Page
@@ -401,6 +524,48 @@ const translations: Record<Language, TranslationKeys> = {
     "room.leaveRoom": "Sair da Sala",
     "room.loadingRoom": "Carregando sala...",
     "room.roomIdCopied": "ID da sala copiado para a área de transferência!",
+
+    // Lobby Page
+    "lobby.title": "Lingez Games",
+    "lobby.subtitle": "Escolha seu modo de jogo favorito",
+    "lobby.raceMode.title": "Corrida Rápida",
+    "lobby.raceMode.description":
+      "Corra para a linha de chegada! Responda perguntas rapidamente para avançar em direção ao objetivo",
+    "lobby.partyMode.title": "Lingez Party",
+    "lobby.partyMode.description":
+      "Modo festa! Mini-jogos, desafios especiais e diversão multijogador",
+    "lobby.partyMode.tag1": "Mini-jogos",
+    "lobby.partyMode.tag2": "Desafios",
+    "lobby.partyMode.tag3": "Competitivo",
+    "lobby.createRaceRoom": "Criar Sala de Corrida",
+    "lobby.createPartyRoom": "Criar Sala Party",
+    "lobby.hasRoomCode": "Já tem um código de sala?",
+    "lobby.enterRoomCode": "Digite o código da sala",
+    "lobby.joinRoom": "Entrar na Sala",
+    "lobby.explorePublicRooms": "Explorar Salas Públicas",
+    "lobby.enterValidRoomId": "Por favor, digite um ID de sala válido",
+    "lobby.raceTab": "Corrida Rápida",
+    "lobby.raceTabShort": "Corrida",
+    "lobby.partyTab": "Lingez Party",
+    "lobby.partyTabShort": "Party",
+    "lobby.backToHome": "Voltar",
+
+    // Search Page
+    "search.title": "Salas Disponíveis",
+    "search.subtitle": "Junte-se a uma partida em andamento",
+    "search.loadingRooms": "Carregando salas...",
+    "search.error": "Erro",
+    "search.backToLobby": "Voltar ao Lobby",
+    "search.room": "Sala",
+    "search.players": "Jogadores",
+    "search.currentPlayers": "Jogadores atuais:",
+    "search.roomFull": "Sala Cheia",
+    "search.joinRoom": "Entrar na Sala",
+    "search.noRooms": "Nenhuma sala disponível",
+    "search.noRoomsDescription":
+      "Nenhuma sala está esperando jogadores no momento.",
+    "search.refresh": "Atualizar",
+    "search.refreshing": "Atualizando...",
   },
   fr: {
     // Landing Page
@@ -503,6 +668,48 @@ const translations: Record<Language, TranslationKeys> = {
     "room.leaveRoom": "Quitter la Salle",
     "room.loadingRoom": "Chargement de la salle...",
     "room.roomIdCopied": "ID de la salle copié dans le presse-papiers !",
+
+    // Lobby Page
+    "lobby.title": "Lingez Games",
+    "lobby.subtitle": "Choisissez votre mode de jeu préféré",
+    "lobby.raceMode.title": "Course Rapide",
+    "lobby.raceMode.description":
+      "Courez vers la ligne d'arrivée ! Répondez rapidement aux questions pour avancer vers l'objectif",
+    "lobby.partyMode.title": "Lingez Party",
+    "lobby.partyMode.description":
+      "Mode fête ! Mini-jeux, défis spéciaux et amusement multijoueur",
+    "lobby.partyMode.tag1": "Mini-jeux",
+    "lobby.partyMode.tag2": "Défis",
+    "lobby.partyMode.tag3": "Compétitif",
+    "lobby.createRaceRoom": "Créer Salle de Course",
+    "lobby.createPartyRoom": "Créer Salle Party",
+    "lobby.hasRoomCode": "Vous avez déjà un code de salle ?",
+    "lobby.enterRoomCode": "Entrez le code de la salle",
+    "lobby.joinRoom": "Rejoindre la Salle",
+    "lobby.explorePublicRooms": "Explorer les Salles Publiques",
+    "lobby.enterValidRoomId": "Veuillez entrer un ID de salle valide",
+    "lobby.raceTab": "Course Rapide",
+    "lobby.raceTabShort": "Course",
+    "lobby.partyTab": "Lingez Party",
+    "lobby.partyTabShort": "Party",
+    "lobby.backToHome": "Retour",
+
+    // Search Page
+    "search.title": "Salles Disponibles",
+    "search.subtitle": "Rejoignez une partie en cours",
+    "search.loadingRooms": "Chargement des salles...",
+    "search.error": "Erreur",
+    "search.backToLobby": "Retour au Lobby",
+    "search.room": "Salle",
+    "search.players": "Joueurs",
+    "search.currentPlayers": "Joueurs actuels:",
+    "search.roomFull": "Salle Pleine",
+    "search.joinRoom": "Rejoindre la Salle",
+    "search.noRooms": "Aucune salle disponible",
+    "search.noRoomsDescription":
+      "Aucune salle n'attend de joueurs pour le moment.",
+    "search.refresh": "Actualiser",
+    "search.refreshing": "Actualisation...",
   },
 };
 

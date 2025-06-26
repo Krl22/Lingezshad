@@ -2,9 +2,9 @@
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-// import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase } from "firebase/database"; // Descomenta esta línea
 import { getFirestore } from "firebase/firestore";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { getStorage, ref as storageRef, getDownloadURL } from "firebase/storage"; // Renombra ref para evitar conflictos
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -30,9 +30,13 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
-//database
+// Firestore database
 export const db = getFirestore(app);
 
+// Realtime Database
+export const rtdb = getDatabase(app); // Agregar esta línea
+
+// Storage
 const storage = getStorage(app);
 
-export { storage, ref, getDownloadURL };
+export { storage, storageRef as ref, getDownloadURL };

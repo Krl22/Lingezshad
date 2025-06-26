@@ -7,11 +7,12 @@ import {
   onSnapshot,
   runTransaction,
   getDoc,
+  deleteDoc, // Agregar este import
 } from "firebase/firestore";
 import { questions } from "./utils/questions";
 import { generateAvatarUrl, getDefaultAvatar } from "@/firebase/avatarService";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Clock, Zap, Target } from "lucide-react";
+import { Clock, Zap, Target, LogOut } from "lucide-react"; // Agregar LogOut icon
 
 const MAX_QUESTIONS = 10;
 // const TRACK_LENGTH = 90;
@@ -44,6 +45,7 @@ interface RoomData {
   status: string;
   dashboardVisible?: boolean;
   gameSettings?: GameSettings;
+  returnToRoom?: boolean;
 }
 
 const Game = () => {
@@ -195,6 +197,137 @@ const Game = () => {
     return () => clearTimer();
   }, [currentQuestionIndex, roomData?.gameSettings]);
 
+  // Función para eliminar la sala de Firebase
+  const deleteRoom = async (roomId: string) => {
+    try {
+      const roomRef = doc(db, "rooms", roomId);
+      await deleteDoc(roomRef);
+      console.log("Room deleted successfully");
+    } catch (error) {
+      console.error("Error deleting room: ", error);
+    }
+  };
+
+  // Función para salir del juego
+  const handleExitGame = async () => {
+    const user = auth.currentUser;
+    if (!user || !roomData || !roomId) return;
+
+    try {
+      const roomRef = doc(db, "rooms", roomId);
+
+      // Remover al jugador de la sala
+      const updatedPlayers = roomData.players.filter(
+        (player) => player.id !== user.uid
+      );
+
+      if (updatedPlayers.length === 0) {
+        // Si no quedan jugadores, eliminar la sala
+        await deleteRoom(roomId);
+      } else {
+        // Si quedan jugadores, solo actualizar la lista
+        await updateDoc(roomRef, {
+          players: updatedPlayers,
+        });
+      }
+
+      // Navegar de vuelta al lobby
+      navigate("/lobby");
+    } catch (error) {
+      console.error("Error exiting game: ", error);
+    }
+  };
+
+  // Función mejorada para manejar el final del juego
+  const handleGameEnd = async () => {
+    const user = auth.currentUser;
+    if (!user || !roomData || !roomId) return;
+
+    try {
+      // Esperar un poco para que los usuarios vean los resultados
+      setTimeout(async () => {
+        await deleteRoom(roomId);
+      }, 30000); // Eliminar la sala después de 30 segundos
+    } catch (error) {
+      console.error("Error handling game end: ", error);
+    }
+  };
+
+  // Modificar el useEffect para detectar cuando termina el juego
+  useEffect(() => {
+    if (!roomId) {
+      console.log("Missing data, skipping handleAnswerSubmit");
+      return;
+    }
+    const roomRef = doc(db, "rooms", roomId);
+
+    const unsubscribe = onSnapshot(roomRef, async (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data() as RoomData;
+
+        // Verificar si se debe regresar al room
+        if (data.returnToRoom) {
+          // Limpiar el flag y navegar
+          await updateDoc(roomRef, {
+            returnToRoom: false,
+          });
+          navigate(`/room/${roomId}`);
+          return;
+        }
+
+        // Obtener avatares para todos los jugadores
+        const playersWithAvatars = await Promise.all(
+          data.players.map(async (player) => {
+            const avatarUrl = await getPlayerAvatar(player.id);
+            return { ...player, avatarUrl };
+          })
+        );
+
+        const updatedData = { ...data, players: playersWithAvatars };
+        setRoomData(updatedData);
+
+        const winningPlayer = updatedData.players.find(
+          (player) => player.progress >= MAX_QUESTIONS
+        );
+        if (winningPlayer) {
+          setWinner(winningPlayer.nickname);
+          setDashboardVisible(true);
+          clearTimer();
+          // Iniciar el proceso de eliminación automática
+          handleGameEnd();
+        } else {
+          setDashboardVisible(updatedData.dashboardVisible || false);
+        }
+
+        updatedData.players.forEach((player) => {
+          if (isNaN(player.progress)) {
+            player.progress = 0;
+          }
+        });
+
+        setLoading(false);
+      } else {
+        // Si la sala fue eliminada, redirigir al lobby
+        navigate("/lobby");
+      }
+    });
+
+    return () => {
+      unsubscribe();
+      clearTimer();
+    };
+  }, [roomId]);
+
+  // Inicializar pregunta especial y temporizador cuando cambia la pregunta
+  useEffect(() => {
+    if (roomData && !loading) {
+      setIsSpecialQuestion(checkIfSpecialQuestion());
+      startQuestionTimer();
+    }
+
+    return () => clearTimer();
+  }, [currentQuestionIndex, roomData?.gameSettings]);
+
   const handleAnswerSubmit = async () => {
     const isCorrect = checkAnswer(selectedOption);
     const responseTime = questionStartTime ? Date.now() - questionStartTime : 0;
@@ -290,26 +423,26 @@ const Game = () => {
     if (!user || !roomData || !roomId) return;
 
     try {
-      await updateRoomStatus(roomId, "waiting");
+      const roomRef = doc(db, "rooms", roomId);
 
-      const updatedPlayers = roomData.players.map((player) => ({
-        ...player,
-        progress: 0,
-      }));
+      // Actualizar el estado de la sala para que TODOS regresen
+      await updateDoc(roomRef, {
+        status: "waiting",
+        dashboardVisible: false,
+        returnToRoom: true, // Nuevo campo para indicar que todos deben regresar
+        players: roomData.players.map((player) => ({
+          ...player,
+          progress: 0,
+        })),
+      });
 
-      try {
-        await updateDoc(doc(db, "rooms", roomId), {
-          players: updatedPlayers,
-        });
+      setCurrentQuestionIndex(0);
+      setWinner(null);
+      setDashboardVisible(false);
+      setSelectedOption("");
 
-        setCurrentQuestionIndex(0);
-        setWinner(null);
-        setDashboardVisible(false);
-        navigate(`/room/${roomId}`);
-        setSelectedOption("");
-      } catch (error) {
-        console.error("Error updating player progress: ", error);
-      }
+      // Navegar inmediatamente
+      navigate(`/room/${roomId}`);
     } catch (error) {
       console.error("Error returning to room:", error);
     }
@@ -393,20 +526,22 @@ const Game = () => {
   return (
     <div className="px-2 py-4 mt-16 min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <div className="mx-auto max-w-4xl">
-        {/* Header con indicadores de modo de juego */}
+        {/* Header con indicadores de modo de juego y botón de salir */}
         <div className="mb-4 text-center">
-          <h1 className="mb-2 text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 md:text-3xl dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">
-            🏁 ¡Carrera al Final!
-          </h1>
-          <div className="flex justify-center items-center mb-2 space-x-2">
-            <div className="inline-flex items-center px-3 py-1 bg-white rounded-full border shadow-lg dark:bg-slate-800 border-slate-200 dark:border-slate-700">
-              <span className="mr-2 text-xs font-medium text-slate-600 dark:text-slate-300">
-                Sala:
-              </span>
-              <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
-                {roomId}
-              </span>
-            </div>
+          <div className="flex justify-between items-center mb-2">
+            <div></div> {/* Espaciador */}
+            <h1 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 md:text-3xl dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">
+              🏁 ¡Carrera al Final!
+            </h1>
+            {/* Botón de salir */}
+            <button
+              onClick={handleExitGame}
+              className="flex items-center px-3 py-2 text-white bg-red-500 rounded-lg shadow-lg transition-colors duration-200 hover:bg-red-600"
+              title="Salir del juego"
+            >
+              <LogOut className="mr-1 w-4 h-4" />
+              <span className="text-sm font-medium">Salir</span>
+            </button>
           </div>
 
           {/* Indicadores de modos activos */}
@@ -510,7 +645,8 @@ const Game = () => {
                     {/* Pelota con avatar */}
                     <div
                       className={`relative group ${
-                        isCurrentUser ? "animate-bounce" : ""}`}
+                        isCurrentUser ? "animate-bounce" : ""
+                      }`}
                     >
                       {/* Sombra de la pelota */}
                       <div className="absolute -bottom-1 left-1/2 w-8 h-2 rounded-full blur-sm transform -translate-x-1/2 bg-black/20"></div>
