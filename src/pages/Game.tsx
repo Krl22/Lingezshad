@@ -17,7 +17,7 @@ import { Clock, Zap, Target, LogOut } from "lucide-react"; // Agregar LogOut ico
 const MAX_QUESTIONS = 10;
 // const TRACK_LENGTH = 90;
 
-// Colores de respaldo para las pelotas
+// Colores de respaldo para las pelotas xd
 const ballColors = [
   "bg-gradient-to-br from-red-400 to-red-600 shadow-lg",
   "bg-gradient-to-br from-blue-400 to-blue-600 shadow-lg",
@@ -404,18 +404,6 @@ const Game = () => {
   const checkAnswer = (selectedOption: string) => {
     const correctAnswer = questions[currentQuestionIndex].answer;
     return selectedOption === correctAnswer;
-  };
-
-  const updateRoomStatus = async (roomId: string, status: string) => {
-    const roomRef = doc(db, "rooms", roomId);
-    try {
-      await updateDoc(roomRef, {
-        status: status,
-      });
-      console.log("Room status updated successfully");
-    } catch (error) {
-      console.error("Error updating room status: ", error);
-    }
   };
 
   const handleReturnToRoom = async () => {
