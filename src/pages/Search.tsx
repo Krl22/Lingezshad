@@ -232,7 +232,7 @@ const Search = () => {
                       {t("search.currentPlayers") || "Jugadores actuales:"}
                     </p>
                     <div className="flex flex-wrap gap-1">
-                      {room.players.slice(0, 3).map((player, index) => (
+                      {room.players.slice(0, 3).map((player) => (
                         <span
                           key={player.id}
                           className="px-2 py-1 text-xs rounded-full bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300"

@@ -202,7 +202,9 @@ const ConditionalTopNavBar = () => {
     "/search-rooms",
     "/lobby",
   ];
-  return !hiddenRoutes.includes(location.pathname) ? <TopNavBar /> : null;
+  
+  const isHidden = hiddenRoutes.includes(location.pathname) || location.pathname.startsWith('/room/');
+  return !isHidden ? <TopNavBar /> : null;
 };
 
 const ConditionalBottomNavBar = () => {
@@ -219,7 +221,9 @@ const ConditionalBottomNavBar = () => {
     "/search-rooms",
     "/lobby",
   ];
-  return !hiddenRoutes.includes(location.pathname) ? <BottomNavBar /> : null;
+  
+  const isHidden = hiddenRoutes.includes(location.pathname) || location.pathname.startsWith('/room/');
+  return !isHidden ? <BottomNavBar /> : null;
 };
 
 export default App;
